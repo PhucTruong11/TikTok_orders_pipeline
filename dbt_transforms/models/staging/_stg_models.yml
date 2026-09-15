@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: stg_tiktok_orders
+    description: "Staging TikTok Shop orders - ép kiểu dữ liệu, giữ nguyên grain line-item"
+    columns:
+      - name: pk_id
+        description: "Khóa chính từ hệ thống đồng bộ (có thể trùng ở tầng Bronze, sẽ dedup ở Silver)"
+        tests:
+          - not_null
+          - unique:
+              config:
+                severity: warn
+      - name: order_id
+        description: "Mã đơn hàng TikTok Shop"
+        tests:
+          - not_null
+      - name: created_time
+        description: "Thời điểm tạo đơn"
+        tests:
+          - not_null
+      - name: quantity
+        description: "Số lượng sản phẩm"
+        tests:
+          - not_null

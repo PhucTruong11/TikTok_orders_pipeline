@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: int_orders_deduped
+    description: "Dữ liệu TikTok đã khử trùng - giữ bản ghi mới nhất theo pk_id"
+    columns:
+      - name: pk_id
+        tests:
+          - not_null
+          - unique
+
+  - name: fct_orders
+    description: "Fact table cấp đơn hàng: 1 dòng = 1 order_id duy nhất"
+    columns:
+      - name: order_id
+        description: "Mã đơn hàng TikTok (khóa chính)"
+        tests:
+          - not_null
+          - unique
+      - name: total_amount
+        description: "Tổng tiền đơn hàng (ORDER LEVEL - không bị nhân đôi)"
+        tests:
+          - not_null
+      - name: created_time
+        tests:
+          - not_null
+
+  - name: fct_order_items
+    description: "Fact table cấp sản phẩm: 1 dòng = 1 SKU trong đơn"
+    columns:
+      - name: pk_id
+        description: "Khóa chính (unique sau khi dedup)"
+        tests:
+          - not_null
+          - unique
+      - name: order_id
+        description: "Mã đơn hàng - FK tham chiếu fct_orders"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('fct_orders')
+              field: order_id

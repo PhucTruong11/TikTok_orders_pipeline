@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: mart_daily_revenue
+    description: "Doanh thu, tỷ lệ hoàn thành/hủy, AOV theo ngày"
+    columns:
+      - name: order_date
+        tests:
+          - not_null
+          - unique
+
+  - name: mart_fulfillment_sla
+    description: "SLA đóng gói & giao hàng theo ngày, nhà vận chuyển, khu vực"
+
+  - name: mart_product_performance
+    description: "Hiệu suất sản phẩm: doanh thu, số lượng bán, tỷ lệ hủy theo SKU"
+
+  - name: mart_geo_analysis
+    description: "Phân tích theo khu vực địa lý: doanh thu, tỷ lệ COD, tốc độ giao theo tỉnh/quận"
+
+  - name: mart_financial_reconciliation
+    description: "Đối soát tài chính: GMV → Discount → Fees → Net Revenue theo tháng & trạng thái"

@@ -1,0 +1,2 @@
+# DuckDB storage directory
+Chứa file database cục bộ (ví dụ: ecom_warehouse.duckdb)

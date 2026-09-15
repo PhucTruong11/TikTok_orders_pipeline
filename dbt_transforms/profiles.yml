@@ -1,0 +1,14 @@
+ecom_pipeline:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "{{ env_var('DBT_DUCKDB_PATH', '../data/duckdb/ecom_warehouse.duckdb') }}"
+      threads: 4
+      extensions:
+        - parquet
+        - icu
+    prod:
+      type: duckdb
+      path: "{{ env_var('DBT_DUCKDB_PATH', '../data/duckdb/ecom_warehouse.duckdb') }}"
+      threads: 4

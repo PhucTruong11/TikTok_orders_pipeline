@@ -1,0 +1,16 @@
+channel,raw_status,standardized_status,status_group,description
+tiktok,UNPAID,UNPAID,PENDING,Chưa thanh toán
+tiktok,AWAITING_SHIPMENT,AWAITING_SHIPMENT,PROCESSING,Chờ đóng gói / xử lý
+tiktok,AWAITING_COLLECTION,AWAITING_COLLECTION,PROCESSING,Đã đóng gói - chờ lấy hàng
+tiktok,IN_TRANSIT,IN_TRANSIT,SHIPPING,Đang vận chuyển
+tiktok,DELIVERED,DELIVERED,SHIPPING,Đã giao - chờ hoàn tất
+tiktok,COMPLETED,COMPLETED,COMPLETED,Hoàn thành
+tiktok,CANCELLED,CANCELLED,CANCELLED,Đã hủy
+shopee,UNPAID,UNPAID,PENDING,Chưa thanh toán
+shopee,READY_TO_SHIP,AWAITING_SHIPMENT,PROCESSING,Chờ chuẩn bị hàng
+shopee,PROCESSED,AWAITING_COLLECTION,PROCESSING,Đã đóng gói - chờ bàn giao
+shopee,SHIPPED,IN_TRANSIT,SHIPPING,Đang giao hàng
+shopee,TO_CONFIRM_RECEIVE,DELIVERED,SHIPPING,Đã giao - chờ người mua xác nhận
+shopee,COMPLETED,COMPLETED,COMPLETED,Đơn hàng thành công
+shopee,CANCELLED,CANCELLED,CANCELLED,Đã hủy
+shopee,TO_RETURN,RETURNED,RETURNED,Yêu cầu trả hàng / hoàn tiền
