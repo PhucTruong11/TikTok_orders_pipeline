@@ -162,17 +162,19 @@ Tiktok_orders_pipeline/
 
 ---
 
-## 📋 6. Lộ trình Triển khai (Roadmap)
+## 📋 6. Trạng thái Dự án (Current Status)
 
-- [ ] **Giai đoạn 1: Khởi tạo & Dữ liệu Mẫu**
-  - Cài đặt môi trường Python (`uv` hoặc `venv`), cài đặt `duckdb`, `dbt-duckdb`, `dagster`.
-  - Nạp dữ liệu 5.000 đơn Shopee & 2.000 đơn TikTok Shop vào tầng Bronze (DuckDB).
-- [ ] **Giai đoạn 2: Mô hình hóa dữ liệu (dbt Core)**
-  - Viết models dbt phân tách bảng phẳng thành Star Schema (`fct_orders`, `fct_order_items`, `dim_...`).
-  - Viết dbt tests để chặn lỗi nhân đôi doanh thu và kiểm tra toàn vẹn dữ liệu.
-- [ ] **Giai đoạn 3: Điều phối Pipeline (Dagster)**
-  - Tích hợp dbt project vào Dagster qua `dagster-dbt`.
-  - Thiết lập lịch chạy định kỳ (schedule) hoặc cảm biến kích hoạt khi có file dữ liệu mới (sensor).
-- [ ] **Giai đoạn 4: Trực quan hóa & Báo cáo**
-  - Xây dựng dashboard đối soát tài chính trên Evidence.dev hoặc Streamlit.
-  - Phân tích chỉ số SLA, tỷ lệ hủy đơn theo từng khu vực địa lý và theo sản phẩm.
+Dự án đã triển khai thành công và hoàn thiện toàn bộ các tính năng cốt lõi:
+
+- [x] **Giai đoạn 1: Khởi tạo & Dữ liệu**
+  - Môi trường Python (uv), DuckDB, dbt-duckdb, Dagster, Streamlit.
+  - Nạp dữ liệu e-commerce vào tầng Bronze (Raw).
+- [x] **Giai đoạn 2: Mô hình hóa dữ liệu (dbt Core)**
+  - Tách bảng Star Schema (Staging -> Intermediate -> Marts).
+  - Viết dbt tests toàn vẹn dữ liệu (chặn trùng lặp, logic constraints).
+- [x] **Giai đoạn 3: Điều phối Pipeline (Dagster)**
+  - Tích hợp `dbt_assets` vào Data Orchestration UI.
+  - Thiết lập lịch (Schedules) tự động chạy vào 7:00 sáng và 13:00 trưa hàng ngày (`0 7,13 * * *`).
+- [x] **Giai đoạn 4: Trực quan hóa & Báo cáo (Streamlit)**
+  - Dashboard tương tác đọc trực tiếp từ DuckDB.
+  - Tối ưu hóa UI/UX: Dark Mode tương thích, Không Taskbar, Card CSS, biểu đồ tương quan, và Báo cáo dòng tiền.
