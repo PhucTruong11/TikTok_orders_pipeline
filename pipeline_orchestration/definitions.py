@@ -46,6 +46,7 @@ daily_dbt_schedule = build_schedule_from_dbt_selection(
     [tiktok_dbt_assets],
     job_name="daily_tiktok_pipeline",
     cron_schedule="0 7 * * *", # 07:00 hàng ngày
+    
 )
 
 noon_dbt_schedule = build_schedule_from_dbt_selection(
