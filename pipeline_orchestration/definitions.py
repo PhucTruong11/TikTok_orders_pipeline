@@ -52,7 +52,7 @@ daily_dbt_schedule = build_schedule_from_dbt_selection(
 noon_dbt_schedule = build_schedule_from_dbt_selection(
     [tiktok_dbt_assets],
     job_name="noon_tiktok_pipeline",
-    cron_schedule="0 13 * * *",
+    cron_schedule="0 15 * * *",
 )
 
 # === Khai báo Definitions (entry point của Dagster) ===
