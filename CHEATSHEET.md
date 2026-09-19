@@ -37,6 +37,8 @@ Sử dụng Dagster khi bạn muốn có một cái nhìn tổng quan về sự 
 
 ```bash
 # Đứng ở thư mục gốc của dự án, khởi chạy Server Dagster:
+# (Thiết lập DAGSTER_HOME để tránh bị sinh ra các thư mục rác .tmp_dagster_home)
+$env:DAGSTER_HOME="$(Get-Location)\.dagster"
 dagster dev -m pipeline_orchestration.definitions
 ```
 👉 **Truy cập:** [http://localhost:3000](http://localhost:3000)

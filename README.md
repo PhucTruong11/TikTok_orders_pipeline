@@ -154,6 +154,8 @@ Tiktok_orders_pipeline/
 │   │   └── dbt_assets.py
 │   ├── repository.py
 │   └── schedules.py
+├── prefect_orchestration/      # Dự án Prefect (Lựa chọn thay thế Dagster)
+│   └── dbt_flow.py             # Định nghĩa Flow chạy dbt build
 └── dashboards/                 # Tầng BI & Báo cáo
     ├── evidence/               # Evidence.dev Markdown reports
     └── streamlit_app/          # Streamlit Interactive App
