@@ -1,0 +1,44 @@
+name: CI Data Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v2
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "requirements.txt"
+
+      - name: Install Dependencies
+        run: uv pip install --system -r requirements.txt
+
+      - name: Check Python Syntax (Dagster & Prefect & Streamlit)
+        run: |
+          python -m py_compile pipeline_orchestration/definitions.py
+          python -m py_compile prefect_orchestration/dbt_flow.py
+          python -m py_compile dashboards/streamlit_app/app.py
+
+      - name: dbt Compile Check
+        working-directory: ./dbt_transforms
+        run: |
+          dbt deps
+          dbt compile
