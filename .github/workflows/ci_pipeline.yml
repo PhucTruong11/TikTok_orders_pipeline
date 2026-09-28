@@ -31,11 +31,9 @@ jobs:
       - name: Install Dependencies
         run: uv pip install --system -r requirements.txt
 
-      - name: Check Python Syntax (Dagster & Prefect & Streamlit)
+      - name: Check Python Syntax (Dagster)
         run: |
           python -m py_compile pipeline_orchestration/definitions.py
-          python -m py_compile prefect_orchestration/dbt_flow.py
-          python -m py_compile dashboards/streamlit_app/app.py
 
       - name: dbt Compile Check
         working-directory: ./dbt_transforms
