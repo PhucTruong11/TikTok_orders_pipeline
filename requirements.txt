@@ -7,3 +7,5 @@ dagster-dbt>=0.24.0
 pandas>=2.2.0
 pyarrow>=17.0.0
 polars>=1.0.0
+streamlit>=1.38.0
+plotly>=5.24.0

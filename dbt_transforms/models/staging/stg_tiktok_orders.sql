@@ -17,7 +17,7 @@ select
     cast(order_id as varchar)           as order_id,
     cast(order_status as varchar)       as order_status,
     cast(order_type as varchar)         as order_type,
-    cast(shop_name as varchar)          as shop_name,
+    {{ clean_string('shop_name') }}     as shop_name,
 
     -- === Mốc thời gian đơn hàng ===
     cast(created_time as timestamp)     as created_time,
@@ -72,20 +72,20 @@ select
 
     -- === Thông tin người mua ===
     cast(buyer_uid as varchar)          as buyer_uid,
-    cast(buyer_name as varchar)         as buyer_name,
-    cast(buyer_message as varchar)      as buyer_message,
+    {{ clean_string('buyer_name') }}    as buyer_name,
+    {{ clean_string('buyer_message') }} as buyer_message,
 
     -- === Địa chỉ giao hàng ===
-    cast(recipient_name as varchar)     as recipient_name,
+    {{ clean_string('recipient_name') }} as recipient_name,
     cast(recipient_phone as varchar)    as recipient_phone,
-    cast(full_address as varchar)       as full_address,
+    {{ clean_string('full_address') }}  as full_address,
     cast(postal_code as varchar)        as postal_code,
     cast(region_state as varchar)       as region_state,
     cast(city_town as varchar)          as city_town,
     cast(district as varchar)           as district,
 
     -- === Chi tiết sản phẩm - Cấp LINE ITEM ===
-    cast(product_name as varchar)               as product_name,
+    {{ clean_string('product_name') }}          as product_name,
     cast(sku_name as varchar)                   as sku_name,
     cast(seller_sku as varchar)                 as seller_sku,
     cast(quantity as integer)                   as quantity,

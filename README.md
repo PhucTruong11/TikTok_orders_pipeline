@@ -26,48 +26,41 @@ Pipeline được thiết kế theo triết lý **Modern Data Stack in-a-Box**: 
 
 ```mermaid
 flowchart TD
+    %% Định nghĩa màu sắc (classDef)
+    classDef source fill:#e67e22,stroke:#d35400,stroke-width:2px,color:#fff;
+    classDef orchestrator fill:#2f3640,stroke:#718093,stroke-width:2px,color:#fff;
+    classDef compute fill:#4a69bd,stroke:#0c2461,stroke-width:2px,color:#fff;
+    classDef transform fill:#e55039,stroke:#b71540,stroke-width:2px,color:#fff;
+    classDef storage fill:#2ecc71,stroke:#27ae60,stroke-width:2px,color:#fff;
+    classDef bi fill:#9b59b6,stroke:#8e44ad,stroke-width:2px,color:#fff;
+
     subgraph Sources ["1. Nguồn Dữ Liệu"]
-        TT["TikTok Shop Open API / Flat File"]
-        SP["Shopee Open API / Flat File"]
+        CSV[("File CSV\n(TikTok Shop Orders)")]:::source
     end
 
-    subgraph Ingestion ["2. Ingestion & ELT"]
-        DLT["dlt (Data Load Tool) / Python Ingestion"]
+    subgraph Orchestration ["2. Điều phối & Tự động hóa"]
+        DAGSTER(("Dagster\n(Schedules & Assets)")):::orchestrator
     end
 
-    subgraph Storage ["3. Embedded OLAP & Storage"]
-        DUCK[("DuckDB Database Engine")]
-        PARQUET[("Data Lakehouse (Parquet Files)")]
-    end
-
-    subgraph Transformation ["4. Modeling & Transformation (dbt-duckdb)"]
-        BRONZE["Bronze Layer (Raw Staging)"]
-        SILVER["Silver Layer (Cleaned & Star Schema)"]
-        GOLD["Gold Layer (Business Data Marts)"]
+    subgraph DataPlatform ["3. Data Warehouse & Transformation"]
+        DBT["dbt-duckdb\n(Mô hình hóa Dữ liệu)"]:::transform
+        DUCKDB[("DuckDB\n(Database Engine)")]:::storage
         
-        BRONZE --> SILVER --> GOLD
+        BRONZE["🥉 Bronze (Staging)"]:::compute
+        SILVER["🥈 Silver (Intermediate)"]:::compute
+        GOLD["🥇 Gold (Data Marts)"]:::compute
+        
+        DBT -->|Xử lý logic| BRONZE --> SILVER --> GOLD
+        GOLD -.->|Lưu trữ| DUCKDB
     end
 
-    subgraph Orchestration ["5. Orchestration & Lineage"]
-        DAGSTER["Dagster (Software-Defined Assets)"]
+    subgraph Consumption ["4. Trực quan hóa (BI)"]
+        STREAMLIT["Streamlit\n(Executive Dashboard)"]:::bi
     end
 
-    subgraph Consumption ["6. Analytics & BI Dashboards"]
-        EVIDENCE["Evidence.dev (Báo cáo Tài chính & Đối soát)"]
-        STREAMLIT["Streamlit (Dashboard Vận hành & Dự báo tồn kho)"]
-    end
-
-    Sources --> DLT
-    DLT -->|Load Raw| BRONZE
-    BRONZE -.-> DUCK
-    SILVER -.-> DUCK
-    GOLD -->|Export to| PARQUET
-    PARQUET --> EVIDENCE
-    PARQUET --> STREAMLIT
-
-    DAGSTER -.->|Quản lý & Giám sát| Ingestion
-    DAGSTER -.->|Điều phối dbt run/test| Transformation
-    DAGSTER -.->|Theo dõi dữ liệu| Consumption
+    CSV -->|Read CSV| DBT
+    DAGSTER -.->|Kích hoạt chạy| DBT
+    DUCKDB -->|Truy vấn trực tiếp| STREAMLIT
 ```
 
 ---
@@ -76,34 +69,33 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    subgraph Bronze ["🥉 Bronze (Raw Ingestion)"]
-        raw_tt["raw_tiktok_orders\n(71 cột nguyên bản)"]
-        raw_sp["raw_shopee_orders\n(71 cột nguyên bản)"]
+    subgraph Bronze ["🥉 Bronze (Raw Staging)"]
+        stg_tt["stg_tiktok_orders\n(Clean string, chuẩn hóa tên cột)"]
     end
 
-    subgraph Silver ["🥈 Silver (Normalized & Star Schema)"]
-        fct_orders["fct_orders\n(Grain: 1 dòng / 1 đơn hàng)"]
-        fct_items["fct_order_items\n(Grain: 1 dòng / 1 SKU)"]
-        dim_prod["dim_products & dim_skus"]
-        dim_cust["dim_customers & dim_addresses"]
-        dim_status["dim_order_status_mapping"]
+    subgraph Silver ["🥈 Silver (Intermediate)"]
+        int_dedup["int_orders_deduped\n(Xử lý trùng lặp, Watermark)"]
+        fct_orders["fct_orders\n(Fact Đơn hàng)"]
+        fct_items["fct_order_items\n(Fact Sản phẩm)"]
+        dim_status["order_status_mapping\n(Seed data)"]
     end
 
     subgraph Gold ["🥇 Gold (Data Marts)"]
-        mart_fin["mart_financial_reconciliation\n(Doanh thu, Phí sàn, Lợi nhuận)"]
-        mart_ops["mart_fulfillment_sla\n(SLA đóng gói, Tỷ lệ giao trễ/hủy)"]
-        mart_prod["mart_product_performance\n(Top SKU bán chạy, Tỷ lệ hoàn)"]
+        mart_fin["mart_financial_reconciliation\n(Waterfall dòng tiền)"]
+        mart_rev["mart_daily_revenue\n(Doanh thu theo ngày)"]
+        mart_prod["mart_product_performance\n(Top SKU bán chạy)"]
+        mart_geo["mart_geo_analysis\n(Phân bổ địa lý)"]
     end
 
-    raw_tt & raw_sp --> fct_orders
-    raw_tt & raw_sp --> fct_items
-    raw_tt & raw_sp --> dim_prod
-    raw_tt & raw_sp --> dim_cust
-    raw_tt & raw_sp --> dim_status
+    stg_tt --> int_dedup
+    int_dedup --> fct_orders
+    int_dedup --> fct_items
+    dim_status --> fct_orders
 
-    fct_orders & fct_items & dim_status --> mart_fin
-    fct_orders & dim_status --> mart_ops
-    fct_items & dim_prod --> mart_prod
+    fct_orders --> mart_rev
+    fct_orders --> mart_fin
+    fct_items --> mart_prod
+    fct_orders --> mart_geo
 ```
 
 ### Chi tiết các tầng dữ liệu:
@@ -120,11 +112,10 @@ flowchart LR
 
 | Công nghệ | Vai trò | Tại sao chọn thay vì giải pháp truyền thống? |
 | :--- | :--- | :--- |
-| **DuckDB** | OLAP Engine | **Thay thế PostgreSQL / ClickHouse:** Xử lý dạng cột (columnar) cực nhanh cho câu lệnh phân tích/tổng hợp. Chạy in-process (không cần server riêng, RAM thấp, không tốn chi phí duy trì như ClickHouse). |
-| **dbt-duckdb** | Data Transformation | Mang lại chuẩn mực công nghệ phần mềm vào dữ liệu: viết bằng SQL, quản lý version Git, tự động kiểm thử dữ liệu (`unique`, `not_null`, `relationships`), sinh documentation tự động. |
-| **Dagster** | Orchestrator | **Thay thế Airflow:** Tiếp cận theo tư duy **Software-Defined Assets (SDA)** thay vì task-based. Tích hợp sâu với dbt, hiển thị data lineage chi tiết, debug cục bộ cực dễ bằng lệnh `dagster dev`. |
-| **Parquet** | Data Lakehouse Storage | Lưu trữ dạng columnar mở. Giúp giải quyết triệt để vấn đề **Concurrency Lock** của DuckDB: dbt ghi ra Parquet, Streamlit/Evidence chỉ việc đọc Parquet độc lập mà không bao giờ bị khóa file. |
-| **Evidence.dev / Streamlit** | BI & Dashboard | **Evidence.dev:** Báo cáo Markdown + SQL siêu nhanh, xuất báo cáo tài chính/đối soát có thể version-control qua Git.<br>**Streamlit:** Dashboard vận hành tương tác cao, hỗ trợ Python cho dự báo nhu cầu hoặc nhập liệu điều chỉnh. |
+| **DuckDB** | OLAP Engine | **Thay thế PostgreSQL / ClickHouse:** Xử lý dạng cột (columnar) cực nhanh, truy vấn trực tiếp file CSV. Chạy in-process (không cần server riêng). |
+| **dbt-duckdb** | Data Transformation | Tự động hóa quá trình làm sạch và chia tầng dữ liệu. Có sẵn cơ chế test (unique, not_null) và quản lý bằng Git. |
+| **Dagster** | Orchestrator | **Thay thế Airflow:** Tiếp cận theo tư duy Software-Defined Assets (SDA). Lên lịch chạy tự động, hiển thị rõ luồng lineage từ file CSV đến Data Mart. |
+| **Streamlit** | BI Dashboard | Dùng Python thuần túy để xây dựng dashboard Premium với Plotly (nhẹ, nhanh, không cần cài cắm server rườm rà như Metabase / Superset). |
 
 ---
 
@@ -133,29 +124,21 @@ flowchart LR
 ```text
 Tiktok_orders_pipeline/
 ├── README.md
-├── pyproject.toml              # Quản lý dependencies (uv / poetry / pip)
+├── pyproject.toml              # Quản lý dependencies (uv)
 ├── data/
-│   ├── raw/                    # Chứa file export ban đầu (.csv, .xlsx, .json)
-│   ├── duckdb/                 # File database local (local.duckdb)
-│   └── gold/                   # Output parquet files cho tầng BI
-├── dbt_transforms/             # Dự án dbt-duckdb
+│   ├── raw/                    # Chứa file CSV đầu vào (Tiktok_ecommerce.csv)
+│   └── duckdb/                 # Nơi lưu database ecom_warehouse.duckdb
+├── dbt_transforms/             # Data Warehouse Transformation
 │   ├── dbt_project.yml
-│   ├── profiles.yml
 │   ├── models/
-│   │   ├── staging/            # Bronze: raw staging
-│   │   ├── intermediate/       # Silver: deduplication, status mapping
-│   │   ├── marts/              # Gold: core business facts & dims
-│   │   └── schema.yml          # Data contracts & tests
-│   └── seeds/                  # Bảng mapping trạng thái (order_status_mapping.csv)
-├── pipeline_orchestration/     # Dự án Dagster
-│   ├── __init__.py
-│   ├── assets/                 # Software-Defined Assets (Ingestion, dbt assets)
-│   │   ├── raw_assets.py
-│   │   └── dbt_assets.py
-│   ├── repository.py
-│   └── schedules.py
-└── dashboards/                 # Tầng BI & Báo cáo
-    └── evidence/               # Evidence.dev Markdown reports
+│   │   ├── staging/            # Tầng Bronze
+│   │   ├── intermediate/       # Tầng Silver
+│   │   └── marts/              # Tầng Gold (Business logic)
+│   └── seeds/                  # order_status_mapping.csv
+├── pipeline_orchestration/     # Dagster Orchestrator
+│   └── ...                     # Code định nghĩa Assets & Lịch trình
+└── dashboards/
+    └── streamlit_app/          # Streamlit Single Page Dashboard (app.py)
 ```
 
 ---
@@ -173,5 +156,6 @@ Dự án đã triển khai thành công và hoàn thiện toàn bộ các tính 
 - [x] **Giai đoạn 3: Điều phối Pipeline (Dagster)**
   - Tích hợp `dbt_assets` vào Data Orchestration UI.
   - Thiết lập lịch (Schedules) tự động chạy vào 7:00 sáng và 13:00 trưa hàng ngày (`0 7,13 * * *`).
-- [ ] **Giai đoạn 4: Trực quan hóa & Báo cáo (BI/Evidence)**
-  - (Đang lên kế hoạch) Xây dựng báo cáo tĩnh dựa trên Data Catalog của dbt/Dagster hoặc Evidence.dev.
+- [x] **Giai đoạn 4: Trực quan hóa & Báo cáo (Streamlit)**
+  - Đã xây dựng hoàn chỉnh Executive Dashboard dạng Single Page Scroll.
+  - Tích hợp biểu đồ Plotly sang trọng (Waterfall, Area, Scatter).

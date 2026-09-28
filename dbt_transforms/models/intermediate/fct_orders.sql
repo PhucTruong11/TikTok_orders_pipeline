@@ -31,6 +31,9 @@ select
 
     -- === Trạng thái & Loại đơn ===
     h.order_status,
+    case when h.order_status in ('Cancelled', 'Canceled') then 1 else 0 end as is_cancelled,
+    case when h.order_status = 'Returned' then 1 else 0 end as is_returned,
+    case when h.order_status = 'Completed' then 1 else 0 end as is_successful_revenue,
     h.order_type,
     h.shop_name,
 
