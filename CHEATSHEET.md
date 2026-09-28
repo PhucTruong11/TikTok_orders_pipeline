@@ -1,6 +1,6 @@
 # 🚀 DATA PIPELINE CHEATSHEET
 
-Tài liệu này lưu trữ toàn bộ các câu lệnh cần thiết để khởi chạy, quản lý và cập nhật hệ thống Data Pipeline (dbt + Dagster + Prefect + Streamlit).
+Tài liệu này lưu trữ toàn bộ các câu lệnh cần thiết để khởi chạy, quản lý và cập nhật hệ thống Data Pipeline (dbt + Dagster + Evidence).
 
 ---
 
@@ -45,31 +45,3 @@ dagster dev -m pipeline_orchestration.definitions
 - Mở **Overview** để xem toàn bộ Asset.
 - Chọn bảng và bấm **Materialize** để chạy dbt từ giao diện web.
 - Đóng Terminal (Ctrl+C) thì Dagster UI sẽ tắt và lịch sẽ ngưng chạy.
-
----
-
-## 4. Prefect (Giao diện Quản lý - Cloud)
-Sử dụng Prefect khi bạn muốn một UI hiện đại, quản lý log dễ nhìn và giám sát từ xa (trên web điện thoại/máy tính khác).
-
-```bash
-# (Chỉ làm 1 lần) Đăng nhập Terminal của bạn vào Prefect Cloud
-prefect cloud login
-
-# Khởi chạy luồng dbt và bắt đầu lắng nghe Lịch trình (Schedules)
-python prefect_orchestration/dbt_flow.py
-```
-👉 **Truy cập:** [https://app.prefect.cloud](https://app.prefect.cloud)
-- Lệnh Python ở trên sẽ bị "treo" (Listening) ở Terminal. Nó đóng vai trò làm công nhân (Worker). Khi tới đúng giờ hẹn, Cloud sẽ ra lệnh và Terminal này sẽ chạy code.
-- Đóng Terminal (Ctrl+C) thì Lịch trên Cloud báo chạy sẽ bị Lỗi (Failed) vì không có Worker phản hồi.
-
----
-
-## 5. Streamlit (Giao diện Dashboard Báo cáo)
-Khởi chạy trang web trực quan hóa dữ liệu để hiển thị kết quả kinh doanh.
-
-```bash
-# Khởi chạy Streamlit Dashboard
-streamlit run dashboards\streamlit_app\app.py
-```
-👉 **Truy cập:** [http://localhost:8501](http://localhost:8501)
-- Streamlit sẽ tự động reload lại trang web nếu bạn có sửa đổi code trong file `app.py`.

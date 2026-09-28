@@ -154,12 +154,8 @@ Tiktok_orders_pipeline/
 │   │   └── dbt_assets.py
 │   ├── repository.py
 │   └── schedules.py
-├── prefect_orchestration/      # Dự án Prefect (Lựa chọn thay thế Dagster)
-│   └── dbt_flow.py             # Định nghĩa Flow chạy dbt build
 └── dashboards/                 # Tầng BI & Báo cáo
-    ├── evidence/               # Evidence.dev Markdown reports
-    └── streamlit_app/          # Streamlit Interactive App
-        └── app.py
+    └── evidence/               # Evidence.dev Markdown reports
 ```
 
 ---
@@ -177,6 +173,5 @@ Dự án đã triển khai thành công và hoàn thiện toàn bộ các tính 
 - [x] **Giai đoạn 3: Điều phối Pipeline (Dagster)**
   - Tích hợp `dbt_assets` vào Data Orchestration UI.
   - Thiết lập lịch (Schedules) tự động chạy vào 7:00 sáng và 13:00 trưa hàng ngày (`0 7,13 * * *`).
-- [x] **Giai đoạn 4: Trực quan hóa & Báo cáo (Streamlit)**
-  - Dashboard tương tác đọc trực tiếp từ DuckDB.
-  - Tối ưu hóa UI/UX: Dark Mode tương thích, Không Taskbar, Card CSS, biểu đồ tương quan, và Báo cáo dòng tiền.
+- [ ] **Giai đoạn 4: Trực quan hóa & Báo cáo (BI/Evidence)**
+  - (Đang lên kế hoạch) Xây dựng báo cáo tĩnh dựa trên Data Catalog của dbt/Dagster hoặc Evidence.dev.
