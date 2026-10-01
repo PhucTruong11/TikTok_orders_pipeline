@@ -39,5 +39,6 @@ jobs:
       - name: dbt Compile Check
         working-directory: ./dbt_transforms
         run: |
+          mkdir -p ../data/duckdb
           dbt deps
           dbt compile
