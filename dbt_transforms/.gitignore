@@ -1,4 +1,6 @@
-renders/
-.venv/
-__pycache__/
+target/
+dbt_packages/
+logs/
+.user.yml
 *.duckdb
+__pycache__/
