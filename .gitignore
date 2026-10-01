@@ -26,15 +26,15 @@ wheels/
 # Data & Database files
 data/duckdb/*.duckdb
 data/duckdb/*.duckdb.wal
+!data/duckdb/.gitkeep
 data/raw/*
 !data/raw/.gitkeep
-data/gold/*
-!data/gold/.gitkeep
 
 # dbt
 dbt_transforms/target/
 dbt_transforms/dbt_packages/
 dbt_transforms/logs/
+*.user.yml
 
 # Dagster
 .dagster/
