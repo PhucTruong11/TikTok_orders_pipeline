@@ -1,17 +1,28 @@
 version: 2
 seeds:
-  - name: order_status_mapping
-    description: "One mapping per (channel, normalized raw_status). Unknown statuses fail validation."
-    columns:
-      - name: channel
-        data_tests: [not_null]
-      - name: raw_status
-        data_tests: [not_null]
-      - name: standardized_status
-        data_tests: [not_null]
-      - name: status_group
-        data_tests:
-          - not_null
-          - accepted_values:
-              arguments:
-                values: ['PENDING', 'PROCESSING', 'SHIPPING', 'COMPLETED', 'CANCELLED', 'RETURNED']
+- name: silver_order_status_mapping
+  description: One mapping per (channel, normalized raw_status). Unknown statuses
+    fail validation.
+  columns:
+  - name: channel
+    data_tests:
+    - not_null
+  - name: raw_status
+    data_tests:
+    - not_null
+  - name: standardized_status
+    data_tests:
+    - not_null
+  - name: status_group
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - PENDING
+          - PROCESSING
+          - SHIPPING
+          - COMPLETED
+          - CANCELLED
+          - RETURNED
+          - RETURN_REQUESTED

@@ -1,0 +1,16 @@
+version: 2
+sources:
+- name: raw_exports
+  description: Immutable DataGrip CSV snapshots. All original columns stay strings
+    in Bronze.
+  tables:
+  - name: tiktok_orders
+    config:
+      meta:
+        external_location: read_csv('{{ env_var("TIKTOK_CSV_PATH", "../data/raw/tiktok_orders.csv")
+          | replace("'", "''") }}', all_varchar=true, parallel=false)
+  - name: shopee_orders
+    config:
+      meta:
+        external_location: read_csv('{{ env_var("SHOPEE_CSV_PATH", "../data/raw/shopee_orders.csv")
+          | replace("'", "''") }}', all_varchar=true, parallel=false)

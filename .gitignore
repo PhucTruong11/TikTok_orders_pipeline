@@ -24,6 +24,9 @@ wheels/
 *.egg
 
 # Data & Database files
+data/duckdb/.builds/
+data/duckdb/*.build.lock
+data/duckdb/latest_build.json
 data/duckdb/*.duckdb
 data/duckdb/*.duckdb.wal
 !data/duckdb/.gitkeep
