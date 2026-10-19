@@ -7,25 +7,27 @@ Dữ liệu nguồn đã che thông tin vì bảo mật. Một observation là m
 ## 1. Luồng dữ liệu đang triển khai
 
 ```mermaid
+---
+config:
+  htmlLabels: false
+  flowchart:
+    htmlLabels: false
+    nodeSpacing: 25
+    rankSpacing: 35
+---
 flowchart TB
-    TT[("CSV TikTok gốc")]
-    SP[("CSV Shopee gốc")]
-    subgraph B["Bronze schema | Raw strings + metadata"]
-        BT["bronze_tiktok_orders"]
-        BS["bronze_shopee_orders"]
-    end
-    subgraph S["Silver schema | Ép kiểu, mapping, bảo toàn observations"]
-        ST["silver_tiktok_observations"]
-        SS["silver_shopee_observations"]
-        MAP["silver_order_status_mapping"]
-        UNION["silver_ecommerce_observations"]
-    end
-    subgraph G["Gold schema | Tổng hợp theo grain đã công bố"]
-        Q["gold_observation_quality"]
-        D["gold_channel_daily"]
-        STATUS["gold_status_distribution"]
-        META["gold_pipeline_metadata"]
-    end
+    TT[("TikTok CSV")]
+    SP[("Shopee CSV")]
+    BT["Bronze<br/>TikTok raw"]
+    BS["Bronze<br/>Shopee raw"]
+    ST["Silver<br/>TikTok observations"]
+    SS["Silver<br/>Shopee observations"]
+    MAP["Silver<br/>Status mapping"]
+    UNION["Silver<br/>Observations hai nguồn"]
+    Q["Gold<br/>Data quality"]
+    D["Gold<br/>Channel daily"]
+    STATUS["Gold<br/>Status distribution"]
+    META["Gold<br/>Build metadata"]
     TT --> BT --> ST
     SP --> BS --> SS
     MAP --> ST
@@ -36,14 +38,6 @@ flowchart TB
     UNION --> D
     UNION --> STATUS
     UNION --> META
-    Q --> VERIFY["dbt tests + kiểm tra đủ hai nguồn"]
-    D --> VERIFY
-    STATUS --> VERIFY
-    META --> VERIFY
-    VERIFY --> PUBLISH["Publish atomically<br/>ecom_medallion.duckdb"]
-    PUBLISH --> UI["Streamlit<br/>Nguồn, currency, ngày, trạng thái, coverage"]
-    DAGSTER["Dagster hoặc CLI local"] -.->|"Điều phối build + validate + publish"| BT
-    DAGSTER -.->|"Cùng một lần chạy"| BS
 
     classDef bronze fill:#fff1df,stroke:#a86622,color:#3f2a16;
     classDef silver fill:#edf2f7,stroke:#64748b,color:#172033;
@@ -51,6 +45,22 @@ flowchart TB
     class BT,BS bronze;
     class ST,SS,UNION,MAP silver;
     class Q,D,STATUS,META gold;
+```
+
+Nhãn trong sơ đồ được rút gọn để dễ đọc; [physical lineage](dbt_transforms/models/README.md#physical-lineage) liệt kê tên đầy đủ của cả 10 bảng. Dagster hoặc CLI điều phối luồng vận hành riêng bên dưới:
+
+```mermaid
+---
+config:
+  htmlLabels: false
+  flowchart:
+    htmlLabels: false
+    rankSpacing: 30
+---
+flowchart LR
+    BUILD["Build candidate<br/>Bronze → Silver → Gold"] --> CHECK["dbt tests<br/>Đối chiếu hai nguồn"]
+    CHECK --> PUBLISH["Atomic publish<br/>DuckDB"]
+    PUBLISH --> UI["Streamlit<br/>Đọc Gold"]
 ```
 
 | Tầng | Folder dbt | Schema thật | Ví dụ bảng |
