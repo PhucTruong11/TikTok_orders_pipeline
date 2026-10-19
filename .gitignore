@@ -31,6 +31,7 @@ data/raw/*
 !data/raw/.gitkeep
 
 # dbt
+/.validation/
 dbt_transforms/target/
 dbt_transforms/dbt_packages/
 dbt_transforms/logs/

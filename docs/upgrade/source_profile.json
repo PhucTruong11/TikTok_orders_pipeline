@@ -1,0 +1,505 @@
+{
+  "executed_at_utc": "2026-10-19T01:33:37.065871+00:00",
+  "scope": "Local CSV files in full; optional existing warehouse, read-only.",
+  "caveats": [
+    "Counts of distinct identifiers do not establish counts of business orders.",
+    "Source provenance, anonymization and identifier semantics are unverified.",
+    "Stored timestamps have no verified timezone; no timezone conversion applied.",
+    "Warehouse results describe the existing materialization, not a fresh build."
+  ],
+  "versions": {
+    "duckdb": "1.5.5",
+    "dbt-core": "1.12.4",
+    "dbt-duckdb": "1.11.0"
+  },
+  "sources": {
+    "tiktok": {
+      "file": "data/raw/tiktok_orders.csv",
+      "bytes": 100815605,
+      "sha256": "849022b62666db6e207336002efb00d3341e8c9eb69b7af825b73414b3d87888",
+      "columns": [
+        "pkId",
+        "user_id",
+        "createdAt",
+        "updatedAt",
+        "order_id",
+        "order_status",
+        "order_type",
+        "shop_name",
+        "created_time",
+        "paid_time",
+        "rts_time",
+        "shipped_time",
+        "delivered_time",
+        "completed_time",
+        "cancelled_time",
+        "updated_time",
+        "rts_sla_time",
+        "tts_sla_time",
+        "delivery_sla_time",
+        "cancel_sla_time",
+        "auto_cancel_time",
+        "currency",
+        "total_amount",
+        "sub_total",
+        "order_original_price",
+        "payment_method",
+        "is_cod",
+        "shipping_fee",
+        "original_shipping_fee",
+        "tax_amount",
+        "product_tax",
+        "shipping_tax",
+        "small_order_fee",
+        "retail_delivery_fee",
+        "insurance_fee",
+        "seller_discount",
+        "platform_discount",
+        "shipping_seller_discount",
+        "shipping_platform_discount",
+        "fulfillment_type",
+        "delivery_type",
+        "delivery_option",
+        "shipping_provider",
+        "tracking_number",
+        "warehouse_id",
+        "buyer_uid",
+        "buyer_name",
+        "buyer_message",
+        "recipient_name",
+        "recipient_phone",
+        "full_address",
+        "postal_code",
+        "region_state",
+        "city_town",
+        "district",
+        "product_name",
+        "sku_name",
+        "seller_sku",
+        "quantity",
+        "item_status",
+        "item_sale_price",
+        "item_original_price",
+        "item_platform_disc",
+        "item_seller_disc",
+        "product_id",
+        "sku_id",
+        "package_id",
+        "package_status",
+        "item_cancel_reason",
+        "sku_image",
+        "row_idx"
+      ],
+      "column_count": 71,
+      "load_sql": "create temp table tiktok as select * from read_csv(?, all_varchar=true)",
+      "load_parameters": [
+        "data/raw/tiktok_orders.csv"
+      ]
+    },
+    "shopee": {
+      "file": "data/raw/shopee_orders.csv",
+      "bytes": 21568414,
+      "sha256": "413fbd9150cdc39577d4ddba945778c30090990131de3c8ee330a35797569459",
+      "columns": [
+        "pkId",
+        "user_id",
+        "shop_id",
+        "order_sn",
+        "order_status",
+        "create_time",
+        "pay_time",
+        "shipped_time",
+        "completed_time",
+        "cancel_reason",
+        "buyer_remark",
+        "shipping_carrier",
+        "payment_method",
+        "estimated_shipping_date",
+        "buyer_username",
+        "recipient_name",
+        "phone",
+        "full_address",
+        "state",
+        "city",
+        "district",
+        "country",
+        "item_name",
+        "item_sku",
+        "model_name",
+        "model_sku",
+        "quantity",
+        "original_price",
+        "model_discounted_price",
+        "item_weight",
+        "total_order_value",
+        "buyer_total_amount",
+        "seller_discount",
+        "shopee_discount",
+        "voucher_from_seller",
+        "voucher_from_shopee",
+        "commission_fee",
+        "service_fee",
+        "transaction_fee",
+        "escrow_amount",
+        "actual_shipping_fee",
+        "shop_name",
+        "connection_id",
+        "region",
+        "synced_at",
+        "raw_payload",
+        "currency",
+        "order_status_raw",
+        "cancel_time",
+        "fulfillment_flag",
+        "cod",
+        "buyer_user_id",
+        "ship_by_date",
+        "note",
+        "shipping_method",
+        "package_number",
+        "recipient_town",
+        "returned_quantity",
+        "total_weight",
+        "estimated_shipping_fee",
+        "return_shipping_fee",
+        "item_id",
+        "model_id",
+        "zipcode",
+        "update_time",
+        "buyer_cancel_reason",
+        "cancel_by",
+        "product_location_id",
+        "promotion_type",
+        "promotion_id",
+        "active_qty",
+        "cancel_requested_qty",
+        "cancelled_qty",
+        "return_requested_qty",
+        "wholesale",
+        "add_on_deal",
+        "main_item",
+        "add_on_deal_id",
+        "can_full_cancel_order",
+        "can_partial_cancel_order",
+        "buyer_preference_for_partial_cancellation",
+        "booking_sn",
+        "advance_package",
+        "is_primary_row"
+      ],
+      "column_count": 84,
+      "load_sql": "create temp table shopee as select * from read_csv(?, all_varchar=true)",
+      "load_parameters": [
+        "data/raw/shopee_orders.csv"
+      ]
+    }
+  },
+  "queries": [
+    {
+      "id": "tiktok-summary",
+      "sql": "\nselect count(*) as rows, count(distinct order_id) as distinct_order_ids,\n count(distinct (user_id, shop_name, order_id)) as user_shop_order_keys,\n count(distinct pkId) as distinct_pk_ids, count(distinct shop_name) as shop_names,\n count(distinct user_id) as users,\n min(try_cast(created_time as timestamp)) as min_created,\n max(try_cast(created_time as timestamp)) as max_created,\n min(try_cast(updatedAt as timestamp)) as min_sync,\n max(try_cast(updatedAt as timestamp)) as max_sync,\n count(*) filter(where pkId is null) as null_pk,\n count(*) filter(where order_id is null) as null_order,\n count(*) filter(where created_time is not null and try_cast(created_time as timestamp) is null) as invalid_created,\n count(*) filter(where updatedAt is not null and try_cast(updatedAt as timestamp) is null) as invalid_sync,\n count(*) filter(where quantity is null or try_cast(quantity as integer) is null) as invalid_or_null_quantity,\n count(*) filter(where try_cast(quantity as integer)<=0) as nonpositive_quantity,\n count(*) filter(where regexp_matches(order_id, '(?i)e[+-][0-9]+')) as scientific_order_ids\nfrom tiktok",
+      "rows": [
+        {
+          "rows": 102000,
+          "distinct_order_ids": 386,
+          "user_shop_order_keys": 1449,
+          "distinct_pk_ids": 97158,
+          "shop_names": 12,
+          "users": 10,
+          "min_created": "2025-10-31 09:01:46",
+          "max_created": "2026-09-09 21:55:04",
+          "min_sync": "2026-04-14 17:06:19.489000",
+          "max_sync": "2026-09-09 22:02:01.712000",
+          "null_pk": 0,
+          "null_order": 0,
+          "invalid_created": 0,
+          "invalid_sync": 0,
+          "invalid_or_null_quantity": 0,
+          "nonpositive_quantity": 0,
+          "scientific_order_ids": 0
+        }
+      ]
+    },
+    {
+      "id": "tiktok-duplicate-pk",
+      "sql": "\nselect count(*) as affected_key_groups, coalesce(sum(n),0) as affected_rows\nfrom (select pkId,count(*) as n from tiktok\n      group by pkId having count(*)>1)",
+      "rows": [
+        {
+          "affected_key_groups": 4689,
+          "affected_rows": 9531
+        }
+      ]
+    },
+    {
+      "id": "tiktok-pk-multiple-orders",
+      "sql": "\nselect count(*) as affected_key_groups, coalesce(sum(n),0) as affected_rows\nfrom (select pkId,count(*) as n from tiktok\n      group by pkId having count(distinct order_id)>1)",
+      "rows": [
+        {
+          "affected_key_groups": 4651,
+          "affected_rows": 9455
+        }
+      ]
+    },
+    {
+      "id": "tiktok-scoped-pk-multiple-orders",
+      "sql": "\nselect count(*) as affected_key_groups, coalesce(sum(n),0) as affected_rows\nfrom (select user_id,shop_name,pkId,count(*) as n from tiktok\n      group by user_id,shop_name,pkId having count(distinct order_id)>1)",
+      "rows": [
+        {
+          "affected_key_groups": 1336,
+          "affected_rows": 2697
+        }
+      ]
+    },
+    {
+      "id": "tiktok-scoped-orders-multiple-created",
+      "sql": "\nselect count(*) as affected_key_groups, coalesce(sum(n),0) as affected_rows\nfrom (select user_id,shop_name,order_id,count(*) as n from tiktok\n      group by user_id,shop_name,order_id having count(distinct created_time)>1)",
+      "rows": [
+        {
+          "affected_key_groups": 1258,
+          "affected_rows": 101788
+        }
+      ]
+    },
+    {
+      "id": "tiktok-scoped-orders-multiple-status",
+      "sql": "\nselect count(*) as affected_key_groups, coalesce(sum(n),0) as affected_rows\nfrom (select user_id,shop_name,order_id,count(*) as n from tiktok\n      group by user_id,shop_name,order_id having count(distinct order_status)>1)",
+      "rows": [
+        {
+          "affected_key_groups": 761,
+          "affected_rows": 91263
+        }
+      ]
+    },
+    {
+      "id": "tiktok-statuses",
+      "sql": "\nselect order_status,count(*) as rows,count(distinct order_id) as distinct_order_ids\nfrom tiktok group by 1 order by 2 desc",
+      "rows": [
+        {
+          "order_status": "COMPLETED",
+          "rows": 67448,
+          "distinct_order_ids": 359
+        },
+        {
+          "order_status": "CANCELLED",
+          "rows": 16267,
+          "distinct_order_ids": 288
+        },
+        {
+          "order_status": "DELIVERED",
+          "rows": 16173,
+          "distinct_order_ids": 125
+        },
+        {
+          "order_status": "IN_TRANSIT",
+          "rows": 1607,
+          "distinct_order_ids": 105
+        },
+        {
+          "order_status": "AWAITING_SHIPMENT",
+          "rows": 346,
+          "distinct_order_ids": 11
+        },
+        {
+          "order_status": "AWAITING_COLLECTION",
+          "rows": 155,
+          "distinct_order_ids": 9
+        },
+        {
+          "order_status": "UNPAID",
+          "rows": 4,
+          "distinct_order_ids": 4
+        }
+      ]
+    },
+    {
+      "id": "tiktok-currency",
+      "sql": "select currency,count(*) as rows from tiktok group by 1 order by 2 desc",
+      "rows": [
+        {
+          "currency": "VND",
+          "rows": 102000
+        }
+      ]
+    },
+    {
+      "id": "shopee-summary",
+      "sql": "\nselect count(*) as rows, count(distinct order_sn) as distinct_order_ids,\n count(distinct (user_id, shop_name, order_sn)) as user_shop_order_keys,\n count(distinct pkId) as distinct_pk_ids, count(distinct shop_name) as shop_names,\n count(distinct user_id) as users,\n min(try_cast(create_time as timestamp)) as min_created,\n max(try_cast(create_time as timestamp)) as max_created,\n min(try_cast(synced_at as timestamp)) as min_sync,\n max(try_cast(synced_at as timestamp)) as max_sync,\n count(*) filter(where pkId is null) as null_pk,\n count(*) filter(where order_sn is null) as null_order,\n count(*) filter(where create_time is not null and try_cast(create_time as timestamp) is null) as invalid_created,\n count(*) filter(where synced_at is not null and try_cast(synced_at as timestamp) is null) as invalid_sync,\n count(*) filter(where quantity is null or try_cast(quantity as integer) is null) as invalid_or_null_quantity,\n count(*) filter(where try_cast(quantity as integer)<=0) as nonpositive_quantity,\n count(*) filter(where regexp_matches(order_sn, '(?i)e[+-][0-9]+')) as scientific_order_ids\nfrom shopee",
+      "rows": [
+        {
+          "rows": 25546,
+          "distinct_order_ids": 35,
+          "user_shop_order_keys": 140,
+          "distinct_pk_ids": 25241,
+          "shop_names": 9,
+          "users": 6,
+          "min_created": "2025-12-13 07:10:47",
+          "max_created": "2026-09-07 01:50:19",
+          "min_sync": "2026-07-14 18:16:27.580000",
+          "max_sync": "2026-09-07 05:00:30.989000",
+          "null_pk": 0,
+          "null_order": 0,
+          "invalid_created": 0,
+          "invalid_sync": 0,
+          "invalid_or_null_quantity": 0,
+          "nonpositive_quantity": 0,
+          "scientific_order_ids": 0
+        }
+      ]
+    },
+    {
+      "id": "shopee-duplicate-pk",
+      "sql": "\nselect count(*) as affected_key_groups, coalesce(sum(n),0) as affected_rows\nfrom (select pkId,count(*) as n from shopee\n      group by pkId having count(*)>1)",
+      "rows": [
+        {
+          "affected_key_groups": 301,
+          "affected_rows": 606
+        }
+      ]
+    },
+    {
+      "id": "shopee-pk-multiple-orders",
+      "sql": "\nselect count(*) as affected_key_groups, coalesce(sum(n),0) as affected_rows\nfrom (select pkId,count(*) as n from shopee\n      group by pkId having count(distinct order_sn)>1)",
+      "rows": [
+        {
+          "affected_key_groups": 277,
+          "affected_rows": 558
+        }
+      ]
+    },
+    {
+      "id": "shopee-scoped-pk-multiple-orders",
+      "sql": "\nselect count(*) as affected_key_groups, coalesce(sum(n),0) as affected_rows\nfrom (select user_id,shop_name,pkId,count(*) as n from shopee\n      group by user_id,shop_name,pkId having count(distinct order_sn)>1)",
+      "rows": [
+        {
+          "affected_key_groups": 126,
+          "affected_rows": 254
+        }
+      ]
+    },
+    {
+      "id": "shopee-scoped-orders-multiple-created",
+      "sql": "\nselect count(*) as affected_key_groups, coalesce(sum(n),0) as affected_rows\nfrom (select user_id,shop_name,order_sn,count(*) as n from shopee\n      group by user_id,shop_name,order_sn having count(distinct create_time)>1)",
+      "rows": [
+        {
+          "affected_key_groups": 136,
+          "affected_rows": 25538
+        }
+      ]
+    },
+    {
+      "id": "shopee-scoped-orders-multiple-status",
+      "sql": "\nselect count(*) as affected_key_groups, coalesce(sum(n),0) as affected_rows\nfrom (select user_id,shop_name,order_sn,count(*) as n from shopee\n      group by user_id,shop_name,order_sn having count(distinct order_status)>1)",
+      "rows": [
+        {
+          "affected_key_groups": 125,
+          "affected_rows": 25434
+        }
+      ]
+    },
+    {
+      "id": "shopee-statuses",
+      "sql": "\nselect order_status,count(*) as rows,count(distinct order_sn) as distinct_order_ids\nfrom shopee group by 1 order by 2 desc",
+      "rows": [
+        {
+          "order_status": "COMPLETED",
+          "rows": 20499,
+          "distinct_order_ids": 35
+        },
+        {
+          "order_status": "CANCELLED",
+          "rows": 4658,
+          "distinct_order_ids": 34
+        },
+        {
+          "order_status": "TO_CONFIRM_RECEIVE",
+          "rows": 167,
+          "distinct_order_ids": 7
+        },
+        {
+          "order_status": "READY_TO_SHIP",
+          "rows": 104,
+          "distinct_order_ids": 1
+        },
+        {
+          "order_status": "SHIPPED",
+          "rows": 77,
+          "distinct_order_ids": 5
+        },
+        {
+          "order_status": "TO_RETURN",
+          "rows": 34,
+          "distinct_order_ids": 6
+        },
+        {
+          "order_status": "PROCESSED",
+          "rows": 6,
+          "distinct_order_ids": 2
+        },
+        {
+          "order_status": "UNPAID",
+          "rows": 1,
+          "distinct_order_ids": 1
+        }
+      ]
+    },
+    {
+      "id": "shopee-currency",
+      "sql": "select currency,count(*) as rows from shopee group by 1 order by 2 desc",
+      "rows": [
+        {
+          "currency": "VND",
+          "rows": 25542
+        },
+        {
+          "currency": "SGD",
+          "rows": 4
+        }
+      ]
+    },
+    {
+      "id": "shopee-primary-row",
+      "sql": "select is_primary_row,count(*) as rows from shopee group by 1 order by 2 desc",
+      "rows": [
+        {
+          "is_primary_row": "true",
+          "rows": 19833
+        },
+        {
+          "is_primary_row": "false",
+          "rows": 5713
+        }
+      ]
+    },
+    {
+      "id": "shopee-shopid-keys",
+      "sql": "select count(distinct shop_id) as shop_ids,count(distinct (shop_id,order_sn)) as shop_order_keys from shopee",
+      "rows": [
+        {
+          "shop_ids": 8,
+          "shop_order_keys": 132
+        }
+      ]
+    },
+    {
+      "id": "shared-sku-values",
+      "sql": "\nselect count(*) as shared_literal_sku_values\nfrom (select distinct seller_sku as sku from tiktok where seller_sku is not null) t\njoin (select distinct item_sku as sku from shopee where item_sku is not null) s using(sku)",
+      "rows": [
+        {
+          "shared_literal_sku_values": 3
+        }
+      ]
+    },
+    {
+      "id": "existing-fact-flags",
+      "sql": "\nselect count(*) as fact_rows,sum(is_successful_revenue) as successful_flags,\nsum(is_cancelled) as cancelled_flags,\ncount(*) filter(where order_status='COMPLETED') as completed_status_rows,\ncount(*) filter(where order_status='CANCELLED') as cancelled_status_rows\nfrom main_intermediate.fct_orders",
+      "rows": [
+        {
+          "fact_rows": 385,
+          "successful_flags": 0,
+          "cancelled_flags": 0,
+          "completed_status_rows": 287,
+          "cancelled_status_rows": 53
+        }
+      ]
+    }
+  ]
+}

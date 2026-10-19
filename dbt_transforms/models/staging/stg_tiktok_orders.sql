@@ -1,12 +1,26 @@
--- Model staging: Ép kiểu dữ liệu + đặt alias chuẩn cho 71 cột TikTok
--- Grain (hạt độ): 1 dòng = 1 line item (sản phẩm) trong đơn hàng
--- Đọc trực tiếp file CSV thô qua hàm read_csv_auto() của DuckDB
+{{ config(materialized='table', tags=['tiktok', 'observations']) }}
 
-with source as (
-    select * from read_csv_auto('../data/raw/tiktok_orders.csv')
+-- One immutable CSV record, including repeated masks or identical record contents.
+-- Serial CSV scan assigns record ordinals before any joins (quoted newlines are safe).
+{% set input_path = env_var('TIKTOK_CSV_PATH', '../data/raw/tiktok_orders.csv') | replace("'", "''") %}
+
+with source_rows as (
+    select row_number() over () as _source_row_number, *
+    from {{ source('raw_tiktok', 'tiktok_orders') }}
+),
+file_metadata as (
+    select sha256(content) as _file_sha256
+    from read_blob('{{ input_path }}')
 )
 
 select
+    sha256('tiktok|' || _file_sha256 || '|' || cast(_source_row_number as varchar)) as observation_id,
+    _source_row_number,
+    _file_sha256,
+    '{{ input_path }}' as _source_file,
+    current_timestamp as _ingested_at,
+    contains(cast(pkId as varchar), '*') as is_pk_masked,
+    contains(cast(order_id as varchar), '*') as is_order_id_masked,
     -- === Metadata hệ thống ===
     cast(pkId as varchar)               as pk_id,
     cast(user_id as varchar)            as user_id,
@@ -15,7 +29,8 @@ select
 
     -- === Thông tin đơn hàng ===
     cast(order_id as varchar)           as order_id,
-    cast(order_status as varchar)       as order_status,
+    cast(order_status as varchar)       as raw_order_status,
+    {{ normalize_order_status('order_status') }} as order_status,
     cast(order_type as varchar)         as order_type,
     {{ clean_string('shop_name') }}     as shop_name,
 
@@ -23,9 +38,9 @@ select
     cast(created_time as timestamp)     as created_time,
     cast(paid_time as timestamp)        as paid_time,
     cast(rts_time as timestamp)         as rts_time,
-    cast(shipped_time as varchar)       as shipped_time,
+    cast(shipped_time as timestamp)     as shipped_time,
     cast(delivered_time as timestamp)   as delivered_time,
-    cast(completed_time as varchar)     as completed_time,
+    cast(completed_time as timestamp)   as completed_time,
     cast(cancelled_time as timestamp)   as cancelled_time,
     cast(updated_time as timestamp)     as updated_time,
 
@@ -34,10 +49,10 @@ select
     cast(tts_sla_time as timestamp)     as tts_sla_time,
     cast(delivery_sla_time as timestamp) as delivery_sla_time,
     cast(cancel_sla_time as timestamp)  as cancel_sla_time,
-    cast(auto_cancel_time as varchar)   as auto_cancel_time,
+    cast(auto_cancel_time as timestamp) as auto_cancel_time,
 
     -- === Tài chính - Cấp đơn hàng (ORDER LEVEL) ===
-    cast(currency as varchar)                   as currency,
+    upper(trim(cast(currency as varchar)))      as currency,
     cast(total_amount as decimal(18,2))         as total_amount,
     cast(sub_total as decimal(18,2))            as sub_total,
     cast(order_original_price as decimal(18,2)) as order_original_price,
@@ -105,4 +120,4 @@ select
     -- === Cột bổ sung cho pipeline ===
     'tiktok' as source_channel
 
-from source
+from source_rows cross join file_metadata

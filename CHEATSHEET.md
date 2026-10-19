@@ -1,5 +1,14 @@
 # 🚀 DATA PIPELINE CHEATSHEET
 
+> TikTok hiện chạy ở grain **CSV observation**, không dedup theo masked ID. Contract, schema cho dashboard và danh sách mart cũ đã ngưng build nằm tại [models/README.md](dbt_transforms/models/README.md). Các bảng mart cũ trong working warehouse không tự bị xóa hoặc refresh.
+
+Kiểm thử an toàn từ repo root, dùng DB riêng dưới `.validation/`:
+
+```powershell
+.venv/Scripts/python.exe scripts/validate_tiktok_dbt.py
+.venv/Scripts/python.exe scripts/validate_tiktok_dbt.py --real-data
+```
+
 Tài liệu này lưu trữ toàn bộ các câu lệnh cần thiết để khởi chạy, quản lý và cập nhật hệ thống Data Pipeline (dbt + Dagster + Streamlit).
 
 ---

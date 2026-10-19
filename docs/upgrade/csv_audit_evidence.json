@@ -1,0 +1,2664 @@
+{
+  "executed_at_utc": "2026-10-19T01:47:03.330617+00:00",
+  "duckdb_version": "1.5.5",
+  "sources": {
+    "tiktok": {
+      "sha256": "849022b62666db6e207336002efb00d3341e8c9eb69b7af825b73414b3d87888",
+      "bytes": 100815605,
+      "encoding_checked": "UTF-8, strict decoding",
+      "utf8_bom": false,
+      "csv_strict_parse": "passed",
+      "csv_rows": 102000,
+      "columns": [
+        "pkId",
+        "user_id",
+        "createdAt",
+        "updatedAt",
+        "order_id",
+        "order_status",
+        "order_type",
+        "shop_name",
+        "created_time",
+        "paid_time",
+        "rts_time",
+        "shipped_time",
+        "delivered_time",
+        "completed_time",
+        "cancelled_time",
+        "updated_time",
+        "rts_sla_time",
+        "tts_sla_time",
+        "delivery_sla_time",
+        "cancel_sla_time",
+        "auto_cancel_time",
+        "currency",
+        "total_amount",
+        "sub_total",
+        "order_original_price",
+        "payment_method",
+        "is_cod",
+        "shipping_fee",
+        "original_shipping_fee",
+        "tax_amount",
+        "product_tax",
+        "shipping_tax",
+        "small_order_fee",
+        "retail_delivery_fee",
+        "insurance_fee",
+        "seller_discount",
+        "platform_discount",
+        "shipping_seller_discount",
+        "shipping_platform_discount",
+        "fulfillment_type",
+        "delivery_type",
+        "delivery_option",
+        "shipping_provider",
+        "tracking_number",
+        "warehouse_id",
+        "buyer_uid",
+        "buyer_name",
+        "buyer_message",
+        "recipient_name",
+        "recipient_phone",
+        "full_address",
+        "postal_code",
+        "region_state",
+        "city_town",
+        "district",
+        "product_name",
+        "sku_name",
+        "seller_sku",
+        "quantity",
+        "item_status",
+        "item_sale_price",
+        "item_original_price",
+        "item_platform_disc",
+        "item_seller_disc",
+        "product_id",
+        "sku_id",
+        "package_id",
+        "package_status",
+        "item_cancel_reason",
+        "sku_image",
+        "row_idx"
+      ],
+      "column_count": 71,
+      "duplicate_column_names": 0,
+      "row_width_counts": {
+        "71": 102000
+      },
+      "bad_width_row_numbers": [],
+      "repeated_headers": 0,
+      "blank_records": 0,
+      "records_with_embedded_newlines": 0,
+      "physical_lines": 102001,
+      "ends_newline": true,
+      "file": "data/raw/tiktok_orders.csv",
+      "duckdb_load_sql": "create temp table tiktok as select row_number() over() as __csv_row, * from read_csv(?, all_varchar=true, parallel=false)",
+      "duckdb_load_parameters": [
+        "data/raw/tiktok_orders.csv"
+      ]
+    },
+    "shopee": {
+      "sha256": "413fbd9150cdc39577d4ddba945778c30090990131de3c8ee330a35797569459",
+      "bytes": 21568414,
+      "encoding_checked": "UTF-8, strict decoding",
+      "utf8_bom": false,
+      "csv_strict_parse": "passed",
+      "csv_rows": 25546,
+      "columns": [
+        "pkId",
+        "user_id",
+        "shop_id",
+        "order_sn",
+        "order_status",
+        "create_time",
+        "pay_time",
+        "shipped_time",
+        "completed_time",
+        "cancel_reason",
+        "buyer_remark",
+        "shipping_carrier",
+        "payment_method",
+        "estimated_shipping_date",
+        "buyer_username",
+        "recipient_name",
+        "phone",
+        "full_address",
+        "state",
+        "city",
+        "district",
+        "country",
+        "item_name",
+        "item_sku",
+        "model_name",
+        "model_sku",
+        "quantity",
+        "original_price",
+        "model_discounted_price",
+        "item_weight",
+        "total_order_value",
+        "buyer_total_amount",
+        "seller_discount",
+        "shopee_discount",
+        "voucher_from_seller",
+        "voucher_from_shopee",
+        "commission_fee",
+        "service_fee",
+        "transaction_fee",
+        "escrow_amount",
+        "actual_shipping_fee",
+        "shop_name",
+        "connection_id",
+        "region",
+        "synced_at",
+        "raw_payload",
+        "currency",
+        "order_status_raw",
+        "cancel_time",
+        "fulfillment_flag",
+        "cod",
+        "buyer_user_id",
+        "ship_by_date",
+        "note",
+        "shipping_method",
+        "package_number",
+        "recipient_town",
+        "returned_quantity",
+        "total_weight",
+        "estimated_shipping_fee",
+        "return_shipping_fee",
+        "item_id",
+        "model_id",
+        "zipcode",
+        "update_time",
+        "buyer_cancel_reason",
+        "cancel_by",
+        "product_location_id",
+        "promotion_type",
+        "promotion_id",
+        "active_qty",
+        "cancel_requested_qty",
+        "cancelled_qty",
+        "return_requested_qty",
+        "wholesale",
+        "add_on_deal",
+        "main_item",
+        "add_on_deal_id",
+        "can_full_cancel_order",
+        "can_partial_cancel_order",
+        "buyer_preference_for_partial_cancellation",
+        "booking_sn",
+        "advance_package",
+        "is_primary_row"
+      ],
+      "column_count": 84,
+      "duplicate_column_names": 0,
+      "row_width_counts": {
+        "84": 25546
+      },
+      "bad_width_row_numbers": [],
+      "repeated_headers": 0,
+      "blank_records": 0,
+      "records_with_embedded_newlines": 86,
+      "physical_lines": 25633,
+      "ends_newline": true,
+      "file": "data/raw/shopee_orders.csv",
+      "duckdb_load_sql": "create temp table shopee as select row_number() over() as __csv_row, * from read_csv(?, all_varchar=true, parallel=false)",
+      "duckdb_load_parameters": [
+        "data/raw/shopee_orders.csv"
+      ]
+    }
+  },
+  "queries": [
+    {
+      "id": "tiktok-summary",
+      "sql": "\nselect count(*) as rows,count(distinct pkId) as masked_pk_values,\n count(distinct order_id) as masked_order_values,\n count(*)-count(distinct pkId) as rows_removed_by_masked_pk_dedup,\n min(try_cast(created_time as timestamp)) as min_created,\n max(try_cast(created_time as timestamp)) as max_created from tiktok",
+      "rows": [
+        {
+          "rows": 102000,
+          "masked_pk_values": 97158,
+          "masked_order_values": 386,
+          "rows_removed_by_masked_pk_dedup": 4842,
+          "min_created": "2025-10-31 09:01:46",
+          "max_created": "2026-09-09 21:55:04"
+        }
+      ]
+    },
+    {
+      "id": "tiktok-exact-duplicates",
+      "sql": "\nselect count(*) as duplicate_groups,coalesce(sum(n-1),0) as excess_duplicate_rows,\n coalesce(sum(n),0) as affected_rows\nfrom (select * exclude(__csv_row),count(*) as n from tiktok group by all having count(*)>1)",
+      "rows": [
+        {
+          "duplicate_groups": 0,
+          "excess_duplicate_rows": 0,
+          "affected_rows": 0
+        }
+      ]
+    },
+    {
+      "id": "tiktok-column-profile",
+      "sql": "select 'pkId' as column_name,count(*) as rows,\n count(*) filter(where \"pkId\" is null) as null_rows,\n count(*) filter(where \"pkId\" is not null and trim(\"pkId\")='') as blank_rows,\n count(*) filter(where contains(\"pkId\",'*')) as masked_rows,\n count(distinct \"pkId\") as distinct_nonnull_values from tiktok\nunion all\nselect 'user_id' as column_name,count(*) as rows,\n count(*) filter(where \"user_id\" is null) as null_rows,\n count(*) filter(where \"user_id\" is not null and trim(\"user_id\")='') as blank_rows,\n count(*) filter(where contains(\"user_id\",'*')) as masked_rows,\n count(distinct \"user_id\") as distinct_nonnull_values from tiktok\nunion all\nselect 'createdAt' as column_name,count(*) as rows,\n count(*) filter(where \"createdAt\" is null) as null_rows,\n count(*) filter(where \"createdAt\" is not null and trim(\"createdAt\")='') as blank_rows,\n count(*) filter(where contains(\"createdAt\",'*')) as masked_rows,\n count(distinct \"createdAt\") as distinct_nonnull_values from tiktok\nunion all\nselect 'updatedAt' as column_name,count(*) as rows,\n count(*) filter(where \"updatedAt\" is null) as null_rows,\n count(*) filter(where \"updatedAt\" is not null and trim(\"updatedAt\")='') as blank_rows,\n count(*) filter(where contains(\"updatedAt\",'*')) as masked_rows,\n count(distinct \"updatedAt\") as distinct_nonnull_values from tiktok\nunion all\nselect 'order_id' as column_name,count(*) as rows,\n count(*) filter(where \"order_id\" is null) as null_rows,\n count(*) filter(where \"order_id\" is not null and trim(\"order_id\")='') as blank_rows,\n count(*) filter(where contains(\"order_id\",'*')) as masked_rows,\n count(distinct \"order_id\") as distinct_nonnull_values from tiktok\nunion all\nselect 'order_status' as column_name,count(*) as rows,\n count(*) filter(where \"order_status\" is null) as null_rows,\n count(*) filter(where \"order_status\" is not null and trim(\"order_status\")='') as blank_rows,\n count(*) filter(where contains(\"order_status\",'*')) as masked_rows,\n count(distinct \"order_status\") as distinct_nonnull_values from tiktok\nunion all\nselect 'order_type' as column_name,count(*) as rows,\n count(*) filter(where \"order_type\" is null) as null_rows,\n count(*) filter(where \"order_type\" is not null and trim(\"order_type\")='') as blank_rows,\n count(*) filter(where contains(\"order_type\",'*')) as masked_rows,\n count(distinct \"order_type\") as distinct_nonnull_values from tiktok\nunion all\nselect 'shop_name' as column_name,count(*) as rows,\n count(*) filter(where \"shop_name\" is null) as null_rows,\n count(*) filter(where \"shop_name\" is not null and trim(\"shop_name\")='') as blank_rows,\n count(*) filter(where contains(\"shop_name\",'*')) as masked_rows,\n count(distinct \"shop_name\") as distinct_nonnull_values from tiktok\nunion all\nselect 'created_time' as column_name,count(*) as rows,\n count(*) filter(where \"created_time\" is null) as null_rows,\n count(*) filter(where \"created_time\" is not null and trim(\"created_time\")='') as blank_rows,\n count(*) filter(where contains(\"created_time\",'*')) as masked_rows,\n count(distinct \"created_time\") as distinct_nonnull_values from tiktok\nunion all\nselect 'paid_time' as column_name,count(*) as rows,\n count(*) filter(where \"paid_time\" is null) as null_rows,\n count(*) filter(where \"paid_time\" is not null and trim(\"paid_time\")='') as blank_rows,\n count(*) filter(where contains(\"paid_time\",'*')) as masked_rows,\n count(distinct \"paid_time\") as distinct_nonnull_values from tiktok\nunion all\nselect 'rts_time' as column_name,count(*) as rows,\n count(*) filter(where \"rts_time\" is null) as null_rows,\n count(*) filter(where \"rts_time\" is not null and trim(\"rts_time\")='') as blank_rows,\n count(*) filter(where contains(\"rts_time\",'*')) as masked_rows,\n count(distinct \"rts_time\") as distinct_nonnull_values from tiktok\nunion all\nselect 'shipped_time' as column_name,count(*) as rows,\n count(*) filter(where \"shipped_time\" is null) as null_rows,\n count(*) filter(where \"shipped_time\" is not null and trim(\"shipped_time\")='') as blank_rows,\n count(*) filter(where contains(\"shipped_time\",'*')) as masked_rows,\n count(distinct \"shipped_time\") as distinct_nonnull_values from tiktok\nunion all\nselect 'delivered_time' as column_name,count(*) as rows,\n count(*) filter(where \"delivered_time\" is null) as null_rows,\n count(*) filter(where \"delivered_time\" is not null and trim(\"delivered_time\")='') as blank_rows,\n count(*) filter(where contains(\"delivered_time\",'*')) as masked_rows,\n count(distinct \"delivered_time\") as distinct_nonnull_values from tiktok\nunion all\nselect 'completed_time' as column_name,count(*) as rows,\n count(*) filter(where \"completed_time\" is null) as null_rows,\n count(*) filter(where \"completed_time\" is not null and trim(\"completed_time\")='') as blank_rows,\n count(*) filter(where contains(\"completed_time\",'*')) as masked_rows,\n count(distinct \"completed_time\") as distinct_nonnull_values from tiktok\nunion all\nselect 'cancelled_time' as column_name,count(*) as rows,\n count(*) filter(where \"cancelled_time\" is null) as null_rows,\n count(*) filter(where \"cancelled_time\" is not null and trim(\"cancelled_time\")='') as blank_rows,\n count(*) filter(where contains(\"cancelled_time\",'*')) as masked_rows,\n count(distinct \"cancelled_time\") as distinct_nonnull_values from tiktok\nunion all\nselect 'updated_time' as column_name,count(*) as rows,\n count(*) filter(where \"updated_time\" is null) as null_rows,\n count(*) filter(where \"updated_time\" is not null and trim(\"updated_time\")='') as blank_rows,\n count(*) filter(where contains(\"updated_time\",'*')) as masked_rows,\n count(distinct \"updated_time\") as distinct_nonnull_values from tiktok\nunion all\nselect 'rts_sla_time' as column_name,count(*) as rows,\n count(*) filter(where \"rts_sla_time\" is null) as null_rows,\n count(*) filter(where \"rts_sla_time\" is not null and trim(\"rts_sla_time\")='') as blank_rows,\n count(*) filter(where contains(\"rts_sla_time\",'*')) as masked_rows,\n count(distinct \"rts_sla_time\") as distinct_nonnull_values from tiktok\nunion all\nselect 'tts_sla_time' as column_name,count(*) as rows,\n count(*) filter(where \"tts_sla_time\" is null) as null_rows,\n count(*) filter(where \"tts_sla_time\" is not null and trim(\"tts_sla_time\")='') as blank_rows,\n count(*) filter(where contains(\"tts_sla_time\",'*')) as masked_rows,\n count(distinct \"tts_sla_time\") as distinct_nonnull_values from tiktok\nunion all\nselect 'delivery_sla_time' as column_name,count(*) as rows,\n count(*) filter(where \"delivery_sla_time\" is null) as null_rows,\n count(*) filter(where \"delivery_sla_time\" is not null and trim(\"delivery_sla_time\")='') as blank_rows,\n count(*) filter(where contains(\"delivery_sla_time\",'*')) as masked_rows,\n count(distinct \"delivery_sla_time\") as distinct_nonnull_values from tiktok\nunion all\nselect 'cancel_sla_time' as column_name,count(*) as rows,\n count(*) filter(where \"cancel_sla_time\" is null) as null_rows,\n count(*) filter(where \"cancel_sla_time\" is not null and trim(\"cancel_sla_time\")='') as blank_rows,\n count(*) filter(where contains(\"cancel_sla_time\",'*')) as masked_rows,\n count(distinct \"cancel_sla_time\") as distinct_nonnull_values from tiktok\nunion all\nselect 'auto_cancel_time' as column_name,count(*) as rows,\n count(*) filter(where \"auto_cancel_time\" is null) as null_rows,\n count(*) filter(where \"auto_cancel_time\" is not null and trim(\"auto_cancel_time\")='') as blank_rows,\n count(*) filter(where contains(\"auto_cancel_time\",'*')) as masked_rows,\n count(distinct \"auto_cancel_time\") as distinct_nonnull_values from tiktok\nunion all\nselect 'currency' as column_name,count(*) as rows,\n count(*) filter(where \"currency\" is null) as null_rows,\n count(*) filter(where \"currency\" is not null and trim(\"currency\")='') as blank_rows,\n count(*) filter(where contains(\"currency\",'*')) as masked_rows,\n count(distinct \"currency\") as distinct_nonnull_values from tiktok\nunion all\nselect 'total_amount' as column_name,count(*) as rows,\n count(*) filter(where \"total_amount\" is null) as null_rows,\n count(*) filter(where \"total_amount\" is not null and trim(\"total_amount\")='') as blank_rows,\n count(*) filter(where contains(\"total_amount\",'*')) as masked_rows,\n count(distinct \"total_amount\") as distinct_nonnull_values from tiktok\nunion all\nselect 'sub_total' as column_name,count(*) as rows,\n count(*) filter(where \"sub_total\" is null) as null_rows,\n count(*) filter(where \"sub_total\" is not null and trim(\"sub_total\")='') as blank_rows,\n count(*) filter(where contains(\"sub_total\",'*')) as masked_rows,\n count(distinct \"sub_total\") as distinct_nonnull_values from tiktok\nunion all\nselect 'order_original_price' as column_name,count(*) as rows,\n count(*) filter(where \"order_original_price\" is null) as null_rows,\n count(*) filter(where \"order_original_price\" is not null and trim(\"order_original_price\")='') as blank_rows,\n count(*) filter(where contains(\"order_original_price\",'*')) as masked_rows,\n count(distinct \"order_original_price\") as distinct_nonnull_values from tiktok\nunion all\nselect 'payment_method' as column_name,count(*) as rows,\n count(*) filter(where \"payment_method\" is null) as null_rows,\n count(*) filter(where \"payment_method\" is not null and trim(\"payment_method\")='') as blank_rows,\n count(*) filter(where contains(\"payment_method\",'*')) as masked_rows,\n count(distinct \"payment_method\") as distinct_nonnull_values from tiktok\nunion all\nselect 'is_cod' as column_name,count(*) as rows,\n count(*) filter(where \"is_cod\" is null) as null_rows,\n count(*) filter(where \"is_cod\" is not null and trim(\"is_cod\")='') as blank_rows,\n count(*) filter(where contains(\"is_cod\",'*')) as masked_rows,\n count(distinct \"is_cod\") as distinct_nonnull_values from tiktok\nunion all\nselect 'shipping_fee' as column_name,count(*) as rows,\n count(*) filter(where \"shipping_fee\" is null) as null_rows,\n count(*) filter(where \"shipping_fee\" is not null and trim(\"shipping_fee\")='') as blank_rows,\n count(*) filter(where contains(\"shipping_fee\",'*')) as masked_rows,\n count(distinct \"shipping_fee\") as distinct_nonnull_values from tiktok\nunion all\nselect 'original_shipping_fee' as column_name,count(*) as rows,\n count(*) filter(where \"original_shipping_fee\" is null) as null_rows,\n count(*) filter(where \"original_shipping_fee\" is not null and trim(\"original_shipping_fee\")='') as blank_rows,\n count(*) filter(where contains(\"original_shipping_fee\",'*')) as masked_rows,\n count(distinct \"original_shipping_fee\") as distinct_nonnull_values from tiktok\nunion all\nselect 'tax_amount' as column_name,count(*) as rows,\n count(*) filter(where \"tax_amount\" is null) as null_rows,\n count(*) filter(where \"tax_amount\" is not null and trim(\"tax_amount\")='') as blank_rows,\n count(*) filter(where contains(\"tax_amount\",'*')) as masked_rows,\n count(distinct \"tax_amount\") as distinct_nonnull_values from tiktok\nunion all\nselect 'product_tax' as column_name,count(*) as rows,\n count(*) filter(where \"product_tax\" is null) as null_rows,\n count(*) filter(where \"product_tax\" is not null and trim(\"product_tax\")='') as blank_rows,\n count(*) filter(where contains(\"product_tax\",'*')) as masked_rows,\n count(distinct \"product_tax\") as distinct_nonnull_values from tiktok\nunion all\nselect 'shipping_tax' as column_name,count(*) as rows,\n count(*) filter(where \"shipping_tax\" is null) as null_rows,\n count(*) filter(where \"shipping_tax\" is not null and trim(\"shipping_tax\")='') as blank_rows,\n count(*) filter(where contains(\"shipping_tax\",'*')) as masked_rows,\n count(distinct \"shipping_tax\") as distinct_nonnull_values from tiktok\nunion all\nselect 'small_order_fee' as column_name,count(*) as rows,\n count(*) filter(where \"small_order_fee\" is null) as null_rows,\n count(*) filter(where \"small_order_fee\" is not null and trim(\"small_order_fee\")='') as blank_rows,\n count(*) filter(where contains(\"small_order_fee\",'*')) as masked_rows,\n count(distinct \"small_order_fee\") as distinct_nonnull_values from tiktok\nunion all\nselect 'retail_delivery_fee' as column_name,count(*) as rows,\n count(*) filter(where \"retail_delivery_fee\" is null) as null_rows,\n count(*) filter(where \"retail_delivery_fee\" is not null and trim(\"retail_delivery_fee\")='') as blank_rows,\n count(*) filter(where contains(\"retail_delivery_fee\",'*')) as masked_rows,\n count(distinct \"retail_delivery_fee\") as distinct_nonnull_values from tiktok\nunion all\nselect 'insurance_fee' as column_name,count(*) as rows,\n count(*) filter(where \"insurance_fee\" is null) as null_rows,\n count(*) filter(where \"insurance_fee\" is not null and trim(\"insurance_fee\")='') as blank_rows,\n count(*) filter(where contains(\"insurance_fee\",'*')) as masked_rows,\n count(distinct \"insurance_fee\") as distinct_nonnull_values from tiktok\nunion all\nselect 'seller_discount' as column_name,count(*) as rows,\n count(*) filter(where \"seller_discount\" is null) as null_rows,\n count(*) filter(where \"seller_discount\" is not null and trim(\"seller_discount\")='') as blank_rows,\n count(*) filter(where contains(\"seller_discount\",'*')) as masked_rows,\n count(distinct \"seller_discount\") as distinct_nonnull_values from tiktok\nunion all\nselect 'platform_discount' as column_name,count(*) as rows,\n count(*) filter(where \"platform_discount\" is null) as null_rows,\n count(*) filter(where \"platform_discount\" is not null and trim(\"platform_discount\")='') as blank_rows,\n count(*) filter(where contains(\"platform_discount\",'*')) as masked_rows,\n count(distinct \"platform_discount\") as distinct_nonnull_values from tiktok\nunion all\nselect 'shipping_seller_discount' as column_name,count(*) as rows,\n count(*) filter(where \"shipping_seller_discount\" is null) as null_rows,\n count(*) filter(where \"shipping_seller_discount\" is not null and trim(\"shipping_seller_discount\")='') as blank_rows,\n count(*) filter(where contains(\"shipping_seller_discount\",'*')) as masked_rows,\n count(distinct \"shipping_seller_discount\") as distinct_nonnull_values from tiktok\nunion all\nselect 'shipping_platform_discount' as column_name,count(*) as rows,\n count(*) filter(where \"shipping_platform_discount\" is null) as null_rows,\n count(*) filter(where \"shipping_platform_discount\" is not null and trim(\"shipping_platform_discount\")='') as blank_rows,\n count(*) filter(where contains(\"shipping_platform_discount\",'*')) as masked_rows,\n count(distinct \"shipping_platform_discount\") as distinct_nonnull_values from tiktok\nunion all\nselect 'fulfillment_type' as column_name,count(*) as rows,\n count(*) filter(where \"fulfillment_type\" is null) as null_rows,\n count(*) filter(where \"fulfillment_type\" is not null and trim(\"fulfillment_type\")='') as blank_rows,\n count(*) filter(where contains(\"fulfillment_type\",'*')) as masked_rows,\n count(distinct \"fulfillment_type\") as distinct_nonnull_values from tiktok\nunion all\nselect 'delivery_type' as column_name,count(*) as rows,\n count(*) filter(where \"delivery_type\" is null) as null_rows,\n count(*) filter(where \"delivery_type\" is not null and trim(\"delivery_type\")='') as blank_rows,\n count(*) filter(where contains(\"delivery_type\",'*')) as masked_rows,\n count(distinct \"delivery_type\") as distinct_nonnull_values from tiktok\nunion all\nselect 'delivery_option' as column_name,count(*) as rows,\n count(*) filter(where \"delivery_option\" is null) as null_rows,\n count(*) filter(where \"delivery_option\" is not null and trim(\"delivery_option\")='') as blank_rows,\n count(*) filter(where contains(\"delivery_option\",'*')) as masked_rows,\n count(distinct \"delivery_option\") as distinct_nonnull_values from tiktok\nunion all\nselect 'shipping_provider' as column_name,count(*) as rows,\n count(*) filter(where \"shipping_provider\" is null) as null_rows,\n count(*) filter(where \"shipping_provider\" is not null and trim(\"shipping_provider\")='') as blank_rows,\n count(*) filter(where contains(\"shipping_provider\",'*')) as masked_rows,\n count(distinct \"shipping_provider\") as distinct_nonnull_values from tiktok\nunion all\nselect 'tracking_number' as column_name,count(*) as rows,\n count(*) filter(where \"tracking_number\" is null) as null_rows,\n count(*) filter(where \"tracking_number\" is not null and trim(\"tracking_number\")='') as blank_rows,\n count(*) filter(where contains(\"tracking_number\",'*')) as masked_rows,\n count(distinct \"tracking_number\") as distinct_nonnull_values from tiktok\nunion all\nselect 'warehouse_id' as column_name,count(*) as rows,\n count(*) filter(where \"warehouse_id\" is null) as null_rows,\n count(*) filter(where \"warehouse_id\" is not null and trim(\"warehouse_id\")='') as blank_rows,\n count(*) filter(where contains(\"warehouse_id\",'*')) as masked_rows,\n count(distinct \"warehouse_id\") as distinct_nonnull_values from tiktok\nunion all\nselect 'buyer_uid' as column_name,count(*) as rows,\n count(*) filter(where \"buyer_uid\" is null) as null_rows,\n count(*) filter(where \"buyer_uid\" is not null and trim(\"buyer_uid\")='') as blank_rows,\n count(*) filter(where contains(\"buyer_uid\",'*')) as masked_rows,\n count(distinct \"buyer_uid\") as distinct_nonnull_values from tiktok\nunion all\nselect 'buyer_name' as column_name,count(*) as rows,\n count(*) filter(where \"buyer_name\" is null) as null_rows,\n count(*) filter(where \"buyer_name\" is not null and trim(\"buyer_name\")='') as blank_rows,\n count(*) filter(where contains(\"buyer_name\",'*')) as masked_rows,\n count(distinct \"buyer_name\") as distinct_nonnull_values from tiktok\nunion all\nselect 'buyer_message' as column_name,count(*) as rows,\n count(*) filter(where \"buyer_message\" is null) as null_rows,\n count(*) filter(where \"buyer_message\" is not null and trim(\"buyer_message\")='') as blank_rows,\n count(*) filter(where contains(\"buyer_message\",'*')) as masked_rows,\n count(distinct \"buyer_message\") as distinct_nonnull_values from tiktok\nunion all\nselect 'recipient_name' as column_name,count(*) as rows,\n count(*) filter(where \"recipient_name\" is null) as null_rows,\n count(*) filter(where \"recipient_name\" is not null and trim(\"recipient_name\")='') as blank_rows,\n count(*) filter(where contains(\"recipient_name\",'*')) as masked_rows,\n count(distinct \"recipient_name\") as distinct_nonnull_values from tiktok\nunion all\nselect 'recipient_phone' as column_name,count(*) as rows,\n count(*) filter(where \"recipient_phone\" is null) as null_rows,\n count(*) filter(where \"recipient_phone\" is not null and trim(\"recipient_phone\")='') as blank_rows,\n count(*) filter(where contains(\"recipient_phone\",'*')) as masked_rows,\n count(distinct \"recipient_phone\") as distinct_nonnull_values from tiktok\nunion all\nselect 'full_address' as column_name,count(*) as rows,\n count(*) filter(where \"full_address\" is null) as null_rows,\n count(*) filter(where \"full_address\" is not null and trim(\"full_address\")='') as blank_rows,\n count(*) filter(where contains(\"full_address\",'*')) as masked_rows,\n count(distinct \"full_address\") as distinct_nonnull_values from tiktok\nunion all\nselect 'postal_code' as column_name,count(*) as rows,\n count(*) filter(where \"postal_code\" is null) as null_rows,\n count(*) filter(where \"postal_code\" is not null and trim(\"postal_code\")='') as blank_rows,\n count(*) filter(where contains(\"postal_code\",'*')) as masked_rows,\n count(distinct \"postal_code\") as distinct_nonnull_values from tiktok\nunion all\nselect 'region_state' as column_name,count(*) as rows,\n count(*) filter(where \"region_state\" is null) as null_rows,\n count(*) filter(where \"region_state\" is not null and trim(\"region_state\")='') as blank_rows,\n count(*) filter(where contains(\"region_state\",'*')) as masked_rows,\n count(distinct \"region_state\") as distinct_nonnull_values from tiktok\nunion all\nselect 'city_town' as column_name,count(*) as rows,\n count(*) filter(where \"city_town\" is null) as null_rows,\n count(*) filter(where \"city_town\" is not null and trim(\"city_town\")='') as blank_rows,\n count(*) filter(where contains(\"city_town\",'*')) as masked_rows,\n count(distinct \"city_town\") as distinct_nonnull_values from tiktok\nunion all\nselect 'district' as column_name,count(*) as rows,\n count(*) filter(where \"district\" is null) as null_rows,\n count(*) filter(where \"district\" is not null and trim(\"district\")='') as blank_rows,\n count(*) filter(where contains(\"district\",'*')) as masked_rows,\n count(distinct \"district\") as distinct_nonnull_values from tiktok\nunion all\nselect 'product_name' as column_name,count(*) as rows,\n count(*) filter(where \"product_name\" is null) as null_rows,\n count(*) filter(where \"product_name\" is not null and trim(\"product_name\")='') as blank_rows,\n count(*) filter(where contains(\"product_name\",'*')) as masked_rows,\n count(distinct \"product_name\") as distinct_nonnull_values from tiktok\nunion all\nselect 'sku_name' as column_name,count(*) as rows,\n count(*) filter(where \"sku_name\" is null) as null_rows,\n count(*) filter(where \"sku_name\" is not null and trim(\"sku_name\")='') as blank_rows,\n count(*) filter(where contains(\"sku_name\",'*')) as masked_rows,\n count(distinct \"sku_name\") as distinct_nonnull_values from tiktok\nunion all\nselect 'seller_sku' as column_name,count(*) as rows,\n count(*) filter(where \"seller_sku\" is null) as null_rows,\n count(*) filter(where \"seller_sku\" is not null and trim(\"seller_sku\")='') as blank_rows,\n count(*) filter(where contains(\"seller_sku\",'*')) as masked_rows,\n count(distinct \"seller_sku\") as distinct_nonnull_values from tiktok\nunion all\nselect 'quantity' as column_name,count(*) as rows,\n count(*) filter(where \"quantity\" is null) as null_rows,\n count(*) filter(where \"quantity\" is not null and trim(\"quantity\")='') as blank_rows,\n count(*) filter(where contains(\"quantity\",'*')) as masked_rows,\n count(distinct \"quantity\") as distinct_nonnull_values from tiktok\nunion all\nselect 'item_status' as column_name,count(*) as rows,\n count(*) filter(where \"item_status\" is null) as null_rows,\n count(*) filter(where \"item_status\" is not null and trim(\"item_status\")='') as blank_rows,\n count(*) filter(where contains(\"item_status\",'*')) as masked_rows,\n count(distinct \"item_status\") as distinct_nonnull_values from tiktok\nunion all\nselect 'item_sale_price' as column_name,count(*) as rows,\n count(*) filter(where \"item_sale_price\" is null) as null_rows,\n count(*) filter(where \"item_sale_price\" is not null and trim(\"item_sale_price\")='') as blank_rows,\n count(*) filter(where contains(\"item_sale_price\",'*')) as masked_rows,\n count(distinct \"item_sale_price\") as distinct_nonnull_values from tiktok\nunion all\nselect 'item_original_price' as column_name,count(*) as rows,\n count(*) filter(where \"item_original_price\" is null) as null_rows,\n count(*) filter(where \"item_original_price\" is not null and trim(\"item_original_price\")='') as blank_rows,\n count(*) filter(where contains(\"item_original_price\",'*')) as masked_rows,\n count(distinct \"item_original_price\") as distinct_nonnull_values from tiktok\nunion all\nselect 'item_platform_disc' as column_name,count(*) as rows,\n count(*) filter(where \"item_platform_disc\" is null) as null_rows,\n count(*) filter(where \"item_platform_disc\" is not null and trim(\"item_platform_disc\")='') as blank_rows,\n count(*) filter(where contains(\"item_platform_disc\",'*')) as masked_rows,\n count(distinct \"item_platform_disc\") as distinct_nonnull_values from tiktok\nunion all\nselect 'item_seller_disc' as column_name,count(*) as rows,\n count(*) filter(where \"item_seller_disc\" is null) as null_rows,\n count(*) filter(where \"item_seller_disc\" is not null and trim(\"item_seller_disc\")='') as blank_rows,\n count(*) filter(where contains(\"item_seller_disc\",'*')) as masked_rows,\n count(distinct \"item_seller_disc\") as distinct_nonnull_values from tiktok\nunion all\nselect 'product_id' as column_name,count(*) as rows,\n count(*) filter(where \"product_id\" is null) as null_rows,\n count(*) filter(where \"product_id\" is not null and trim(\"product_id\")='') as blank_rows,\n count(*) filter(where contains(\"product_id\",'*')) as masked_rows,\n count(distinct \"product_id\") as distinct_nonnull_values from tiktok\nunion all\nselect 'sku_id' as column_name,count(*) as rows,\n count(*) filter(where \"sku_id\" is null) as null_rows,\n count(*) filter(where \"sku_id\" is not null and trim(\"sku_id\")='') as blank_rows,\n count(*) filter(where contains(\"sku_id\",'*')) as masked_rows,\n count(distinct \"sku_id\") as distinct_nonnull_values from tiktok\nunion all\nselect 'package_id' as column_name,count(*) as rows,\n count(*) filter(where \"package_id\" is null) as null_rows,\n count(*) filter(where \"package_id\" is not null and trim(\"package_id\")='') as blank_rows,\n count(*) filter(where contains(\"package_id\",'*')) as masked_rows,\n count(distinct \"package_id\") as distinct_nonnull_values from tiktok\nunion all\nselect 'package_status' as column_name,count(*) as rows,\n count(*) filter(where \"package_status\" is null) as null_rows,\n count(*) filter(where \"package_status\" is not null and trim(\"package_status\")='') as blank_rows,\n count(*) filter(where contains(\"package_status\",'*')) as masked_rows,\n count(distinct \"package_status\") as distinct_nonnull_values from tiktok\nunion all\nselect 'item_cancel_reason' as column_name,count(*) as rows,\n count(*) filter(where \"item_cancel_reason\" is null) as null_rows,\n count(*) filter(where \"item_cancel_reason\" is not null and trim(\"item_cancel_reason\")='') as blank_rows,\n count(*) filter(where contains(\"item_cancel_reason\",'*')) as masked_rows,\n count(distinct \"item_cancel_reason\") as distinct_nonnull_values from tiktok\nunion all\nselect 'sku_image' as column_name,count(*) as rows,\n count(*) filter(where \"sku_image\" is null) as null_rows,\n count(*) filter(where \"sku_image\" is not null and trim(\"sku_image\")='') as blank_rows,\n count(*) filter(where contains(\"sku_image\",'*')) as masked_rows,\n count(distinct \"sku_image\") as distinct_nonnull_values from tiktok\nunion all\nselect 'row_idx' as column_name,count(*) as rows,\n count(*) filter(where \"row_idx\" is null) as null_rows,\n count(*) filter(where \"row_idx\" is not null and trim(\"row_idx\")='') as blank_rows,\n count(*) filter(where contains(\"row_idx\",'*')) as masked_rows,\n count(distinct \"row_idx\") as distinct_nonnull_values from tiktok",
+      "rows": [
+        {
+          "column_name": "pkId",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 102000,
+          "distinct_nonnull_values": 97158
+        },
+        {
+          "column_name": "user_id",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 102000,
+          "distinct_nonnull_values": 10
+        },
+        {
+          "column_name": "createdAt",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 4052
+        },
+        {
+          "column_name": "updatedAt",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 4052
+        },
+        {
+          "column_name": "order_id",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 102000,
+          "distinct_nonnull_values": 386
+        },
+        {
+          "column_name": "order_status",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 7
+        },
+        {
+          "column_name": "order_type",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 2
+        },
+        {
+          "column_name": "shop_name",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 102000,
+          "distinct_nonnull_values": 12
+        },
+        {
+          "column_name": "created_time",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 84389
+        },
+        {
+          "column_name": "paid_time",
+          "rows": 102000,
+          "null_rows": 16527,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 70232
+        },
+        {
+          "column_name": "rts_time",
+          "rows": 102000,
+          "null_rows": 13185,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 18845
+        },
+        {
+          "column_name": "shipped_time",
+          "rows": 102000,
+          "null_rows": 102000,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 0
+        },
+        {
+          "column_name": "delivered_time",
+          "rows": 102000,
+          "null_rows": 18388,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 68751
+        },
+        {
+          "column_name": "completed_time",
+          "rows": 102000,
+          "null_rows": 102000,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 0
+        },
+        {
+          "column_name": "cancelled_time",
+          "rows": 102000,
+          "null_rows": 85733,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 12697
+        },
+        {
+          "column_name": "updated_time",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 82820
+        },
+        {
+          "column_name": "rts_sla_time",
+          "rows": 102000,
+          "null_rows": 1084,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 371
+        },
+        {
+          "column_name": "tts_sla_time",
+          "rows": 102000,
+          "null_rows": 1140,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 508
+        },
+        {
+          "column_name": "delivery_sla_time",
+          "rows": 102000,
+          "null_rows": 96188,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 5748
+        },
+        {
+          "column_name": "cancel_sla_time",
+          "rows": 102000,
+          "null_rows": 1084,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 310
+        },
+        {
+          "column_name": "auto_cancel_time",
+          "rows": 102000,
+          "null_rows": 102000,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 0
+        },
+        {
+          "column_name": "currency",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "total_amount",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 17643
+        },
+        {
+          "column_name": "sub_total",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 14749
+        },
+        {
+          "column_name": "order_original_price",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1270
+        },
+        {
+          "column_name": "payment_method",
+          "rows": 102000,
+          "null_rows": 1120,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 21
+        },
+        {
+          "column_name": "is_cod",
+          "rows": 102000,
+          "null_rows": 17680,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "shipping_fee",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 475
+        },
+        {
+          "column_name": "original_shipping_fee",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 733
+        },
+        {
+          "column_name": "tax_amount",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "product_tax",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "shipping_tax",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "small_order_fee",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "retail_delivery_fee",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "insurance_fee",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "seller_discount",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 4944
+        },
+        {
+          "column_name": "platform_discount",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 10381
+        },
+        {
+          "column_name": "shipping_seller_discount",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 84
+        },
+        {
+          "column_name": "shipping_platform_discount",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 678
+        },
+        {
+          "column_name": "fulfillment_type",
+          "rows": 102000,
+          "null_rows": 2388,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "delivery_type",
+          "rows": 102000,
+          "null_rows": 2388,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "delivery_option",
+          "rows": 102000,
+          "null_rows": 2388,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 6
+        },
+        {
+          "column_name": "shipping_provider",
+          "rows": 102000,
+          "null_rows": 3425,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 7
+        },
+        {
+          "column_name": "tracking_number",
+          "rows": 102000,
+          "null_rows": 15237,
+          "blank_rows": 0,
+          "masked_rows": 86763,
+          "distinct_nonnull_values": 56
+        },
+        {
+          "column_name": "warehouse_id",
+          "rows": 102000,
+          "null_rows": 2388,
+          "blank_rows": 0,
+          "masked_rows": 99612,
+          "distinct_nonnull_values": 13
+        },
+        {
+          "column_name": "buyer_uid",
+          "rows": 102000,
+          "null_rows": 2388,
+          "blank_rows": 0,
+          "masked_rows": 99612,
+          "distinct_nonnull_values": 34
+        },
+        {
+          "column_name": "buyer_name",
+          "rows": 102000,
+          "null_rows": 2388,
+          "blank_rows": 0,
+          "masked_rows": 99612,
+          "distinct_nonnull_values": 10655
+        },
+        {
+          "column_name": "buyer_message",
+          "rows": 102000,
+          "null_rows": 102000,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 0
+        },
+        {
+          "column_name": "recipient_name",
+          "rows": 102000,
+          "null_rows": 18192,
+          "blank_rows": 0,
+          "masked_rows": 83808,
+          "distinct_nonnull_values": 10644
+        },
+        {
+          "column_name": "recipient_phone",
+          "rows": 102000,
+          "null_rows": 18192,
+          "blank_rows": 0,
+          "masked_rows": 83808,
+          "distinct_nonnull_values": 222
+        },
+        {
+          "column_name": "full_address",
+          "rows": 102000,
+          "null_rows": 18192,
+          "blank_rows": 0,
+          "masked_rows": 83808,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "postal_code",
+          "rows": 102000,
+          "null_rows": 102000,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 0
+        },
+        {
+          "column_name": "region_state",
+          "rows": 102000,
+          "null_rows": 18192,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 282
+        },
+        {
+          "column_name": "city_town",
+          "rows": 102000,
+          "null_rows": 18192,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 3934
+        },
+        {
+          "column_name": "district",
+          "rows": 102000,
+          "null_rows": 18192,
+          "blank_rows": 0,
+          "masked_rows": 83808,
+          "distinct_nonnull_values": 1261
+        },
+        {
+          "column_name": "product_name",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 102000,
+          "distinct_nonnull_values": 1121
+        },
+        {
+          "column_name": "sku_name",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 102000,
+          "distinct_nonnull_values": 1311
+        },
+        {
+          "column_name": "seller_sku",
+          "rows": 102000,
+          "null_rows": 1114,
+          "blank_rows": 0,
+          "masked_rows": 100886,
+          "distinct_nonnull_values": 1150
+        },
+        {
+          "column_name": "quantity",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "item_status",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 7
+        },
+        {
+          "column_name": "item_sale_price",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 14678
+        },
+        {
+          "column_name": "item_original_price",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 626
+        },
+        {
+          "column_name": "item_platform_disc",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 10829
+        },
+        {
+          "column_name": "item_seller_disc",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 4803
+        },
+        {
+          "column_name": "product_id",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 102000,
+          "distinct_nonnull_values": 78
+        },
+        {
+          "column_name": "sku_id",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 102000,
+          "distinct_nonnull_values": 79
+        },
+        {
+          "column_name": "package_id",
+          "rows": 102000,
+          "null_rows": 1084,
+          "blank_rows": 0,
+          "masked_rows": 100916,
+          "distinct_nonnull_values": 279
+        },
+        {
+          "column_name": "package_status",
+          "rows": 102000,
+          "null_rows": 1084,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 5
+        },
+        {
+          "column_name": "item_cancel_reason",
+          "rows": 102000,
+          "null_rows": 84595,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 58
+        },
+        {
+          "column_name": "sku_image",
+          "rows": 102000,
+          "null_rows": 102000,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 0
+        },
+        {
+          "column_name": "row_idx",
+          "rows": 102000,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 23
+        }
+      ]
+    },
+    {
+      "id": "tiktok-id-masking",
+      "sql": "select 'pkId' as column_name,count(\"pkId\") as nonnull_rows,\n count(*) filter(where contains(\"pkId\",'*')) as masked_rows,\n count(*) filter(where regexp_full_match(\"pkId\",'[^*]{5}\\*+')) as five_visible_then_stars,\n count(*) filter(where regexp_full_match(\"pkId\",'[0-9a-fA-F]{5}\\*{31}')) as hex_five_then_31_stars\n from tiktok\nunion all\nselect 'user_id' as column_name,count(\"user_id\") as nonnull_rows,\n count(*) filter(where contains(\"user_id\",'*')) as masked_rows,\n count(*) filter(where regexp_full_match(\"user_id\",'[^*]{5}\\*+')) as five_visible_then_stars,\n count(*) filter(where regexp_full_match(\"user_id\",'[0-9a-fA-F]{5}\\*{31}')) as hex_five_then_31_stars\n from tiktok\nunion all\nselect 'order_id' as column_name,count(\"order_id\") as nonnull_rows,\n count(*) filter(where contains(\"order_id\",'*')) as masked_rows,\n count(*) filter(where regexp_full_match(\"order_id\",'[^*]{5}\\*+')) as five_visible_then_stars,\n count(*) filter(where regexp_full_match(\"order_id\",'[0-9a-fA-F]{5}\\*{31}')) as hex_five_then_31_stars\n from tiktok\nunion all\nselect 'product_id' as column_name,count(\"product_id\") as nonnull_rows,\n count(*) filter(where contains(\"product_id\",'*')) as masked_rows,\n count(*) filter(where regexp_full_match(\"product_id\",'[^*]{5}\\*+')) as five_visible_then_stars,\n count(*) filter(where regexp_full_match(\"product_id\",'[0-9a-fA-F]{5}\\*{31}')) as hex_five_then_31_stars\n from tiktok\nunion all\nselect 'sku_id' as column_name,count(\"sku_id\") as nonnull_rows,\n count(*) filter(where contains(\"sku_id\",'*')) as masked_rows,\n count(*) filter(where regexp_full_match(\"sku_id\",'[^*]{5}\\*+')) as five_visible_then_stars,\n count(*) filter(where regexp_full_match(\"sku_id\",'[0-9a-fA-F]{5}\\*{31}')) as hex_five_then_31_stars\n from tiktok\nunion all\nselect 'seller_sku' as column_name,count(\"seller_sku\") as nonnull_rows,\n count(*) filter(where contains(\"seller_sku\",'*')) as masked_rows,\n count(*) filter(where regexp_full_match(\"seller_sku\",'[^*]{5}\\*+')) as five_visible_then_stars,\n count(*) filter(where regexp_full_match(\"seller_sku\",'[0-9a-fA-F]{5}\\*{31}')) as hex_five_then_31_stars\n from tiktok\nunion all\nselect 'shop_name' as column_name,count(\"shop_name\") as nonnull_rows,\n count(*) filter(where contains(\"shop_name\",'*')) as masked_rows,\n count(*) filter(where regexp_full_match(\"shop_name\",'[^*]{5}\\*+')) as five_visible_then_stars,\n count(*) filter(where regexp_full_match(\"shop_name\",'[0-9a-fA-F]{5}\\*{31}')) as hex_five_then_31_stars\n from tiktok",
+      "rows": [
+        {
+          "column_name": "pkId",
+          "nonnull_rows": 102000,
+          "masked_rows": 102000,
+          "five_visible_then_stars": 102000,
+          "hex_five_then_31_stars": 102000
+        },
+        {
+          "column_name": "user_id",
+          "nonnull_rows": 102000,
+          "masked_rows": 102000,
+          "five_visible_then_stars": 102000,
+          "hex_five_then_31_stars": 0
+        },
+        {
+          "column_name": "order_id",
+          "nonnull_rows": 102000,
+          "masked_rows": 102000,
+          "five_visible_then_stars": 102000,
+          "hex_five_then_31_stars": 0
+        },
+        {
+          "column_name": "product_id",
+          "nonnull_rows": 102000,
+          "masked_rows": 102000,
+          "five_visible_then_stars": 102000,
+          "hex_five_then_31_stars": 0
+        },
+        {
+          "column_name": "sku_id",
+          "nonnull_rows": 102000,
+          "masked_rows": 102000,
+          "five_visible_then_stars": 102000,
+          "hex_five_then_31_stars": 0
+        },
+        {
+          "column_name": "seller_sku",
+          "nonnull_rows": 100886,
+          "masked_rows": 100886,
+          "five_visible_then_stars": 0,
+          "hex_five_then_31_stars": 0
+        },
+        {
+          "column_name": "shop_name",
+          "nonnull_rows": 102000,
+          "masked_rows": 102000,
+          "five_visible_then_stars": 0,
+          "hex_five_then_31_stars": 0
+        }
+      ]
+    },
+    {
+      "id": "tiktok-numeric-profile",
+      "sql": "select 'quantity' as column_name,count(*) as rows,\n count(*) filter(where \"quantity\" is null) as null_rows,\n count(*) filter(where \"quantity\" is not null and try_cast(\"quantity\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"quantity\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"quantity\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"quantity\" as decimal(24,4))) as minimum,\n max(try_cast(\"quantity\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'total_amount' as column_name,count(*) as rows,\n count(*) filter(where \"total_amount\" is null) as null_rows,\n count(*) filter(where \"total_amount\" is not null and try_cast(\"total_amount\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"total_amount\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"total_amount\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"total_amount\" as decimal(24,4))) as minimum,\n max(try_cast(\"total_amount\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'sub_total' as column_name,count(*) as rows,\n count(*) filter(where \"sub_total\" is null) as null_rows,\n count(*) filter(where \"sub_total\" is not null and try_cast(\"sub_total\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"sub_total\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"sub_total\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"sub_total\" as decimal(24,4))) as minimum,\n max(try_cast(\"sub_total\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'order_original_price' as column_name,count(*) as rows,\n count(*) filter(where \"order_original_price\" is null) as null_rows,\n count(*) filter(where \"order_original_price\" is not null and try_cast(\"order_original_price\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"order_original_price\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"order_original_price\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"order_original_price\" as decimal(24,4))) as minimum,\n max(try_cast(\"order_original_price\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'shipping_fee' as column_name,count(*) as rows,\n count(*) filter(where \"shipping_fee\" is null) as null_rows,\n count(*) filter(where \"shipping_fee\" is not null and try_cast(\"shipping_fee\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"shipping_fee\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"shipping_fee\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"shipping_fee\" as decimal(24,4))) as minimum,\n max(try_cast(\"shipping_fee\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'original_shipping_fee' as column_name,count(*) as rows,\n count(*) filter(where \"original_shipping_fee\" is null) as null_rows,\n count(*) filter(where \"original_shipping_fee\" is not null and try_cast(\"original_shipping_fee\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"original_shipping_fee\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"original_shipping_fee\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"original_shipping_fee\" as decimal(24,4))) as minimum,\n max(try_cast(\"original_shipping_fee\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'tax_amount' as column_name,count(*) as rows,\n count(*) filter(where \"tax_amount\" is null) as null_rows,\n count(*) filter(where \"tax_amount\" is not null and try_cast(\"tax_amount\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"tax_amount\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"tax_amount\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"tax_amount\" as decimal(24,4))) as minimum,\n max(try_cast(\"tax_amount\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'product_tax' as column_name,count(*) as rows,\n count(*) filter(where \"product_tax\" is null) as null_rows,\n count(*) filter(where \"product_tax\" is not null and try_cast(\"product_tax\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"product_tax\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"product_tax\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"product_tax\" as decimal(24,4))) as minimum,\n max(try_cast(\"product_tax\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'shipping_tax' as column_name,count(*) as rows,\n count(*) filter(where \"shipping_tax\" is null) as null_rows,\n count(*) filter(where \"shipping_tax\" is not null and try_cast(\"shipping_tax\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"shipping_tax\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"shipping_tax\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"shipping_tax\" as decimal(24,4))) as minimum,\n max(try_cast(\"shipping_tax\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'small_order_fee' as column_name,count(*) as rows,\n count(*) filter(where \"small_order_fee\" is null) as null_rows,\n count(*) filter(where \"small_order_fee\" is not null and try_cast(\"small_order_fee\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"small_order_fee\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"small_order_fee\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"small_order_fee\" as decimal(24,4))) as minimum,\n max(try_cast(\"small_order_fee\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'retail_delivery_fee' as column_name,count(*) as rows,\n count(*) filter(where \"retail_delivery_fee\" is null) as null_rows,\n count(*) filter(where \"retail_delivery_fee\" is not null and try_cast(\"retail_delivery_fee\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"retail_delivery_fee\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"retail_delivery_fee\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"retail_delivery_fee\" as decimal(24,4))) as minimum,\n max(try_cast(\"retail_delivery_fee\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'insurance_fee' as column_name,count(*) as rows,\n count(*) filter(where \"insurance_fee\" is null) as null_rows,\n count(*) filter(where \"insurance_fee\" is not null and try_cast(\"insurance_fee\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"insurance_fee\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"insurance_fee\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"insurance_fee\" as decimal(24,4))) as minimum,\n max(try_cast(\"insurance_fee\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'seller_discount' as column_name,count(*) as rows,\n count(*) filter(where \"seller_discount\" is null) as null_rows,\n count(*) filter(where \"seller_discount\" is not null and try_cast(\"seller_discount\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"seller_discount\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"seller_discount\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"seller_discount\" as decimal(24,4))) as minimum,\n max(try_cast(\"seller_discount\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'platform_discount' as column_name,count(*) as rows,\n count(*) filter(where \"platform_discount\" is null) as null_rows,\n count(*) filter(where \"platform_discount\" is not null and try_cast(\"platform_discount\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"platform_discount\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"platform_discount\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"platform_discount\" as decimal(24,4))) as minimum,\n max(try_cast(\"platform_discount\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'shipping_seller_discount' as column_name,count(*) as rows,\n count(*) filter(where \"shipping_seller_discount\" is null) as null_rows,\n count(*) filter(where \"shipping_seller_discount\" is not null and try_cast(\"shipping_seller_discount\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"shipping_seller_discount\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"shipping_seller_discount\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"shipping_seller_discount\" as decimal(24,4))) as minimum,\n max(try_cast(\"shipping_seller_discount\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'shipping_platform_discount' as column_name,count(*) as rows,\n count(*) filter(where \"shipping_platform_discount\" is null) as null_rows,\n count(*) filter(where \"shipping_platform_discount\" is not null and try_cast(\"shipping_platform_discount\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"shipping_platform_discount\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"shipping_platform_discount\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"shipping_platform_discount\" as decimal(24,4))) as minimum,\n max(try_cast(\"shipping_platform_discount\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'item_sale_price' as column_name,count(*) as rows,\n count(*) filter(where \"item_sale_price\" is null) as null_rows,\n count(*) filter(where \"item_sale_price\" is not null and try_cast(\"item_sale_price\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"item_sale_price\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"item_sale_price\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"item_sale_price\" as decimal(24,4))) as minimum,\n max(try_cast(\"item_sale_price\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'item_original_price' as column_name,count(*) as rows,\n count(*) filter(where \"item_original_price\" is null) as null_rows,\n count(*) filter(where \"item_original_price\" is not null and try_cast(\"item_original_price\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"item_original_price\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"item_original_price\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"item_original_price\" as decimal(24,4))) as minimum,\n max(try_cast(\"item_original_price\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'item_platform_disc' as column_name,count(*) as rows,\n count(*) filter(where \"item_platform_disc\" is null) as null_rows,\n count(*) filter(where \"item_platform_disc\" is not null and try_cast(\"item_platform_disc\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"item_platform_disc\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"item_platform_disc\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"item_platform_disc\" as decimal(24,4))) as minimum,\n max(try_cast(\"item_platform_disc\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'item_seller_disc' as column_name,count(*) as rows,\n count(*) filter(where \"item_seller_disc\" is null) as null_rows,\n count(*) filter(where \"item_seller_disc\" is not null and try_cast(\"item_seller_disc\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"item_seller_disc\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"item_seller_disc\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"item_seller_disc\" as decimal(24,4))) as minimum,\n max(try_cast(\"item_seller_disc\" as decimal(24,4))) as maximum from tiktok\nunion all\nselect 'row_idx' as column_name,count(*) as rows,\n count(*) filter(where \"row_idx\" is null) as null_rows,\n count(*) filter(where \"row_idx\" is not null and try_cast(\"row_idx\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"row_idx\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"row_idx\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"row_idx\" as decimal(24,4))) as minimum,\n max(try_cast(\"row_idx\" as decimal(24,4))) as maximum from tiktok",
+      "rows": [
+        {
+          "column_name": "quantity",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 0,
+          "minimum": "1.0000",
+          "maximum": "1.0000"
+        },
+        {
+          "column_name": "total_amount",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 1056,
+          "minimum": "0.0000",
+          "maximum": "5500000.0000"
+        },
+        {
+          "column_name": "sub_total",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 1056,
+          "minimum": "0.0000",
+          "maximum": "5500000.0000"
+        },
+        {
+          "column_name": "order_original_price",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 1056,
+          "minimum": "0.0000",
+          "maximum": "17229000.0000"
+        },
+        {
+          "column_name": "shipping_fee",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 95039,
+          "minimum": "0.0000",
+          "maximum": "562800.0000"
+        },
+        {
+          "column_name": "original_shipping_fee",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 1482,
+          "minimum": "0.0000",
+          "maximum": "862800.0000"
+        },
+        {
+          "column_name": "tax_amount",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 102000,
+          "minimum": "0.0000",
+          "maximum": "0.0000"
+        },
+        {
+          "column_name": "product_tax",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 102000,
+          "minimum": "0.0000",
+          "maximum": "0.0000"
+        },
+        {
+          "column_name": "shipping_tax",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 102000,
+          "minimum": "0.0000",
+          "maximum": "0.0000"
+        },
+        {
+          "column_name": "small_order_fee",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 102000,
+          "minimum": "0.0000",
+          "maximum": "0.0000"
+        },
+        {
+          "column_name": "retail_delivery_fee",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 102000,
+          "minimum": "0.0000",
+          "maximum": "0.0000"
+        },
+        {
+          "column_name": "insurance_fee",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 102000,
+          "minimum": "0.0000",
+          "maximum": "0.0000"
+        },
+        {
+          "column_name": "seller_discount",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 9097,
+          "minimum": "0.0000",
+          "maximum": "10229000.0000"
+        },
+        {
+          "column_name": "platform_discount",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 48724,
+          "minimum": "0.0000",
+          "maximum": "1591679.0000"
+        },
+        {
+          "column_name": "shipping_seller_discount",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 101463,
+          "minimum": "0.0000",
+          "maximum": "78600.0000"
+        },
+        {
+          "column_name": "shipping_platform_discount",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 3514,
+          "minimum": "0.0000",
+          "maximum": "862800.0000"
+        },
+        {
+          "column_name": "item_sale_price",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 14127,
+          "minimum": "0.0000",
+          "maximum": "5500000.0000"
+        },
+        {
+          "column_name": "item_original_price",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 14124,
+          "minimum": "0.0000",
+          "maximum": "17229000.0000"
+        },
+        {
+          "column_name": "item_platform_disc",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 57367,
+          "minimum": "0.0000",
+          "maximum": "1500000.0000"
+        },
+        {
+          "column_name": "item_seller_disc",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 22283,
+          "minimum": "0.0000",
+          "maximum": "10229000.0000"
+        },
+        {
+          "column_name": "row_idx",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 0,
+          "minimum": "1.0000",
+          "maximum": "23.0000"
+        }
+      ]
+    },
+    {
+      "id": "tiktok-timestamp-profile",
+      "sql": "select 'createdAt' as column_name,count(*) as rows,\n count(*) filter(where \"createdAt\" is null) as null_rows,\n count(*) filter(where \"createdAt\" is not null and try_cast(\"createdAt\" as timestamp) is null) as invalid_timestamp_rows\n from tiktok\nunion all\nselect 'updatedAt' as column_name,count(*) as rows,\n count(*) filter(where \"updatedAt\" is null) as null_rows,\n count(*) filter(where \"updatedAt\" is not null and try_cast(\"updatedAt\" as timestamp) is null) as invalid_timestamp_rows\n from tiktok\nunion all\nselect 'created_time' as column_name,count(*) as rows,\n count(*) filter(where \"created_time\" is null) as null_rows,\n count(*) filter(where \"created_time\" is not null and try_cast(\"created_time\" as timestamp) is null) as invalid_timestamp_rows\n from tiktok\nunion all\nselect 'paid_time' as column_name,count(*) as rows,\n count(*) filter(where \"paid_time\" is null) as null_rows,\n count(*) filter(where \"paid_time\" is not null and try_cast(\"paid_time\" as timestamp) is null) as invalid_timestamp_rows\n from tiktok\nunion all\nselect 'rts_time' as column_name,count(*) as rows,\n count(*) filter(where \"rts_time\" is null) as null_rows,\n count(*) filter(where \"rts_time\" is not null and try_cast(\"rts_time\" as timestamp) is null) as invalid_timestamp_rows\n from tiktok\nunion all\nselect 'shipped_time' as column_name,count(*) as rows,\n count(*) filter(where \"shipped_time\" is null) as null_rows,\n count(*) filter(where \"shipped_time\" is not null and try_cast(\"shipped_time\" as timestamp) is null) as invalid_timestamp_rows\n from tiktok\nunion all\nselect 'delivered_time' as column_name,count(*) as rows,\n count(*) filter(where \"delivered_time\" is null) as null_rows,\n count(*) filter(where \"delivered_time\" is not null and try_cast(\"delivered_time\" as timestamp) is null) as invalid_timestamp_rows\n from tiktok\nunion all\nselect 'completed_time' as column_name,count(*) as rows,\n count(*) filter(where \"completed_time\" is null) as null_rows,\n count(*) filter(where \"completed_time\" is not null and try_cast(\"completed_time\" as timestamp) is null) as invalid_timestamp_rows\n from tiktok\nunion all\nselect 'cancelled_time' as column_name,count(*) as rows,\n count(*) filter(where \"cancelled_time\" is null) as null_rows,\n count(*) filter(where \"cancelled_time\" is not null and try_cast(\"cancelled_time\" as timestamp) is null) as invalid_timestamp_rows\n from tiktok\nunion all\nselect 'updated_time' as column_name,count(*) as rows,\n count(*) filter(where \"updated_time\" is null) as null_rows,\n count(*) filter(where \"updated_time\" is not null and try_cast(\"updated_time\" as timestamp) is null) as invalid_timestamp_rows\n from tiktok\nunion all\nselect 'rts_sla_time' as column_name,count(*) as rows,\n count(*) filter(where \"rts_sla_time\" is null) as null_rows,\n count(*) filter(where \"rts_sla_time\" is not null and try_cast(\"rts_sla_time\" as timestamp) is null) as invalid_timestamp_rows\n from tiktok\nunion all\nselect 'tts_sla_time' as column_name,count(*) as rows,\n count(*) filter(where \"tts_sla_time\" is null) as null_rows,\n count(*) filter(where \"tts_sla_time\" is not null and try_cast(\"tts_sla_time\" as timestamp) is null) as invalid_timestamp_rows\n from tiktok\nunion all\nselect 'delivery_sla_time' as column_name,count(*) as rows,\n count(*) filter(where \"delivery_sla_time\" is null) as null_rows,\n count(*) filter(where \"delivery_sla_time\" is not null and try_cast(\"delivery_sla_time\" as timestamp) is null) as invalid_timestamp_rows\n from tiktok\nunion all\nselect 'cancel_sla_time' as column_name,count(*) as rows,\n count(*) filter(where \"cancel_sla_time\" is null) as null_rows,\n count(*) filter(where \"cancel_sla_time\" is not null and try_cast(\"cancel_sla_time\" as timestamp) is null) as invalid_timestamp_rows\n from tiktok\nunion all\nselect 'auto_cancel_time' as column_name,count(*) as rows,\n count(*) filter(where \"auto_cancel_time\" is null) as null_rows,\n count(*) filter(where \"auto_cancel_time\" is not null and try_cast(\"auto_cancel_time\" as timestamp) is null) as invalid_timestamp_rows\n from tiktok",
+      "rows": [
+        {
+          "column_name": "createdAt",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "updatedAt",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "created_time",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "paid_time",
+          "rows": 102000,
+          "null_rows": 16527,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "rts_time",
+          "rows": 102000,
+          "null_rows": 13185,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "shipped_time",
+          "rows": 102000,
+          "null_rows": 102000,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "delivered_time",
+          "rows": 102000,
+          "null_rows": 18388,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "completed_time",
+          "rows": 102000,
+          "null_rows": 102000,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "cancelled_time",
+          "rows": 102000,
+          "null_rows": 85733,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "updated_time",
+          "rows": 102000,
+          "null_rows": 0,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "rts_sla_time",
+          "rows": 102000,
+          "null_rows": 1084,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "tts_sla_time",
+          "rows": 102000,
+          "null_rows": 1140,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "delivery_sla_time",
+          "rows": 102000,
+          "null_rows": 96188,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "cancel_sla_time",
+          "rows": 102000,
+          "null_rows": 1084,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "auto_cancel_time",
+          "rows": 102000,
+          "null_rows": 102000,
+          "invalid_timestamp_rows": 0
+        }
+      ]
+    },
+    {
+      "id": "tiktok-monthly-volume",
+      "sql": "select substr(created_time,1,7) as month,count(*) as rows from tiktok group by 1 order by 1",
+      "rows": [
+        {
+          "month": "2025-10",
+          "rows": 2
+        },
+        {
+          "month": "2025-12",
+          "rows": 71
+        },
+        {
+          "month": "2026-01",
+          "rows": 11218
+        },
+        {
+          "month": "2026-02",
+          "rows": 3213
+        },
+        {
+          "month": "2026-03",
+          "rows": 113
+        },
+        {
+          "month": "2026-04",
+          "rows": 1262
+        },
+        {
+          "month": "2026-05",
+          "rows": 3033
+        },
+        {
+          "month": "2026-06",
+          "rows": 33816
+        },
+        {
+          "month": "2026-07",
+          "rows": 38853
+        },
+        {
+          "month": "2026-08",
+          "rows": 9132
+        },
+        {
+          "month": "2026-09",
+          "rows": 1287
+        }
+      ]
+    },
+    {
+      "id": "tiktok-statuses",
+      "sql": "select order_status,count(*) as rows from tiktok group by 1 order by 2 desc",
+      "rows": [
+        {
+          "order_status": "COMPLETED",
+          "rows": 67448
+        },
+        {
+          "order_status": "CANCELLED",
+          "rows": 16267
+        },
+        {
+          "order_status": "DELIVERED",
+          "rows": 16173
+        },
+        {
+          "order_status": "IN_TRANSIT",
+          "rows": 1607
+        },
+        {
+          "order_status": "AWAITING_SHIPMENT",
+          "rows": 346
+        },
+        {
+          "order_status": "AWAITING_COLLECTION",
+          "rows": 155
+        },
+        {
+          "order_status": "UNPAID",
+          "rows": 4
+        }
+      ]
+    },
+    {
+      "id": "tiktok-currencies",
+      "sql": "select currency,count(*) as rows from tiktok group by 1 order by 2 desc",
+      "rows": [
+        {
+          "currency": "VND",
+          "rows": 102000
+        }
+      ]
+    },
+    {
+      "id": "tiktok-candidate-grouping",
+      "sql": "\nselect count(*) as candidate_groups,count(*) filter(where status_n>1) as multi_status_groups,\ncount(*) filter(where amount_n>1) as multi_header_amount_groups,count(*) filter(where n<>distinct_idx) as repeated_rowidx_groups,count(*) filter(where first_idx=1 and last_idx=n and distinct_idx=n) as contiguous_1_to_n_groups\nfrom (select user_id,shop_name,order_id,created_time,count(distinct order_status) as status_n,count(distinct total_amount) as amount_n,\ncount(*) as n,count(distinct row_idx) as distinct_idx,min(try_cast(row_idx as int)) as first_idx,max(try_cast(row_idx as int)) as last_idx from tiktok group by user_id,shop_name,order_id,created_time)",
+      "rows": [
+        {
+          "candidate_groups": 84718,
+          "multi_status_groups": 209,
+          "multi_header_amount_groups": 533,
+          "repeated_rowidx_groups": 590,
+          "contiguous_1_to_n_groups": 77200
+        }
+      ]
+    },
+    {
+      "id": "shopee-summary",
+      "sql": "\nselect count(*) as rows,count(distinct pkId) as masked_pk_values,\n count(distinct order_sn) as masked_order_values,\n count(*)-count(distinct pkId) as rows_removed_by_masked_pk_dedup,\n min(try_cast(create_time as timestamp)) as min_created,\n max(try_cast(create_time as timestamp)) as max_created from shopee",
+      "rows": [
+        {
+          "rows": 25546,
+          "masked_pk_values": 25241,
+          "masked_order_values": 35,
+          "rows_removed_by_masked_pk_dedup": 305,
+          "min_created": "2025-12-13 07:10:47",
+          "max_created": "2026-09-07 01:50:19"
+        }
+      ]
+    },
+    {
+      "id": "shopee-exact-duplicates",
+      "sql": "\nselect count(*) as duplicate_groups,coalesce(sum(n-1),0) as excess_duplicate_rows,\n coalesce(sum(n),0) as affected_rows\nfrom (select * exclude(__csv_row),count(*) as n from shopee group by all having count(*)>1)",
+      "rows": [
+        {
+          "duplicate_groups": 0,
+          "excess_duplicate_rows": 0,
+          "affected_rows": 0
+        }
+      ]
+    },
+    {
+      "id": "shopee-column-profile",
+      "sql": "select 'pkId' as column_name,count(*) as rows,\n count(*) filter(where \"pkId\" is null) as null_rows,\n count(*) filter(where \"pkId\" is not null and trim(\"pkId\")='') as blank_rows,\n count(*) filter(where contains(\"pkId\",'*')) as masked_rows,\n count(distinct \"pkId\") as distinct_nonnull_values from shopee\nunion all\nselect 'user_id' as column_name,count(*) as rows,\n count(*) filter(where \"user_id\" is null) as null_rows,\n count(*) filter(where \"user_id\" is not null and trim(\"user_id\")='') as blank_rows,\n count(*) filter(where contains(\"user_id\",'*')) as masked_rows,\n count(distinct \"user_id\") as distinct_nonnull_values from shopee\nunion all\nselect 'shop_id' as column_name,count(*) as rows,\n count(*) filter(where \"shop_id\" is null) as null_rows,\n count(*) filter(where \"shop_id\" is not null and trim(\"shop_id\")='') as blank_rows,\n count(*) filter(where contains(\"shop_id\",'*')) as masked_rows,\n count(distinct \"shop_id\") as distinct_nonnull_values from shopee\nunion all\nselect 'order_sn' as column_name,count(*) as rows,\n count(*) filter(where \"order_sn\" is null) as null_rows,\n count(*) filter(where \"order_sn\" is not null and trim(\"order_sn\")='') as blank_rows,\n count(*) filter(where contains(\"order_sn\",'*')) as masked_rows,\n count(distinct \"order_sn\") as distinct_nonnull_values from shopee\nunion all\nselect 'order_status' as column_name,count(*) as rows,\n count(*) filter(where \"order_status\" is null) as null_rows,\n count(*) filter(where \"order_status\" is not null and trim(\"order_status\")='') as blank_rows,\n count(*) filter(where contains(\"order_status\",'*')) as masked_rows,\n count(distinct \"order_status\") as distinct_nonnull_values from shopee\nunion all\nselect 'create_time' as column_name,count(*) as rows,\n count(*) filter(where \"create_time\" is null) as null_rows,\n count(*) filter(where \"create_time\" is not null and trim(\"create_time\")='') as blank_rows,\n count(*) filter(where contains(\"create_time\",'*')) as masked_rows,\n count(distinct \"create_time\") as distinct_nonnull_values from shopee\nunion all\nselect 'pay_time' as column_name,count(*) as rows,\n count(*) filter(where \"pay_time\" is null) as null_rows,\n count(*) filter(where \"pay_time\" is not null and trim(\"pay_time\")='') as blank_rows,\n count(*) filter(where contains(\"pay_time\",'*')) as masked_rows,\n count(distinct \"pay_time\") as distinct_nonnull_values from shopee\nunion all\nselect 'shipped_time' as column_name,count(*) as rows,\n count(*) filter(where \"shipped_time\" is null) as null_rows,\n count(*) filter(where \"shipped_time\" is not null and trim(\"shipped_time\")='') as blank_rows,\n count(*) filter(where contains(\"shipped_time\",'*')) as masked_rows,\n count(distinct \"shipped_time\") as distinct_nonnull_values from shopee\nunion all\nselect 'completed_time' as column_name,count(*) as rows,\n count(*) filter(where \"completed_time\" is null) as null_rows,\n count(*) filter(where \"completed_time\" is not null and trim(\"completed_time\")='') as blank_rows,\n count(*) filter(where contains(\"completed_time\",'*')) as masked_rows,\n count(distinct \"completed_time\") as distinct_nonnull_values from shopee\nunion all\nselect 'cancel_reason' as column_name,count(*) as rows,\n count(*) filter(where \"cancel_reason\" is null) as null_rows,\n count(*) filter(where \"cancel_reason\" is not null and trim(\"cancel_reason\")='') as blank_rows,\n count(*) filter(where contains(\"cancel_reason\",'*')) as masked_rows,\n count(distinct \"cancel_reason\") as distinct_nonnull_values from shopee\nunion all\nselect 'buyer_remark' as column_name,count(*) as rows,\n count(*) filter(where \"buyer_remark\" is null) as null_rows,\n count(*) filter(where \"buyer_remark\" is not null and trim(\"buyer_remark\")='') as blank_rows,\n count(*) filter(where contains(\"buyer_remark\",'*')) as masked_rows,\n count(distinct \"buyer_remark\") as distinct_nonnull_values from shopee\nunion all\nselect 'shipping_carrier' as column_name,count(*) as rows,\n count(*) filter(where \"shipping_carrier\" is null) as null_rows,\n count(*) filter(where \"shipping_carrier\" is not null and trim(\"shipping_carrier\")='') as blank_rows,\n count(*) filter(where contains(\"shipping_carrier\",'*')) as masked_rows,\n count(distinct \"shipping_carrier\") as distinct_nonnull_values from shopee\nunion all\nselect 'payment_method' as column_name,count(*) as rows,\n count(*) filter(where \"payment_method\" is null) as null_rows,\n count(*) filter(where \"payment_method\" is not null and trim(\"payment_method\")='') as blank_rows,\n count(*) filter(where contains(\"payment_method\",'*')) as masked_rows,\n count(distinct \"payment_method\") as distinct_nonnull_values from shopee\nunion all\nselect 'estimated_shipping_date' as column_name,count(*) as rows,\n count(*) filter(where \"estimated_shipping_date\" is null) as null_rows,\n count(*) filter(where \"estimated_shipping_date\" is not null and trim(\"estimated_shipping_date\")='') as blank_rows,\n count(*) filter(where contains(\"estimated_shipping_date\",'*')) as masked_rows,\n count(distinct \"estimated_shipping_date\") as distinct_nonnull_values from shopee\nunion all\nselect 'buyer_username' as column_name,count(*) as rows,\n count(*) filter(where \"buyer_username\" is null) as null_rows,\n count(*) filter(where \"buyer_username\" is not null and trim(\"buyer_username\")='') as blank_rows,\n count(*) filter(where contains(\"buyer_username\",'*')) as masked_rows,\n count(distinct \"buyer_username\") as distinct_nonnull_values from shopee\nunion all\nselect 'recipient_name' as column_name,count(*) as rows,\n count(*) filter(where \"recipient_name\" is null) as null_rows,\n count(*) filter(where \"recipient_name\" is not null and trim(\"recipient_name\")='') as blank_rows,\n count(*) filter(where contains(\"recipient_name\",'*')) as masked_rows,\n count(distinct \"recipient_name\") as distinct_nonnull_values from shopee\nunion all\nselect 'phone' as column_name,count(*) as rows,\n count(*) filter(where \"phone\" is null) as null_rows,\n count(*) filter(where \"phone\" is not null and trim(\"phone\")='') as blank_rows,\n count(*) filter(where contains(\"phone\",'*')) as masked_rows,\n count(distinct \"phone\") as distinct_nonnull_values from shopee\nunion all\nselect 'full_address' as column_name,count(*) as rows,\n count(*) filter(where \"full_address\" is null) as null_rows,\n count(*) filter(where \"full_address\" is not null and trim(\"full_address\")='') as blank_rows,\n count(*) filter(where contains(\"full_address\",'*')) as masked_rows,\n count(distinct \"full_address\") as distinct_nonnull_values from shopee\nunion all\nselect 'state' as column_name,count(*) as rows,\n count(*) filter(where \"state\" is null) as null_rows,\n count(*) filter(where \"state\" is not null and trim(\"state\")='') as blank_rows,\n count(*) filter(where contains(\"state\",'*')) as masked_rows,\n count(distinct \"state\") as distinct_nonnull_values from shopee\nunion all\nselect 'city' as column_name,count(*) as rows,\n count(*) filter(where \"city\" is null) as null_rows,\n count(*) filter(where \"city\" is not null and trim(\"city\")='') as blank_rows,\n count(*) filter(where contains(\"city\",'*')) as masked_rows,\n count(distinct \"city\") as distinct_nonnull_values from shopee\nunion all\nselect 'district' as column_name,count(*) as rows,\n count(*) filter(where \"district\" is null) as null_rows,\n count(*) filter(where \"district\" is not null and trim(\"district\")='') as blank_rows,\n count(*) filter(where contains(\"district\",'*')) as masked_rows,\n count(distinct \"district\") as distinct_nonnull_values from shopee\nunion all\nselect 'country' as column_name,count(*) as rows,\n count(*) filter(where \"country\" is null) as null_rows,\n count(*) filter(where \"country\" is not null and trim(\"country\")='') as blank_rows,\n count(*) filter(where contains(\"country\",'*')) as masked_rows,\n count(distinct \"country\") as distinct_nonnull_values from shopee\nunion all\nselect 'item_name' as column_name,count(*) as rows,\n count(*) filter(where \"item_name\" is null) as null_rows,\n count(*) filter(where \"item_name\" is not null and trim(\"item_name\")='') as blank_rows,\n count(*) filter(where contains(\"item_name\",'*')) as masked_rows,\n count(distinct \"item_name\") as distinct_nonnull_values from shopee\nunion all\nselect 'item_sku' as column_name,count(*) as rows,\n count(*) filter(where \"item_sku\" is null) as null_rows,\n count(*) filter(where \"item_sku\" is not null and trim(\"item_sku\")='') as blank_rows,\n count(*) filter(where contains(\"item_sku\",'*')) as masked_rows,\n count(distinct \"item_sku\") as distinct_nonnull_values from shopee\nunion all\nselect 'model_name' as column_name,count(*) as rows,\n count(*) filter(where \"model_name\" is null) as null_rows,\n count(*) filter(where \"model_name\" is not null and trim(\"model_name\")='') as blank_rows,\n count(*) filter(where contains(\"model_name\",'*')) as masked_rows,\n count(distinct \"model_name\") as distinct_nonnull_values from shopee\nunion all\nselect 'model_sku' as column_name,count(*) as rows,\n count(*) filter(where \"model_sku\" is null) as null_rows,\n count(*) filter(where \"model_sku\" is not null and trim(\"model_sku\")='') as blank_rows,\n count(*) filter(where contains(\"model_sku\",'*')) as masked_rows,\n count(distinct \"model_sku\") as distinct_nonnull_values from shopee\nunion all\nselect 'quantity' as column_name,count(*) as rows,\n count(*) filter(where \"quantity\" is null) as null_rows,\n count(*) filter(where \"quantity\" is not null and trim(\"quantity\")='') as blank_rows,\n count(*) filter(where contains(\"quantity\",'*')) as masked_rows,\n count(distinct \"quantity\") as distinct_nonnull_values from shopee\nunion all\nselect 'original_price' as column_name,count(*) as rows,\n count(*) filter(where \"original_price\" is null) as null_rows,\n count(*) filter(where \"original_price\" is not null and trim(\"original_price\")='') as blank_rows,\n count(*) filter(where contains(\"original_price\",'*')) as masked_rows,\n count(distinct \"original_price\") as distinct_nonnull_values from shopee\nunion all\nselect 'model_discounted_price' as column_name,count(*) as rows,\n count(*) filter(where \"model_discounted_price\" is null) as null_rows,\n count(*) filter(where \"model_discounted_price\" is not null and trim(\"model_discounted_price\")='') as blank_rows,\n count(*) filter(where contains(\"model_discounted_price\",'*')) as masked_rows,\n count(distinct \"model_discounted_price\") as distinct_nonnull_values from shopee\nunion all\nselect 'item_weight' as column_name,count(*) as rows,\n count(*) filter(where \"item_weight\" is null) as null_rows,\n count(*) filter(where \"item_weight\" is not null and trim(\"item_weight\")='') as blank_rows,\n count(*) filter(where contains(\"item_weight\",'*')) as masked_rows,\n count(distinct \"item_weight\") as distinct_nonnull_values from shopee\nunion all\nselect 'total_order_value' as column_name,count(*) as rows,\n count(*) filter(where \"total_order_value\" is null) as null_rows,\n count(*) filter(where \"total_order_value\" is not null and trim(\"total_order_value\")='') as blank_rows,\n count(*) filter(where contains(\"total_order_value\",'*')) as masked_rows,\n count(distinct \"total_order_value\") as distinct_nonnull_values from shopee\nunion all\nselect 'buyer_total_amount' as column_name,count(*) as rows,\n count(*) filter(where \"buyer_total_amount\" is null) as null_rows,\n count(*) filter(where \"buyer_total_amount\" is not null and trim(\"buyer_total_amount\")='') as blank_rows,\n count(*) filter(where contains(\"buyer_total_amount\",'*')) as masked_rows,\n count(distinct \"buyer_total_amount\") as distinct_nonnull_values from shopee\nunion all\nselect 'seller_discount' as column_name,count(*) as rows,\n count(*) filter(where \"seller_discount\" is null) as null_rows,\n count(*) filter(where \"seller_discount\" is not null and trim(\"seller_discount\")='') as blank_rows,\n count(*) filter(where contains(\"seller_discount\",'*')) as masked_rows,\n count(distinct \"seller_discount\") as distinct_nonnull_values from shopee\nunion all\nselect 'shopee_discount' as column_name,count(*) as rows,\n count(*) filter(where \"shopee_discount\" is null) as null_rows,\n count(*) filter(where \"shopee_discount\" is not null and trim(\"shopee_discount\")='') as blank_rows,\n count(*) filter(where contains(\"shopee_discount\",'*')) as masked_rows,\n count(distinct \"shopee_discount\") as distinct_nonnull_values from shopee\nunion all\nselect 'voucher_from_seller' as column_name,count(*) as rows,\n count(*) filter(where \"voucher_from_seller\" is null) as null_rows,\n count(*) filter(where \"voucher_from_seller\" is not null and trim(\"voucher_from_seller\")='') as blank_rows,\n count(*) filter(where contains(\"voucher_from_seller\",'*')) as masked_rows,\n count(distinct \"voucher_from_seller\") as distinct_nonnull_values from shopee\nunion all\nselect 'voucher_from_shopee' as column_name,count(*) as rows,\n count(*) filter(where \"voucher_from_shopee\" is null) as null_rows,\n count(*) filter(where \"voucher_from_shopee\" is not null and trim(\"voucher_from_shopee\")='') as blank_rows,\n count(*) filter(where contains(\"voucher_from_shopee\",'*')) as masked_rows,\n count(distinct \"voucher_from_shopee\") as distinct_nonnull_values from shopee\nunion all\nselect 'commission_fee' as column_name,count(*) as rows,\n count(*) filter(where \"commission_fee\" is null) as null_rows,\n count(*) filter(where \"commission_fee\" is not null and trim(\"commission_fee\")='') as blank_rows,\n count(*) filter(where contains(\"commission_fee\",'*')) as masked_rows,\n count(distinct \"commission_fee\") as distinct_nonnull_values from shopee\nunion all\nselect 'service_fee' as column_name,count(*) as rows,\n count(*) filter(where \"service_fee\" is null) as null_rows,\n count(*) filter(where \"service_fee\" is not null and trim(\"service_fee\")='') as blank_rows,\n count(*) filter(where contains(\"service_fee\",'*')) as masked_rows,\n count(distinct \"service_fee\") as distinct_nonnull_values from shopee\nunion all\nselect 'transaction_fee' as column_name,count(*) as rows,\n count(*) filter(where \"transaction_fee\" is null) as null_rows,\n count(*) filter(where \"transaction_fee\" is not null and trim(\"transaction_fee\")='') as blank_rows,\n count(*) filter(where contains(\"transaction_fee\",'*')) as masked_rows,\n count(distinct \"transaction_fee\") as distinct_nonnull_values from shopee\nunion all\nselect 'escrow_amount' as column_name,count(*) as rows,\n count(*) filter(where \"escrow_amount\" is null) as null_rows,\n count(*) filter(where \"escrow_amount\" is not null and trim(\"escrow_amount\")='') as blank_rows,\n count(*) filter(where contains(\"escrow_amount\",'*')) as masked_rows,\n count(distinct \"escrow_amount\") as distinct_nonnull_values from shopee\nunion all\nselect 'actual_shipping_fee' as column_name,count(*) as rows,\n count(*) filter(where \"actual_shipping_fee\" is null) as null_rows,\n count(*) filter(where \"actual_shipping_fee\" is not null and trim(\"actual_shipping_fee\")='') as blank_rows,\n count(*) filter(where contains(\"actual_shipping_fee\",'*')) as masked_rows,\n count(distinct \"actual_shipping_fee\") as distinct_nonnull_values from shopee\nunion all\nselect 'shop_name' as column_name,count(*) as rows,\n count(*) filter(where \"shop_name\" is null) as null_rows,\n count(*) filter(where \"shop_name\" is not null and trim(\"shop_name\")='') as blank_rows,\n count(*) filter(where contains(\"shop_name\",'*')) as masked_rows,\n count(distinct \"shop_name\") as distinct_nonnull_values from shopee\nunion all\nselect 'connection_id' as column_name,count(*) as rows,\n count(*) filter(where \"connection_id\" is null) as null_rows,\n count(*) filter(where \"connection_id\" is not null and trim(\"connection_id\")='') as blank_rows,\n count(*) filter(where contains(\"connection_id\",'*')) as masked_rows,\n count(distinct \"connection_id\") as distinct_nonnull_values from shopee\nunion all\nselect 'region' as column_name,count(*) as rows,\n count(*) filter(where \"region\" is null) as null_rows,\n count(*) filter(where \"region\" is not null and trim(\"region\")='') as blank_rows,\n count(*) filter(where contains(\"region\",'*')) as masked_rows,\n count(distinct \"region\") as distinct_nonnull_values from shopee\nunion all\nselect 'synced_at' as column_name,count(*) as rows,\n count(*) filter(where \"synced_at\" is null) as null_rows,\n count(*) filter(where \"synced_at\" is not null and trim(\"synced_at\")='') as blank_rows,\n count(*) filter(where contains(\"synced_at\",'*')) as masked_rows,\n count(distinct \"synced_at\") as distinct_nonnull_values from shopee\nunion all\nselect 'raw_payload' as column_name,count(*) as rows,\n count(*) filter(where \"raw_payload\" is null) as null_rows,\n count(*) filter(where \"raw_payload\" is not null and trim(\"raw_payload\")='') as blank_rows,\n count(*) filter(where contains(\"raw_payload\",'*')) as masked_rows,\n count(distinct \"raw_payload\") as distinct_nonnull_values from shopee\nunion all\nselect 'currency' as column_name,count(*) as rows,\n count(*) filter(where \"currency\" is null) as null_rows,\n count(*) filter(where \"currency\" is not null and trim(\"currency\")='') as blank_rows,\n count(*) filter(where contains(\"currency\",'*')) as masked_rows,\n count(distinct \"currency\") as distinct_nonnull_values from shopee\nunion all\nselect 'order_status_raw' as column_name,count(*) as rows,\n count(*) filter(where \"order_status_raw\" is null) as null_rows,\n count(*) filter(where \"order_status_raw\" is not null and trim(\"order_status_raw\")='') as blank_rows,\n count(*) filter(where contains(\"order_status_raw\",'*')) as masked_rows,\n count(distinct \"order_status_raw\") as distinct_nonnull_values from shopee\nunion all\nselect 'cancel_time' as column_name,count(*) as rows,\n count(*) filter(where \"cancel_time\" is null) as null_rows,\n count(*) filter(where \"cancel_time\" is not null and trim(\"cancel_time\")='') as blank_rows,\n count(*) filter(where contains(\"cancel_time\",'*')) as masked_rows,\n count(distinct \"cancel_time\") as distinct_nonnull_values from shopee\nunion all\nselect 'fulfillment_flag' as column_name,count(*) as rows,\n count(*) filter(where \"fulfillment_flag\" is null) as null_rows,\n count(*) filter(where \"fulfillment_flag\" is not null and trim(\"fulfillment_flag\")='') as blank_rows,\n count(*) filter(where contains(\"fulfillment_flag\",'*')) as masked_rows,\n count(distinct \"fulfillment_flag\") as distinct_nonnull_values from shopee\nunion all\nselect 'cod' as column_name,count(*) as rows,\n count(*) filter(where \"cod\" is null) as null_rows,\n count(*) filter(where \"cod\" is not null and trim(\"cod\")='') as blank_rows,\n count(*) filter(where contains(\"cod\",'*')) as masked_rows,\n count(distinct \"cod\") as distinct_nonnull_values from shopee\nunion all\nselect 'buyer_user_id' as column_name,count(*) as rows,\n count(*) filter(where \"buyer_user_id\" is null) as null_rows,\n count(*) filter(where \"buyer_user_id\" is not null and trim(\"buyer_user_id\")='') as blank_rows,\n count(*) filter(where contains(\"buyer_user_id\",'*')) as masked_rows,\n count(distinct \"buyer_user_id\") as distinct_nonnull_values from shopee\nunion all\nselect 'ship_by_date' as column_name,count(*) as rows,\n count(*) filter(where \"ship_by_date\" is null) as null_rows,\n count(*) filter(where \"ship_by_date\" is not null and trim(\"ship_by_date\")='') as blank_rows,\n count(*) filter(where contains(\"ship_by_date\",'*')) as masked_rows,\n count(distinct \"ship_by_date\") as distinct_nonnull_values from shopee\nunion all\nselect 'note' as column_name,count(*) as rows,\n count(*) filter(where \"note\" is null) as null_rows,\n count(*) filter(where \"note\" is not null and trim(\"note\")='') as blank_rows,\n count(*) filter(where contains(\"note\",'*')) as masked_rows,\n count(distinct \"note\") as distinct_nonnull_values from shopee\nunion all\nselect 'shipping_method' as column_name,count(*) as rows,\n count(*) filter(where \"shipping_method\" is null) as null_rows,\n count(*) filter(where \"shipping_method\" is not null and trim(\"shipping_method\")='') as blank_rows,\n count(*) filter(where contains(\"shipping_method\",'*')) as masked_rows,\n count(distinct \"shipping_method\") as distinct_nonnull_values from shopee\nunion all\nselect 'package_number' as column_name,count(*) as rows,\n count(*) filter(where \"package_number\" is null) as null_rows,\n count(*) filter(where \"package_number\" is not null and trim(\"package_number\")='') as blank_rows,\n count(*) filter(where contains(\"package_number\",'*')) as masked_rows,\n count(distinct \"package_number\") as distinct_nonnull_values from shopee\nunion all\nselect 'recipient_town' as column_name,count(*) as rows,\n count(*) filter(where \"recipient_town\" is null) as null_rows,\n count(*) filter(where \"recipient_town\" is not null and trim(\"recipient_town\")='') as blank_rows,\n count(*) filter(where contains(\"recipient_town\",'*')) as masked_rows,\n count(distinct \"recipient_town\") as distinct_nonnull_values from shopee\nunion all\nselect 'returned_quantity' as column_name,count(*) as rows,\n count(*) filter(where \"returned_quantity\" is null) as null_rows,\n count(*) filter(where \"returned_quantity\" is not null and trim(\"returned_quantity\")='') as blank_rows,\n count(*) filter(where contains(\"returned_quantity\",'*')) as masked_rows,\n count(distinct \"returned_quantity\") as distinct_nonnull_values from shopee\nunion all\nselect 'total_weight' as column_name,count(*) as rows,\n count(*) filter(where \"total_weight\" is null) as null_rows,\n count(*) filter(where \"total_weight\" is not null and trim(\"total_weight\")='') as blank_rows,\n count(*) filter(where contains(\"total_weight\",'*')) as masked_rows,\n count(distinct \"total_weight\") as distinct_nonnull_values from shopee\nunion all\nselect 'estimated_shipping_fee' as column_name,count(*) as rows,\n count(*) filter(where \"estimated_shipping_fee\" is null) as null_rows,\n count(*) filter(where \"estimated_shipping_fee\" is not null and trim(\"estimated_shipping_fee\")='') as blank_rows,\n count(*) filter(where contains(\"estimated_shipping_fee\",'*')) as masked_rows,\n count(distinct \"estimated_shipping_fee\") as distinct_nonnull_values from shopee\nunion all\nselect 'return_shipping_fee' as column_name,count(*) as rows,\n count(*) filter(where \"return_shipping_fee\" is null) as null_rows,\n count(*) filter(where \"return_shipping_fee\" is not null and trim(\"return_shipping_fee\")='') as blank_rows,\n count(*) filter(where contains(\"return_shipping_fee\",'*')) as masked_rows,\n count(distinct \"return_shipping_fee\") as distinct_nonnull_values from shopee\nunion all\nselect 'item_id' as column_name,count(*) as rows,\n count(*) filter(where \"item_id\" is null) as null_rows,\n count(*) filter(where \"item_id\" is not null and trim(\"item_id\")='') as blank_rows,\n count(*) filter(where contains(\"item_id\",'*')) as masked_rows,\n count(distinct \"item_id\") as distinct_nonnull_values from shopee\nunion all\nselect 'model_id' as column_name,count(*) as rows,\n count(*) filter(where \"model_id\" is null) as null_rows,\n count(*) filter(where \"model_id\" is not null and trim(\"model_id\")='') as blank_rows,\n count(*) filter(where contains(\"model_id\",'*')) as masked_rows,\n count(distinct \"model_id\") as distinct_nonnull_values from shopee\nunion all\nselect 'zipcode' as column_name,count(*) as rows,\n count(*) filter(where \"zipcode\" is null) as null_rows,\n count(*) filter(where \"zipcode\" is not null and trim(\"zipcode\")='') as blank_rows,\n count(*) filter(where contains(\"zipcode\",'*')) as masked_rows,\n count(distinct \"zipcode\") as distinct_nonnull_values from shopee\nunion all\nselect 'update_time' as column_name,count(*) as rows,\n count(*) filter(where \"update_time\" is null) as null_rows,\n count(*) filter(where \"update_time\" is not null and trim(\"update_time\")='') as blank_rows,\n count(*) filter(where contains(\"update_time\",'*')) as masked_rows,\n count(distinct \"update_time\") as distinct_nonnull_values from shopee\nunion all\nselect 'buyer_cancel_reason' as column_name,count(*) as rows,\n count(*) filter(where \"buyer_cancel_reason\" is null) as null_rows,\n count(*) filter(where \"buyer_cancel_reason\" is not null and trim(\"buyer_cancel_reason\")='') as blank_rows,\n count(*) filter(where contains(\"buyer_cancel_reason\",'*')) as masked_rows,\n count(distinct \"buyer_cancel_reason\") as distinct_nonnull_values from shopee\nunion all\nselect 'cancel_by' as column_name,count(*) as rows,\n count(*) filter(where \"cancel_by\" is null) as null_rows,\n count(*) filter(where \"cancel_by\" is not null and trim(\"cancel_by\")='') as blank_rows,\n count(*) filter(where contains(\"cancel_by\",'*')) as masked_rows,\n count(distinct \"cancel_by\") as distinct_nonnull_values from shopee\nunion all\nselect 'product_location_id' as column_name,count(*) as rows,\n count(*) filter(where \"product_location_id\" is null) as null_rows,\n count(*) filter(where \"product_location_id\" is not null and trim(\"product_location_id\")='') as blank_rows,\n count(*) filter(where contains(\"product_location_id\",'*')) as masked_rows,\n count(distinct \"product_location_id\") as distinct_nonnull_values from shopee\nunion all\nselect 'promotion_type' as column_name,count(*) as rows,\n count(*) filter(where \"promotion_type\" is null) as null_rows,\n count(*) filter(where \"promotion_type\" is not null and trim(\"promotion_type\")='') as blank_rows,\n count(*) filter(where contains(\"promotion_type\",'*')) as masked_rows,\n count(distinct \"promotion_type\") as distinct_nonnull_values from shopee\nunion all\nselect 'promotion_id' as column_name,count(*) as rows,\n count(*) filter(where \"promotion_id\" is null) as null_rows,\n count(*) filter(where \"promotion_id\" is not null and trim(\"promotion_id\")='') as blank_rows,\n count(*) filter(where contains(\"promotion_id\",'*')) as masked_rows,\n count(distinct \"promotion_id\") as distinct_nonnull_values from shopee\nunion all\nselect 'active_qty' as column_name,count(*) as rows,\n count(*) filter(where \"active_qty\" is null) as null_rows,\n count(*) filter(where \"active_qty\" is not null and trim(\"active_qty\")='') as blank_rows,\n count(*) filter(where contains(\"active_qty\",'*')) as masked_rows,\n count(distinct \"active_qty\") as distinct_nonnull_values from shopee\nunion all\nselect 'cancel_requested_qty' as column_name,count(*) as rows,\n count(*) filter(where \"cancel_requested_qty\" is null) as null_rows,\n count(*) filter(where \"cancel_requested_qty\" is not null and trim(\"cancel_requested_qty\")='') as blank_rows,\n count(*) filter(where contains(\"cancel_requested_qty\",'*')) as masked_rows,\n count(distinct \"cancel_requested_qty\") as distinct_nonnull_values from shopee\nunion all\nselect 'cancelled_qty' as column_name,count(*) as rows,\n count(*) filter(where \"cancelled_qty\" is null) as null_rows,\n count(*) filter(where \"cancelled_qty\" is not null and trim(\"cancelled_qty\")='') as blank_rows,\n count(*) filter(where contains(\"cancelled_qty\",'*')) as masked_rows,\n count(distinct \"cancelled_qty\") as distinct_nonnull_values from shopee\nunion all\nselect 'return_requested_qty' as column_name,count(*) as rows,\n count(*) filter(where \"return_requested_qty\" is null) as null_rows,\n count(*) filter(where \"return_requested_qty\" is not null and trim(\"return_requested_qty\")='') as blank_rows,\n count(*) filter(where contains(\"return_requested_qty\",'*')) as masked_rows,\n count(distinct \"return_requested_qty\") as distinct_nonnull_values from shopee\nunion all\nselect 'wholesale' as column_name,count(*) as rows,\n count(*) filter(where \"wholesale\" is null) as null_rows,\n count(*) filter(where \"wholesale\" is not null and trim(\"wholesale\")='') as blank_rows,\n count(*) filter(where contains(\"wholesale\",'*')) as masked_rows,\n count(distinct \"wholesale\") as distinct_nonnull_values from shopee\nunion all\nselect 'add_on_deal' as column_name,count(*) as rows,\n count(*) filter(where \"add_on_deal\" is null) as null_rows,\n count(*) filter(where \"add_on_deal\" is not null and trim(\"add_on_deal\")='') as blank_rows,\n count(*) filter(where contains(\"add_on_deal\",'*')) as masked_rows,\n count(distinct \"add_on_deal\") as distinct_nonnull_values from shopee\nunion all\nselect 'main_item' as column_name,count(*) as rows,\n count(*) filter(where \"main_item\" is null) as null_rows,\n count(*) filter(where \"main_item\" is not null and trim(\"main_item\")='') as blank_rows,\n count(*) filter(where contains(\"main_item\",'*')) as masked_rows,\n count(distinct \"main_item\") as distinct_nonnull_values from shopee\nunion all\nselect 'add_on_deal_id' as column_name,count(*) as rows,\n count(*) filter(where \"add_on_deal_id\" is null) as null_rows,\n count(*) filter(where \"add_on_deal_id\" is not null and trim(\"add_on_deal_id\")='') as blank_rows,\n count(*) filter(where contains(\"add_on_deal_id\",'*')) as masked_rows,\n count(distinct \"add_on_deal_id\") as distinct_nonnull_values from shopee\nunion all\nselect 'can_full_cancel_order' as column_name,count(*) as rows,\n count(*) filter(where \"can_full_cancel_order\" is null) as null_rows,\n count(*) filter(where \"can_full_cancel_order\" is not null and trim(\"can_full_cancel_order\")='') as blank_rows,\n count(*) filter(where contains(\"can_full_cancel_order\",'*')) as masked_rows,\n count(distinct \"can_full_cancel_order\") as distinct_nonnull_values from shopee\nunion all\nselect 'can_partial_cancel_order' as column_name,count(*) as rows,\n count(*) filter(where \"can_partial_cancel_order\" is null) as null_rows,\n count(*) filter(where \"can_partial_cancel_order\" is not null and trim(\"can_partial_cancel_order\")='') as blank_rows,\n count(*) filter(where contains(\"can_partial_cancel_order\",'*')) as masked_rows,\n count(distinct \"can_partial_cancel_order\") as distinct_nonnull_values from shopee\nunion all\nselect 'buyer_preference_for_partial_cancellation' as column_name,count(*) as rows,\n count(*) filter(where \"buyer_preference_for_partial_cancellation\" is null) as null_rows,\n count(*) filter(where \"buyer_preference_for_partial_cancellation\" is not null and trim(\"buyer_preference_for_partial_cancellation\")='') as blank_rows,\n count(*) filter(where contains(\"buyer_preference_for_partial_cancellation\",'*')) as masked_rows,\n count(distinct \"buyer_preference_for_partial_cancellation\") as distinct_nonnull_values from shopee\nunion all\nselect 'booking_sn' as column_name,count(*) as rows,\n count(*) filter(where \"booking_sn\" is null) as null_rows,\n count(*) filter(where \"booking_sn\" is not null and trim(\"booking_sn\")='') as blank_rows,\n count(*) filter(where contains(\"booking_sn\",'*')) as masked_rows,\n count(distinct \"booking_sn\") as distinct_nonnull_values from shopee\nunion all\nselect 'advance_package' as column_name,count(*) as rows,\n count(*) filter(where \"advance_package\" is null) as null_rows,\n count(*) filter(where \"advance_package\" is not null and trim(\"advance_package\")='') as blank_rows,\n count(*) filter(where contains(\"advance_package\",'*')) as masked_rows,\n count(distinct \"advance_package\") as distinct_nonnull_values from shopee\nunion all\nselect 'is_primary_row' as column_name,count(*) as rows,\n count(*) filter(where \"is_primary_row\" is null) as null_rows,\n count(*) filter(where \"is_primary_row\" is not null and trim(\"is_primary_row\")='') as blank_rows,\n count(*) filter(where contains(\"is_primary_row\",'*')) as masked_rows,\n count(distinct \"is_primary_row\") as distinct_nonnull_values from shopee",
+      "rows": [
+        {
+          "column_name": "pkId",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 25546,
+          "distinct_nonnull_values": 25241
+        },
+        {
+          "column_name": "user_id",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 25546,
+          "distinct_nonnull_values": 6
+        },
+        {
+          "column_name": "shop_id",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 25546,
+          "distinct_nonnull_values": 8
+        },
+        {
+          "column_name": "order_sn",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 25546,
+          "distinct_nonnull_values": 35
+        },
+        {
+          "column_name": "order_status",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 8
+        },
+        {
+          "column_name": "create_time",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 19580
+        },
+        {
+          "column_name": "pay_time",
+          "rows": 25546,
+          "null_rows": 3658,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 16599
+        },
+        {
+          "column_name": "shipped_time",
+          "rows": 25546,
+          "null_rows": 4679,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 14567
+        },
+        {
+          "column_name": "completed_time",
+          "rows": 25546,
+          "null_rows": 5212,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 15594
+        },
+        {
+          "column_name": "cancel_reason",
+          "rows": 25546,
+          "null_rows": 20895,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 15
+        },
+        {
+          "column_name": "buyer_remark",
+          "rows": 25546,
+          "null_rows": 25546,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 0
+        },
+        {
+          "column_name": "shipping_carrier",
+          "rows": 25546,
+          "null_rows": 1861,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 14
+        },
+        {
+          "column_name": "payment_method",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 14
+        },
+        {
+          "column_name": "estimated_shipping_date",
+          "rows": 25546,
+          "null_rows": 25546,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 0
+        },
+        {
+          "column_name": "buyer_username",
+          "rows": 25546,
+          "null_rows": 36,
+          "blank_rows": 0,
+          "masked_rows": 25510,
+          "distinct_nonnull_values": 14911
+        },
+        {
+          "column_name": "recipient_name",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 25546,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "phone",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 25546,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "full_address",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 25546,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "state",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 25546,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "city",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 25546,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "district",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 25546,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "country",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 25546,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "item_name",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 25546,
+          "distinct_nonnull_values": 291
+        },
+        {
+          "column_name": "item_sku",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 25546,
+          "distinct_nonnull_values": 204
+        },
+        {
+          "column_name": "model_name",
+          "rows": 25546,
+          "null_rows": 2142,
+          "blank_rows": 0,
+          "masked_rows": 23404,
+          "distinct_nonnull_values": 386
+        },
+        {
+          "column_name": "model_sku",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 25546,
+          "distinct_nonnull_values": 404
+        },
+        {
+          "column_name": "quantity",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 9
+        },
+        {
+          "column_name": "original_price",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 137
+        },
+        {
+          "column_name": "model_discounted_price",
+          "rows": 25546,
+          "null_rows": 1137,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 318
+        },
+        {
+          "column_name": "item_weight",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 30
+        },
+        {
+          "column_name": "total_order_value",
+          "rows": 25546,
+          "null_rows": 276,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 8339
+        },
+        {
+          "column_name": "buyer_total_amount",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 6927
+        },
+        {
+          "column_name": "seller_discount",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 517
+        },
+        {
+          "column_name": "shopee_discount",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 20
+        },
+        {
+          "column_name": "voucher_from_seller",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 120
+        },
+        {
+          "column_name": "voucher_from_shopee",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 4924
+        },
+        {
+          "column_name": "commission_fee",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1360
+        },
+        {
+          "column_name": "service_fee",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1142
+        },
+        {
+          "column_name": "transaction_fee",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1673
+        },
+        {
+          "column_name": "escrow_amount",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 6080
+        },
+        {
+          "column_name": "actual_shipping_fee",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 127
+        },
+        {
+          "column_name": "shop_name",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 25546,
+          "distinct_nonnull_values": 9
+        },
+        {
+          "column_name": "connection_id",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 25546,
+          "distinct_nonnull_values": 7
+        },
+        {
+          "column_name": "region",
+          "rows": 25546,
+          "null_rows": 17872,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "synced_at",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1043
+        },
+        {
+          "column_name": "raw_payload",
+          "rows": 25546,
+          "null_rows": 25546,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 0
+        },
+        {
+          "column_name": "currency",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 2
+        },
+        {
+          "column_name": "order_status_raw",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 8
+        },
+        {
+          "column_name": "cancel_time",
+          "rows": 25546,
+          "null_rows": 20888,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 3620
+        },
+        {
+          "column_name": "fulfillment_flag",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 2
+        },
+        {
+          "column_name": "cod",
+          "rows": 25546,
+          "null_rows": 12483,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "buyer_user_id",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 25546,
+          "distinct_nonnull_values": 14513
+        },
+        {
+          "column_name": "ship_by_date",
+          "rows": 25546,
+          "null_rows": 2171,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 547
+        },
+        {
+          "column_name": "note",
+          "rows": 25546,
+          "null_rows": 25546,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 0
+        },
+        {
+          "column_name": "shipping_method",
+          "rows": 25546,
+          "null_rows": 25546,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 0
+        },
+        {
+          "column_name": "package_number",
+          "rows": 25546,
+          "null_rows": 254,
+          "blank_rows": 0,
+          "masked_rows": 25292,
+          "distinct_nonnull_values": 4
+        },
+        {
+          "column_name": "recipient_town",
+          "rows": 25546,
+          "null_rows": 254,
+          "blank_rows": 0,
+          "masked_rows": 25292,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "returned_quantity",
+          "rows": 25546,
+          "null_rows": 254,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 5
+        },
+        {
+          "column_name": "total_weight",
+          "rows": 25546,
+          "null_rows": 254,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 80
+        },
+        {
+          "column_name": "estimated_shipping_fee",
+          "rows": 25546,
+          "null_rows": 254,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 136
+        },
+        {
+          "column_name": "return_shipping_fee",
+          "rows": 25546,
+          "null_rows": 254,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 15
+        },
+        {
+          "column_name": "item_id",
+          "rows": 25546,
+          "null_rows": 288,
+          "blank_rows": 0,
+          "masked_rows": 25258,
+          "distinct_nonnull_values": 231
+        },
+        {
+          "column_name": "model_id",
+          "rows": 25546,
+          "null_rows": 288,
+          "blank_rows": 0,
+          "masked_rows": 25258,
+          "distinct_nonnull_values": 282
+        },
+        {
+          "column_name": "zipcode",
+          "rows": 25546,
+          "null_rows": 288,
+          "blank_rows": 0,
+          "masked_rows": 25258,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "update_time",
+          "rows": 25546,
+          "null_rows": 288,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 19485
+        },
+        {
+          "column_name": "buyer_cancel_reason",
+          "rows": 25546,
+          "null_rows": 21568,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 11
+        },
+        {
+          "column_name": "cancel_by",
+          "rows": 25546,
+          "null_rows": 20974,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 2
+        },
+        {
+          "column_name": "product_location_id",
+          "rows": 25546,
+          "null_rows": 288,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "promotion_type",
+          "rows": 25546,
+          "null_rows": 19548,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 7
+        },
+        {
+          "column_name": "promotion_id",
+          "rows": 25546,
+          "null_rows": 288,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 736
+        },
+        {
+          "column_name": "active_qty",
+          "rows": 25546,
+          "null_rows": 288,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 8
+        },
+        {
+          "column_name": "cancel_requested_qty",
+          "rows": 25546,
+          "null_rows": 288,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "cancelled_qty",
+          "rows": 25546,
+          "null_rows": 288,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 9
+        },
+        {
+          "column_name": "return_requested_qty",
+          "rows": 25546,
+          "null_rows": 288,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 3
+        },
+        {
+          "column_name": "wholesale",
+          "rows": 25546,
+          "null_rows": 25545,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "add_on_deal",
+          "rows": 25546,
+          "null_rows": 23950,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "main_item",
+          "rows": 25546,
+          "null_rows": 24764,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "add_on_deal_id",
+          "rows": 25546,
+          "null_rows": 288,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 43
+        },
+        {
+          "column_name": "can_full_cancel_order",
+          "rows": 25546,
+          "null_rows": 25440,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "can_partial_cancel_order",
+          "rows": 25546,
+          "null_rows": 25546,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 0
+        },
+        {
+          "column_name": "buyer_preference_for_partial_cancellation",
+          "rows": 25546,
+          "null_rows": 288,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 1
+        },
+        {
+          "column_name": "booking_sn",
+          "rows": 25546,
+          "null_rows": 25546,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 0
+        },
+        {
+          "column_name": "advance_package",
+          "rows": 25546,
+          "null_rows": 25546,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 0
+        },
+        {
+          "column_name": "is_primary_row",
+          "rows": 25546,
+          "null_rows": 0,
+          "blank_rows": 0,
+          "masked_rows": 0,
+          "distinct_nonnull_values": 2
+        }
+      ]
+    },
+    {
+      "id": "shopee-id-masking",
+      "sql": "select 'pkId' as column_name,count(\"pkId\") as nonnull_rows,\n count(*) filter(where contains(\"pkId\",'*')) as masked_rows,\n count(*) filter(where regexp_full_match(\"pkId\",'[^*]{5}\\*+')) as five_visible_then_stars,\n count(*) filter(where regexp_full_match(\"pkId\",'[0-9a-fA-F]{5}\\*{31}')) as hex_five_then_31_stars\n from shopee\nunion all\nselect 'user_id' as column_name,count(\"user_id\") as nonnull_rows,\n count(*) filter(where contains(\"user_id\",'*')) as masked_rows,\n count(*) filter(where regexp_full_match(\"user_id\",'[^*]{5}\\*+')) as five_visible_then_stars,\n count(*) filter(where regexp_full_match(\"user_id\",'[0-9a-fA-F]{5}\\*{31}')) as hex_five_then_31_stars\n from shopee\nunion all\nselect 'shop_id' as column_name,count(\"shop_id\") as nonnull_rows,\n count(*) filter(where contains(\"shop_id\",'*')) as masked_rows,\n count(*) filter(where regexp_full_match(\"shop_id\",'[^*]{5}\\*+')) as five_visible_then_stars,\n count(*) filter(where regexp_full_match(\"shop_id\",'[0-9a-fA-F]{5}\\*{31}')) as hex_five_then_31_stars\n from shopee\nunion all\nselect 'order_sn' as column_name,count(\"order_sn\") as nonnull_rows,\n count(*) filter(where contains(\"order_sn\",'*')) as masked_rows,\n count(*) filter(where regexp_full_match(\"order_sn\",'[^*]{5}\\*+')) as five_visible_then_stars,\n count(*) filter(where regexp_full_match(\"order_sn\",'[0-9a-fA-F]{5}\\*{31}')) as hex_five_then_31_stars\n from shopee\nunion all\nselect 'item_id' as column_name,count(\"item_id\") as nonnull_rows,\n count(*) filter(where contains(\"item_id\",'*')) as masked_rows,\n count(*) filter(where regexp_full_match(\"item_id\",'[^*]{5}\\*+')) as five_visible_then_stars,\n count(*) filter(where regexp_full_match(\"item_id\",'[0-9a-fA-F]{5}\\*{31}')) as hex_five_then_31_stars\n from shopee\nunion all\nselect 'model_id' as column_name,count(\"model_id\") as nonnull_rows,\n count(*) filter(where contains(\"model_id\",'*')) as masked_rows,\n count(*) filter(where regexp_full_match(\"model_id\",'[^*]{5}\\*+')) as five_visible_then_stars,\n count(*) filter(where regexp_full_match(\"model_id\",'[0-9a-fA-F]{5}\\*{31}')) as hex_five_then_31_stars\n from shopee\nunion all\nselect 'item_sku' as column_name,count(\"item_sku\") as nonnull_rows,\n count(*) filter(where contains(\"item_sku\",'*')) as masked_rows,\n count(*) filter(where regexp_full_match(\"item_sku\",'[^*]{5}\\*+')) as five_visible_then_stars,\n count(*) filter(where regexp_full_match(\"item_sku\",'[0-9a-fA-F]{5}\\*{31}')) as hex_five_then_31_stars\n from shopee\nunion all\nselect 'model_sku' as column_name,count(\"model_sku\") as nonnull_rows,\n count(*) filter(where contains(\"model_sku\",'*')) as masked_rows,\n count(*) filter(where regexp_full_match(\"model_sku\",'[^*]{5}\\*+')) as five_visible_then_stars,\n count(*) filter(where regexp_full_match(\"model_sku\",'[0-9a-fA-F]{5}\\*{31}')) as hex_five_then_31_stars\n from shopee\nunion all\nselect 'shop_name' as column_name,count(\"shop_name\") as nonnull_rows,\n count(*) filter(where contains(\"shop_name\",'*')) as masked_rows,\n count(*) filter(where regexp_full_match(\"shop_name\",'[^*]{5}\\*+')) as five_visible_then_stars,\n count(*) filter(where regexp_full_match(\"shop_name\",'[0-9a-fA-F]{5}\\*{31}')) as hex_five_then_31_stars\n from shopee\nunion all\nselect 'connection_id' as column_name,count(\"connection_id\") as nonnull_rows,\n count(*) filter(where contains(\"connection_id\",'*')) as masked_rows,\n count(*) filter(where regexp_full_match(\"connection_id\",'[^*]{5}\\*+')) as five_visible_then_stars,\n count(*) filter(where regexp_full_match(\"connection_id\",'[0-9a-fA-F]{5}\\*{31}')) as hex_five_then_31_stars\n from shopee",
+      "rows": [
+        {
+          "column_name": "pkId",
+          "nonnull_rows": 25546,
+          "masked_rows": 25546,
+          "five_visible_then_stars": 25546,
+          "hex_five_then_31_stars": 25546
+        },
+        {
+          "column_name": "user_id",
+          "nonnull_rows": 25546,
+          "masked_rows": 25546,
+          "five_visible_then_stars": 25546,
+          "hex_five_then_31_stars": 0
+        },
+        {
+          "column_name": "shop_id",
+          "nonnull_rows": 25546,
+          "masked_rows": 25546,
+          "five_visible_then_stars": 25546,
+          "hex_five_then_31_stars": 0
+        },
+        {
+          "column_name": "order_sn",
+          "nonnull_rows": 25546,
+          "masked_rows": 25546,
+          "five_visible_then_stars": 25546,
+          "hex_five_then_31_stars": 0
+        },
+        {
+          "column_name": "item_id",
+          "nonnull_rows": 25258,
+          "masked_rows": 25258,
+          "five_visible_then_stars": 25258,
+          "hex_five_then_31_stars": 0
+        },
+        {
+          "column_name": "model_id",
+          "nonnull_rows": 25258,
+          "masked_rows": 25258,
+          "five_visible_then_stars": 23228,
+          "hex_five_then_31_stars": 0
+        },
+        {
+          "column_name": "item_sku",
+          "nonnull_rows": 25546,
+          "masked_rows": 25546,
+          "five_visible_then_stars": 0,
+          "hex_five_then_31_stars": 0
+        },
+        {
+          "column_name": "model_sku",
+          "nonnull_rows": 25546,
+          "masked_rows": 25546,
+          "five_visible_then_stars": 0,
+          "hex_five_then_31_stars": 0
+        },
+        {
+          "column_name": "shop_name",
+          "nonnull_rows": 25546,
+          "masked_rows": 25546,
+          "five_visible_then_stars": 0,
+          "hex_five_then_31_stars": 0
+        },
+        {
+          "column_name": "connection_id",
+          "nonnull_rows": 25546,
+          "masked_rows": 25546,
+          "five_visible_then_stars": 25546,
+          "hex_five_then_31_stars": 0
+        }
+      ]
+    },
+    {
+      "id": "shopee-numeric-profile",
+      "sql": "select 'quantity' as column_name,count(*) as rows,\n count(*) filter(where \"quantity\" is null) as null_rows,\n count(*) filter(where \"quantity\" is not null and try_cast(\"quantity\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"quantity\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"quantity\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"quantity\" as decimal(24,4))) as minimum,\n max(try_cast(\"quantity\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'original_price' as column_name,count(*) as rows,\n count(*) filter(where \"original_price\" is null) as null_rows,\n count(*) filter(where \"original_price\" is not null and try_cast(\"original_price\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"original_price\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"original_price\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"original_price\" as decimal(24,4))) as minimum,\n max(try_cast(\"original_price\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'model_discounted_price' as column_name,count(*) as rows,\n count(*) filter(where \"model_discounted_price\" is null) as null_rows,\n count(*) filter(where \"model_discounted_price\" is not null and try_cast(\"model_discounted_price\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"model_discounted_price\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"model_discounted_price\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"model_discounted_price\" as decimal(24,4))) as minimum,\n max(try_cast(\"model_discounted_price\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'item_weight' as column_name,count(*) as rows,\n count(*) filter(where \"item_weight\" is null) as null_rows,\n count(*) filter(where \"item_weight\" is not null and try_cast(\"item_weight\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"item_weight\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"item_weight\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"item_weight\" as decimal(24,4))) as minimum,\n max(try_cast(\"item_weight\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'total_order_value' as column_name,count(*) as rows,\n count(*) filter(where \"total_order_value\" is null) as null_rows,\n count(*) filter(where \"total_order_value\" is not null and try_cast(\"total_order_value\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"total_order_value\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"total_order_value\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"total_order_value\" as decimal(24,4))) as minimum,\n max(try_cast(\"total_order_value\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'buyer_total_amount' as column_name,count(*) as rows,\n count(*) filter(where \"buyer_total_amount\" is null) as null_rows,\n count(*) filter(where \"buyer_total_amount\" is not null and try_cast(\"buyer_total_amount\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"buyer_total_amount\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"buyer_total_amount\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"buyer_total_amount\" as decimal(24,4))) as minimum,\n max(try_cast(\"buyer_total_amount\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'seller_discount' as column_name,count(*) as rows,\n count(*) filter(where \"seller_discount\" is null) as null_rows,\n count(*) filter(where \"seller_discount\" is not null and try_cast(\"seller_discount\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"seller_discount\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"seller_discount\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"seller_discount\" as decimal(24,4))) as minimum,\n max(try_cast(\"seller_discount\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'shopee_discount' as column_name,count(*) as rows,\n count(*) filter(where \"shopee_discount\" is null) as null_rows,\n count(*) filter(where \"shopee_discount\" is not null and try_cast(\"shopee_discount\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"shopee_discount\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"shopee_discount\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"shopee_discount\" as decimal(24,4))) as minimum,\n max(try_cast(\"shopee_discount\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'voucher_from_seller' as column_name,count(*) as rows,\n count(*) filter(where \"voucher_from_seller\" is null) as null_rows,\n count(*) filter(where \"voucher_from_seller\" is not null and try_cast(\"voucher_from_seller\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"voucher_from_seller\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"voucher_from_seller\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"voucher_from_seller\" as decimal(24,4))) as minimum,\n max(try_cast(\"voucher_from_seller\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'voucher_from_shopee' as column_name,count(*) as rows,\n count(*) filter(where \"voucher_from_shopee\" is null) as null_rows,\n count(*) filter(where \"voucher_from_shopee\" is not null and try_cast(\"voucher_from_shopee\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"voucher_from_shopee\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"voucher_from_shopee\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"voucher_from_shopee\" as decimal(24,4))) as minimum,\n max(try_cast(\"voucher_from_shopee\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'commission_fee' as column_name,count(*) as rows,\n count(*) filter(where \"commission_fee\" is null) as null_rows,\n count(*) filter(where \"commission_fee\" is not null and try_cast(\"commission_fee\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"commission_fee\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"commission_fee\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"commission_fee\" as decimal(24,4))) as minimum,\n max(try_cast(\"commission_fee\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'service_fee' as column_name,count(*) as rows,\n count(*) filter(where \"service_fee\" is null) as null_rows,\n count(*) filter(where \"service_fee\" is not null and try_cast(\"service_fee\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"service_fee\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"service_fee\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"service_fee\" as decimal(24,4))) as minimum,\n max(try_cast(\"service_fee\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'transaction_fee' as column_name,count(*) as rows,\n count(*) filter(where \"transaction_fee\" is null) as null_rows,\n count(*) filter(where \"transaction_fee\" is not null and try_cast(\"transaction_fee\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"transaction_fee\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"transaction_fee\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"transaction_fee\" as decimal(24,4))) as minimum,\n max(try_cast(\"transaction_fee\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'escrow_amount' as column_name,count(*) as rows,\n count(*) filter(where \"escrow_amount\" is null) as null_rows,\n count(*) filter(where \"escrow_amount\" is not null and try_cast(\"escrow_amount\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"escrow_amount\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"escrow_amount\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"escrow_amount\" as decimal(24,4))) as minimum,\n max(try_cast(\"escrow_amount\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'actual_shipping_fee' as column_name,count(*) as rows,\n count(*) filter(where \"actual_shipping_fee\" is null) as null_rows,\n count(*) filter(where \"actual_shipping_fee\" is not null and try_cast(\"actual_shipping_fee\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"actual_shipping_fee\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"actual_shipping_fee\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"actual_shipping_fee\" as decimal(24,4))) as minimum,\n max(try_cast(\"actual_shipping_fee\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'returned_quantity' as column_name,count(*) as rows,\n count(*) filter(where \"returned_quantity\" is null) as null_rows,\n count(*) filter(where \"returned_quantity\" is not null and try_cast(\"returned_quantity\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"returned_quantity\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"returned_quantity\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"returned_quantity\" as decimal(24,4))) as minimum,\n max(try_cast(\"returned_quantity\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'total_weight' as column_name,count(*) as rows,\n count(*) filter(where \"total_weight\" is null) as null_rows,\n count(*) filter(where \"total_weight\" is not null and try_cast(\"total_weight\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"total_weight\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"total_weight\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"total_weight\" as decimal(24,4))) as minimum,\n max(try_cast(\"total_weight\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'estimated_shipping_fee' as column_name,count(*) as rows,\n count(*) filter(where \"estimated_shipping_fee\" is null) as null_rows,\n count(*) filter(where \"estimated_shipping_fee\" is not null and try_cast(\"estimated_shipping_fee\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"estimated_shipping_fee\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"estimated_shipping_fee\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"estimated_shipping_fee\" as decimal(24,4))) as minimum,\n max(try_cast(\"estimated_shipping_fee\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'return_shipping_fee' as column_name,count(*) as rows,\n count(*) filter(where \"return_shipping_fee\" is null) as null_rows,\n count(*) filter(where \"return_shipping_fee\" is not null and try_cast(\"return_shipping_fee\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"return_shipping_fee\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"return_shipping_fee\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"return_shipping_fee\" as decimal(24,4))) as minimum,\n max(try_cast(\"return_shipping_fee\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'active_qty' as column_name,count(*) as rows,\n count(*) filter(where \"active_qty\" is null) as null_rows,\n count(*) filter(where \"active_qty\" is not null and try_cast(\"active_qty\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"active_qty\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"active_qty\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"active_qty\" as decimal(24,4))) as minimum,\n max(try_cast(\"active_qty\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'cancel_requested_qty' as column_name,count(*) as rows,\n count(*) filter(where \"cancel_requested_qty\" is null) as null_rows,\n count(*) filter(where \"cancel_requested_qty\" is not null and try_cast(\"cancel_requested_qty\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"cancel_requested_qty\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"cancel_requested_qty\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"cancel_requested_qty\" as decimal(24,4))) as minimum,\n max(try_cast(\"cancel_requested_qty\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'cancelled_qty' as column_name,count(*) as rows,\n count(*) filter(where \"cancelled_qty\" is null) as null_rows,\n count(*) filter(where \"cancelled_qty\" is not null and try_cast(\"cancelled_qty\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"cancelled_qty\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"cancelled_qty\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"cancelled_qty\" as decimal(24,4))) as minimum,\n max(try_cast(\"cancelled_qty\" as decimal(24,4))) as maximum from shopee\nunion all\nselect 'return_requested_qty' as column_name,count(*) as rows,\n count(*) filter(where \"return_requested_qty\" is null) as null_rows,\n count(*) filter(where \"return_requested_qty\" is not null and try_cast(\"return_requested_qty\" as decimal(24,4)) is null) as invalid_numeric_rows,\n count(*) filter(where try_cast(\"return_requested_qty\" as decimal(24,4))<0) as negative_rows,\n count(*) filter(where try_cast(\"return_requested_qty\" as decimal(24,4))=0) as zero_rows,\n min(try_cast(\"return_requested_qty\" as decimal(24,4))) as minimum,\n max(try_cast(\"return_requested_qty\" as decimal(24,4))) as maximum from shopee",
+      "rows": [
+        {
+          "column_name": "quantity",
+          "rows": 25546,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 0,
+          "minimum": "1.0000",
+          "maximum": "15.0000"
+        },
+        {
+          "column_name": "original_price",
+          "rows": 25546,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 0,
+          "minimum": "1.8100",
+          "maximum": "9990000.0000"
+        },
+        {
+          "column_name": "model_discounted_price",
+          "rows": 25546,
+          "null_rows": 1137,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 0,
+          "minimum": "1.8100",
+          "maximum": "8191800.0000"
+        },
+        {
+          "column_name": "item_weight",
+          "rows": 25546,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 0,
+          "minimum": "0.0010",
+          "maximum": "6.0000"
+        },
+        {
+          "column_name": "total_order_value",
+          "rows": 25546,
+          "null_rows": 276,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 0,
+          "minimum": "4.5300",
+          "maximum": "13907984.0000"
+        },
+        {
+          "column_name": "buyer_total_amount",
+          "rows": 25546,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 5553,
+          "minimum": "0.0000",
+          "maximum": "7032784.0000"
+        },
+        {
+          "column_name": "seller_discount",
+          "rows": 25546,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 6769,
+          "minimum": "0.0000",
+          "maximum": "2897100.0000"
+        },
+        {
+          "column_name": "shopee_discount",
+          "rows": 25546,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 25090,
+          "minimum": "0.0000",
+          "maximum": "48100.0000"
+        },
+        {
+          "column_name": "voucher_from_seller",
+          "rows": 25546,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 15006,
+          "minimum": "0.0000",
+          "maximum": "200000.0000"
+        },
+        {
+          "column_name": "voucher_from_shopee",
+          "rows": 25546,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 7466,
+          "minimum": "0.0000",
+          "maximum": "1468800.0000"
+        },
+        {
+          "column_name": "commission_fee",
+          "rows": 25546,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 6410,
+          "minimum": "0.0000",
+          "maximum": "959016.0000"
+        },
+        {
+          "column_name": "service_fee",
+          "rows": 25546,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 6407,
+          "minimum": "0.0000",
+          "maximum": "203000.0000"
+        },
+        {
+          "column_name": "transaction_fee",
+          "rows": 25546,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 6410,
+          "minimum": "0.0000",
+          "maximum": "479508.0000"
+        },
+        {
+          "column_name": "escrow_amount",
+          "rows": 25546,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 877,
+          "zero_rows": 5534,
+          "minimum": "-37700.0000",
+          "maximum": "5889943.0000"
+        },
+        {
+          "column_name": "actual_shipping_fee",
+          "rows": 25546,
+          "null_rows": 0,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 5555,
+          "minimum": "0.0000",
+          "maximum": "265700.0000"
+        },
+        {
+          "column_name": "returned_quantity",
+          "rows": 25546,
+          "null_rows": 254,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 23966,
+          "minimum": "0.0000",
+          "maximum": "15.0000"
+        },
+        {
+          "column_name": "total_weight",
+          "rows": 25546,
+          "null_rows": 254,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 6960,
+          "minimum": "0.0000",
+          "maximum": "18.0000"
+        },
+        {
+          "column_name": "estimated_shipping_fee",
+          "rows": 25546,
+          "null_rows": 254,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 4,
+          "minimum": "0.0000",
+          "maximum": "374200.0000"
+        },
+        {
+          "column_name": "return_shipping_fee",
+          "rows": 25546,
+          "null_rows": 254,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 24452,
+          "minimum": "0.0000",
+          "maximum": "40000.0000"
+        },
+        {
+          "column_name": "active_qty",
+          "rows": 25546,
+          "null_rows": 288,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 5898,
+          "minimum": "0.0000",
+          "maximum": "10.0000"
+        },
+        {
+          "column_name": "cancel_requested_qty",
+          "rows": 25546,
+          "null_rows": 288,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 25258,
+          "minimum": "0.0000",
+          "maximum": "0.0000"
+        },
+        {
+          "column_name": "cancelled_qty",
+          "rows": 25546,
+          "null_rows": 288,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 20686,
+          "minimum": "0.0000",
+          "maximum": "10.0000"
+        },
+        {
+          "column_name": "return_requested_qty",
+          "rows": 25546,
+          "null_rows": 288,
+          "invalid_numeric_rows": 0,
+          "negative_rows": 0,
+          "zero_rows": 25250,
+          "minimum": "0.0000",
+          "maximum": "2.0000"
+        }
+      ]
+    },
+    {
+      "id": "shopee-timestamp-profile",
+      "sql": "select 'create_time' as column_name,count(*) as rows,\n count(*) filter(where \"create_time\" is null) as null_rows,\n count(*) filter(where \"create_time\" is not null and try_cast(\"create_time\" as timestamp) is null) as invalid_timestamp_rows\n from shopee\nunion all\nselect 'pay_time' as column_name,count(*) as rows,\n count(*) filter(where \"pay_time\" is null) as null_rows,\n count(*) filter(where \"pay_time\" is not null and try_cast(\"pay_time\" as timestamp) is null) as invalid_timestamp_rows\n from shopee\nunion all\nselect 'shipped_time' as column_name,count(*) as rows,\n count(*) filter(where \"shipped_time\" is null) as null_rows,\n count(*) filter(where \"shipped_time\" is not null and try_cast(\"shipped_time\" as timestamp) is null) as invalid_timestamp_rows\n from shopee\nunion all\nselect 'completed_time' as column_name,count(*) as rows,\n count(*) filter(where \"completed_time\" is null) as null_rows,\n count(*) filter(where \"completed_time\" is not null and try_cast(\"completed_time\" as timestamp) is null) as invalid_timestamp_rows\n from shopee\nunion all\nselect 'estimated_shipping_date' as column_name,count(*) as rows,\n count(*) filter(where \"estimated_shipping_date\" is null) as null_rows,\n count(*) filter(where \"estimated_shipping_date\" is not null and try_cast(\"estimated_shipping_date\" as timestamp) is null) as invalid_timestamp_rows\n from shopee\nunion all\nselect 'synced_at' as column_name,count(*) as rows,\n count(*) filter(where \"synced_at\" is null) as null_rows,\n count(*) filter(where \"synced_at\" is not null and try_cast(\"synced_at\" as timestamp) is null) as invalid_timestamp_rows\n from shopee\nunion all\nselect 'cancel_time' as column_name,count(*) as rows,\n count(*) filter(where \"cancel_time\" is null) as null_rows,\n count(*) filter(where \"cancel_time\" is not null and try_cast(\"cancel_time\" as timestamp) is null) as invalid_timestamp_rows\n from shopee\nunion all\nselect 'ship_by_date' as column_name,count(*) as rows,\n count(*) filter(where \"ship_by_date\" is null) as null_rows,\n count(*) filter(where \"ship_by_date\" is not null and try_cast(\"ship_by_date\" as timestamp) is null) as invalid_timestamp_rows\n from shopee\nunion all\nselect 'update_time' as column_name,count(*) as rows,\n count(*) filter(where \"update_time\" is null) as null_rows,\n count(*) filter(where \"update_time\" is not null and try_cast(\"update_time\" as timestamp) is null) as invalid_timestamp_rows\n from shopee",
+      "rows": [
+        {
+          "column_name": "create_time",
+          "rows": 25546,
+          "null_rows": 0,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "pay_time",
+          "rows": 25546,
+          "null_rows": 3658,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "shipped_time",
+          "rows": 25546,
+          "null_rows": 4679,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "completed_time",
+          "rows": 25546,
+          "null_rows": 5212,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "estimated_shipping_date",
+          "rows": 25546,
+          "null_rows": 25546,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "synced_at",
+          "rows": 25546,
+          "null_rows": 0,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "cancel_time",
+          "rows": 25546,
+          "null_rows": 20888,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "ship_by_date",
+          "rows": 25546,
+          "null_rows": 2171,
+          "invalid_timestamp_rows": 0
+        },
+        {
+          "column_name": "update_time",
+          "rows": 25546,
+          "null_rows": 288,
+          "invalid_timestamp_rows": 0
+        }
+      ]
+    },
+    {
+      "id": "shopee-monthly-volume",
+      "sql": "select substr(create_time,1,7) as month,count(*) as rows from shopee group by 1 order by 1",
+      "rows": [
+        {
+          "month": "2025-12",
+          "rows": 315
+        },
+        {
+          "month": "2026-01",
+          "rows": 6136
+        },
+        {
+          "month": "2026-02",
+          "rows": 6876
+        },
+        {
+          "month": "2026-03",
+          "rows": 1286
+        },
+        {
+          "month": "2026-04",
+          "rows": 1393
+        },
+        {
+          "month": "2026-05",
+          "rows": 1497
+        },
+        {
+          "month": "2026-06",
+          "rows": 1836
+        },
+        {
+          "month": "2026-07",
+          "rows": 2970
+        },
+        {
+          "month": "2026-08",
+          "rows": 2825
+        },
+        {
+          "month": "2026-09",
+          "rows": 412
+        }
+      ]
+    },
+    {
+      "id": "shopee-statuses",
+      "sql": "select order_status,count(*) as rows from shopee group by 1 order by 2 desc",
+      "rows": [
+        {
+          "order_status": "COMPLETED",
+          "rows": 20499
+        },
+        {
+          "order_status": "CANCELLED",
+          "rows": 4658
+        },
+        {
+          "order_status": "TO_CONFIRM_RECEIVE",
+          "rows": 167
+        },
+        {
+          "order_status": "READY_TO_SHIP",
+          "rows": 104
+        },
+        {
+          "order_status": "SHIPPED",
+          "rows": 77
+        },
+        {
+          "order_status": "TO_RETURN",
+          "rows": 34
+        },
+        {
+          "order_status": "PROCESSED",
+          "rows": 6
+        },
+        {
+          "order_status": "UNPAID",
+          "rows": 1
+        }
+      ]
+    },
+    {
+      "id": "shopee-currencies",
+      "sql": "select currency,count(*) as rows from shopee group by 1 order by 2 desc",
+      "rows": [
+        {
+          "currency": "VND",
+          "rows": 25542
+        },
+        {
+          "currency": "SGD",
+          "rows": 4
+        }
+      ]
+    },
+    {
+      "id": "shopee-candidate-grouping",
+      "sql": "\nselect count(*) as candidate_groups,count(*) filter(where status_n>1) as multi_status_groups,\ncount(*) filter(where amount_n>1) as multi_header_amount_groups,count(*) filter(where primaries=1) as exactly_one_primary_groups,count(*) filter(where primaries>1) as multiple_primary_groups,count(*) filter(where primaries=0) as no_primary_groups\nfrom (select user_id,shop_name,order_sn,create_time,count(distinct order_status) as status_n,count(distinct buyer_total_amount) as amount_n,\ncount(*) filter(where is_primary_row='true') as primaries from shopee group by user_id,shop_name,order_sn,create_time)",
+      "rows": [
+        {
+          "candidate_groups": 19661,
+          "multi_status_groups": 32,
+          "multi_header_amount_groups": 57,
+          "exactly_one_primary_groups": 19489,
+          "multiple_primary_groups": 172,
+          "no_primary_groups": 0
+        }
+      ]
+    },
+    {
+      "id": "tiktok-row-index",
+      "sql": "select row_idx,count(*) as rows from tiktok group by 1 order by try_cast(row_idx as int)",
+      "rows": [
+        {
+          "row_idx": "1",
+          "rows": 79053
+        },
+        {
+          "row_idx": "2",
+          "rows": 17699
+        },
+        {
+          "row_idx": "3",
+          "rows": 2653
+        },
+        {
+          "row_idx": "4",
+          "rows": 1113
+        },
+        {
+          "row_idx": "5",
+          "rows": 574
+        },
+        {
+          "row_idx": "6",
+          "rows": 350
+        },
+        {
+          "row_idx": "7",
+          "rows": 165
+        },
+        {
+          "row_idx": "8",
+          "rows": 101
+        },
+        {
+          "row_idx": "9",
+          "rows": 81
+        },
+        {
+          "row_idx": "10",
+          "rows": 59
+        },
+        {
+          "row_idx": "11",
+          "rows": 38
+        },
+        {
+          "row_idx": "12",
+          "rows": 14
+        },
+        {
+          "row_idx": "13",
+          "rows": 18
+        },
+        {
+          "row_idx": "14",
+          "rows": 17
+        },
+        {
+          "row_idx": "15",
+          "rows": 12
+        },
+        {
+          "row_idx": "16",
+          "rows": 9
+        },
+        {
+          "row_idx": "17",
+          "rows": 8
+        },
+        {
+          "row_idx": "18",
+          "rows": 12
+        },
+        {
+          "row_idx": "19",
+          "rows": 7
+        },
+        {
+          "row_idx": "20",
+          "rows": 8
+        },
+        {
+          "row_idx": "21",
+          "rows": 5
+        },
+        {
+          "row_idx": "22",
+          "rows": 3
+        },
+        {
+          "row_idx": "23",
+          "rows": 1
+        }
+      ]
+    },
+    {
+      "id": "tiktok-temporal-checks",
+      "sql": "\nselect count(*) filter(where try_cast(paid_time as timestamp)<try_cast(created_time as timestamp)) as paid_before_created_rows,\n count(*) filter(where try_cast(delivered_time as timestamp)<try_cast(created_time as timestamp)) as delivered_before_created_rows,\n count(*) filter(where order_status='COMPLETED' and delivered_time is null) as completed_missing_delivery_rows,\n count(*) filter(where try_cast(updatedAt as timestamp)<try_cast(createdAt as timestamp)) as sync_update_before_create_rows\nfrom tiktok",
+      "rows": [
+        {
+          "paid_before_created_rows": 118,
+          "delivered_before_created_rows": 0,
+          "completed_missing_delivery_rows": 9,
+          "sync_update_before_create_rows": 0
+        }
+      ]
+    },
+    {
+      "id": "tiktok-early-payment-distance",
+      "sql": "\nselect count(*) as rows,min(date_diff('second',try_cast(paid_time as timestamp),try_cast(created_time as timestamp))) as min_seconds,\n max(date_diff('second',try_cast(paid_time as timestamp),try_cast(created_time as timestamp))) as max_seconds\nfrom tiktok where try_cast(paid_time as timestamp)<try_cast(created_time as timestamp)",
+      "rows": [
+        {
+          "rows": 118,
+          "min_seconds": 1,
+          "max_seconds": 1
+        }
+      ]
+    },
+    {
+      "id": "shopee-temporal-checks",
+      "sql": "\nselect count(*) filter(where try_cast(pay_time as timestamp)<try_cast(create_time as timestamp)) as paid_before_created_rows,\n count(*) filter(where try_cast(shipped_time as timestamp)<try_cast(create_time as timestamp)) as shipped_before_created_rows,\n count(*) filter(where try_cast(completed_time as timestamp)<try_cast(create_time as timestamp)) as completed_before_created_rows,\n count(*) filter(where order_status='COMPLETED' and completed_time is null) as completed_missing_completed_rows\nfrom shopee",
+      "rows": [
+        {
+          "paid_before_created_rows": 0,
+          "shipped_before_created_rows": 0,
+          "completed_before_created_rows": 0,
+          "completed_missing_completed_rows": 165
+        }
+      ]
+    },
+    {
+      "id": "shopee-negative-escrow",
+      "sql": "select order_status,count(*) as rows from shopee where try_cast(escrow_amount as decimal(24,4))<0 group by 1",
+      "rows": [
+        {
+          "order_status": "COMPLETED",
+          "rows": 877
+        }
+      ]
+    },
+    {
+      "id": "shopee-primary-money",
+      "sql": "\nselect is_primary_row,count(*) as rows,\n count(*) filter(where try_cast(buyer_total_amount as decimal(24,4))>0) as positive_buyer_total_rows,\n count(*) filter(where try_cast(commission_fee as decimal(24,4))>0) as positive_commission_rows,\n count(*) filter(where try_cast(escrow_amount as decimal(24,4))<>0) as nonzero_escrow_rows\nfrom shopee group by 1 order by 1",
+      "rows": [
+        {
+          "is_primary_row": "false",
+          "rows": 5713,
+          "positive_buyer_total_rows": 4497,
+          "positive_commission_rows": 4321,
+          "nonzero_escrow_rows": 4499
+        },
+        {
+          "is_primary_row": "true",
+          "rows": 19833,
+          "positive_buyer_total_rows": 15496,
+          "positive_commission_rows": 14815,
+          "nonzero_escrow_rows": 15513
+        }
+      ]
+    },
+    {
+      "id": "shopee-payload",
+      "sql": "select count(*) as rows,count(raw_payload) as populated_payload_rows from shopee",
+      "rows": [
+        {
+          "rows": 25546,
+          "populated_payload_rows": 0
+        }
+      ]
+    }
+  ],
+  "provenance": "User reports exporting CSV directly using DataGrip from vietnam_ecommerce on Xom Dataset; no custom extraction script.",
+  "caveats": [
+    "Masked IDs are not reliable business keys; counts of distinct masks are not counts of original entities.",
+    "CSV validity does not establish completeness against the unavailable database.",
+    "The location where masking was applied is unknown: source, export configuration or another earlier step.",
+    "Candidate grouping by masked fields plus creation timestamp is diagnostic, not a validated order key.",
+    "All anomaly counts refer to CSV rows or diagnostic key groups, not verified business orders."
+  ],
+  "matches_previous_profile_hashes": {
+    "tiktok": true,
+    "shopee": true
+  },
+  "inputs_unchanged_during_audit": {
+    "tiktok": true,
+    "shopee": true
+  }
+}

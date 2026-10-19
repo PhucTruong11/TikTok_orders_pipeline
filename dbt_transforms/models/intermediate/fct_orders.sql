@@ -1,3 +1,6 @@
+{{ config(enabled=false) }}
+-- Retired: masked order IDs cannot establish the claimed order grain.
+-- Historical SQL retained for reference; use fct_tiktok_observations.
 -- Fact Orders: 1 dòng = 1 đơn hàng duy nhất
 -- Tách các cột ORDER-LEVEL ra khỏi bảng phẳng, tránh bẫy nhân đôi doanh thu
 -- Dùng row_number để lấy 1 dòng đại diện cho mỗi order_id

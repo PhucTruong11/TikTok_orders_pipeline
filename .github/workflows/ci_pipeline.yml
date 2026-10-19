@@ -36,9 +36,16 @@ jobs:
         run: |
           python -m py_compile pipeline_orchestration/definitions.py
 
-      - name: dbt Compile Check
-        working-directory: ./dbt_transforms
-        run: |
-          mkdir -p ../data/duckdb
-          dbt deps
-          dbt compile
+      - name: dbt build and regression checks (synthetic TikTok fixture)
+        run: python scripts/validate_tiktok_dbt.py
+
+      - name: Preserve validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tiktok-dbt-validation
+          include-hidden-files: true
+          path: |
+            .validation/latest_validation.json
+            .validation/**/run_results.json
+            .validation/**/command_output.txt
