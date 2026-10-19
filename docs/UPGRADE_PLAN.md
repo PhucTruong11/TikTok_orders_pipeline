@@ -13,31 +13,9 @@ Cập nhật 19/10/2026 theo yêu cầu giữ stack local, đổi tên các tầ
 
 ## 2. Data flow
 
-```mermaid
----
-config:
-  htmlLabels: false
-  flowchart:
-    htmlLabels: false
-    nodeSpacing: 25
-    rankSpacing: 35
----
-flowchart TB
-    T[("TikTok CSV")] --> BT["Bronze<br/>TikTok raw"]
-    S[("Shopee CSV")] --> BS["Bronze<br/>Shopee raw"]
-    BT --> ST["Silver<br/>TikTok observations"]
-    BS --> SS["Silver<br/>Shopee observations"]
-    REF["Silver<br/>Status mapping"] --> ST
-    REF --> SS
-    ST --> U["Silver<br/>Observations hai nguồn"]
-    SS --> U
-    U --> G["Gold<br/>Quality · Daily · Status · Metadata"]
-    G --> V["dbt tests<br/>Đối chiếu hai nguồn"]
-    V --> P["Atomic publish<br/>DuckDB"]
-    P --> UI["Streamlit<br/>Hai nguồn"]
-```
+![Data flow: hai nguồn CSV, Dagster hoặc CLI, dbt, DuckDB Medallion, validation, atomic publication và Streamlit](assets/data-flow.svg)
 
-Dagster hoặc CLI điều phối toàn bộ luồng build, validate và publish cho cả hai nguồn trong cùng một lần chạy. Nhãn sơ đồ được rút gọn để đọc trên GitHub.
+Dagster hoặc CLI điều phối build, validate và publish cho cả hai nguồn trong cùng một lần chạy. Dashboard đọc Gold từ database đã publish; các lịch local là tùy chọn.
 
 Lineage vật lý đầy đủ và metric contract: [models README](../dbt_transforms/models/README.md). Kiến trúc tổng thể và lệnh chạy: [README](../README.md), [cheatsheet](../CHEATSHEET.md).
 
