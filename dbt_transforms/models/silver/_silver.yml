@@ -1,0 +1,187 @@
+version: 2
+models:
+- name: silver_tiktok_observations
+  description: One preserved CSV observation; typed fields, normalized status and
+    source-native money. No business dedup. Header financial fields are non-additive.
+    TO_RETURN is RETURN_REQUESTED, not a completed return.
+  columns:
+  - name: observation_id
+    data_tests:
+    - not_null
+    - unique
+  - name: source_channel
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - tiktok
+          - shopee
+  - name: pk_id
+    description: Privacy mask, deliberately not unique.
+    data_tests:
+    - not_null
+  - name: order_id
+    description: Privacy mask; distinct values do not count orders.
+    data_tests:
+    - not_null
+  - name: created_time
+    data_tests:
+    - not_null
+  - name: currency
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - VND
+          - SGD
+  - name: quantity
+    data_tests:
+    - not_null
+    - positive_value
+  - name: item_original_price
+    data_tests:
+    - not_null
+    - nonnegative_value
+  - name: item_sale_price
+    data_tests:
+    - nonnegative_value
+    - not_null
+  - name: standardized_status
+    data_tests:
+    - not_null
+  - name: status_group
+    data_tests:
+    - not_null
+  - name: is_status_mapped
+    data_tests:
+    - accepted_values:
+        arguments:
+          values:
+          - true
+          quote: false
+  - name: total_amount
+    data_tests:
+    - not_null
+    - nonnegative_value
+- name: silver_shopee_observations
+  description: One preserved CSV observation; typed fields, normalized status and
+    source-native money. No business dedup. Header financial fields are non-additive.
+    TO_RETURN is RETURN_REQUESTED, not a completed return.
+  columns:
+  - name: observation_id
+    data_tests:
+    - not_null
+    - unique
+  - name: source_channel
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - tiktok
+          - shopee
+  - name: pk_id
+    description: Privacy mask, deliberately not unique.
+    data_tests:
+    - not_null
+  - name: order_id
+    description: Privacy mask; distinct values do not count orders.
+    data_tests:
+    - not_null
+  - name: created_time
+    data_tests:
+    - not_null
+  - name: currency
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - VND
+          - SGD
+  - name: quantity
+    data_tests:
+    - not_null
+    - positive_value
+  - name: item_original_price
+    data_tests:
+    - not_null
+    - nonnegative_value
+  - name: item_sale_price
+    data_tests:
+    - nonnegative_value
+  - name: standardized_status
+    data_tests:
+    - not_null
+  - name: status_group
+    data_tests:
+    - not_null
+  - name: is_status_mapped
+    data_tests:
+    - accepted_values:
+        arguments:
+          values:
+          - true
+          quote: false
+- name: silver_ecommerce_observations
+  description: One preserved CSV observation; typed fields, normalized status and
+    source-native money. No business dedup. Header financial fields are non-additive.
+    TO_RETURN is RETURN_REQUESTED, not a completed return.
+  columns:
+  - name: observation_id
+    data_tests:
+    - not_null
+    - unique
+  - name: source_channel
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - tiktok
+          - shopee
+  - name: pk_id
+    description: Privacy mask, deliberately not unique.
+    data_tests:
+    - not_null
+  - name: order_id
+    description: Privacy mask; distinct values do not count orders.
+    data_tests:
+    - not_null
+  - name: created_time
+    data_tests:
+    - not_null
+  - name: currency
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - VND
+          - SGD
+  - name: quantity
+    data_tests:
+    - not_null
+    - positive_value
+  - name: item_original_price
+    data_tests:
+    - not_null
+    - nonnegative_value
+  - name: item_sale_price
+    data_tests:
+    - nonnegative_value
+  - name: standardized_status
+    data_tests:
+    - not_null
+  - name: status_group
+    data_tests:
+    - not_null
+  - name: is_status_mapped
+    data_tests:
+    - accepted_values:
+        arguments:
+          values:
+          - true
+          quote: false

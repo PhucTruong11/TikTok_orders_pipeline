@@ -1,0 +1,56 @@
+version: 2
+models:
+- name: bronze_tiktok_orders
+  description: One raw CSV observation. All source columns are VARCHAR and privacy
+    masks are unchanged. Metadata identifies file content and record ordinal, not
+    business entities.
+  columns:
+  - name: observation_id
+    data_tests:
+    - not_null
+    - unique
+  - name: _source_row_number
+    data_tests:
+    - not_null
+    - unique
+    - positive_value
+  - name: _file_sha256
+    data_tests:
+    - not_null
+  - name: source_channel
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - tiktok
+  - name: pkId
+    data_tests:
+    - not_null
+- name: bronze_shopee_orders
+  description: One raw CSV observation. All source columns are VARCHAR and privacy
+    masks are unchanged. Metadata identifies file content and record ordinal, not
+    business entities.
+  columns:
+  - name: observation_id
+    data_tests:
+    - not_null
+    - unique
+  - name: _source_row_number
+    data_tests:
+    - not_null
+    - unique
+    - positive_value
+  - name: _file_sha256
+    data_tests:
+    - not_null
+  - name: source_channel
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - shopee
+  - name: pkId
+    data_tests:
+    - not_null

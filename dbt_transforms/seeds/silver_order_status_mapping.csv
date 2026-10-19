@@ -14,4 +14,4 @@ shopee,SHIPPED,IN_TRANSIT,SHIPPING,Đang giao hàng
 shopee,TO_CONFIRM_RECEIVE,DELIVERED,SHIPPING,Đã giao - chờ người mua xác nhận
 shopee,COMPLETED,COMPLETED,COMPLETED,Đơn hàng thành công
 shopee,CANCELLED,CANCELLED,CANCELLED,Đã hủy
-shopee,TO_RETURN,RETURNED,RETURNED,Yêu cầu trả hàng / hoàn tiền
+shopee,TO_RETURN,RETURN_REQUESTED,RETURN_REQUESTED,Yêu cầu trả hàng / hoàn tiền

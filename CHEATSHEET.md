@@ -1,71 +1,47 @@
-# 🚀 DATA PIPELINE CHEATSHEET
+# Vận hành pipeline Bronze → Silver → Gold
 
-> TikTok hiện chạy ở grain **CSV observation**, không dedup theo masked ID. Contract, schema cho dashboard và danh sách mart cũ đã ngưng build nằm tại [models/README.md](dbt_transforms/models/README.md). Các bảng mart cũ trong working warehouse không tự bị xóa hoặc refresh.
+Tất cả lệnh chạy từ repo root bằng Python environment hiện có.
 
-Kiểm thử an toàn từ repo root, dùng DB riêng dưới `.validation/`:
+## Build và phục vụ dashboard
 
 ```powershell
-.venv/Scripts/python.exe scripts/validate_tiktok_dbt.py
-.venv/Scripts/python.exe scripts/validate_tiktok_dbt.py --real-data
+.venv/Scripts/python.exe scripts/build_warehouse.py
+.venv/Scripts/streamlit.exe run dashboards/streamlit_app/app.py
 ```
 
-Tài liệu này lưu trữ toàn bộ các câu lệnh cần thiết để khởi chạy, quản lý và cập nhật hệ thống Data Pipeline (dbt + Dagster + Streamlit).
+Output: `data/duckdb/ecom_medallion.duckdb`. Bronze/Silver/Gold, schemas và prefix bảng đồng bộ. CLI build/test trong candidate rồi publish; giữ nguyên CSV và file warehouse legacy. Cần cả hai CSV để build đầy đủ.
 
----
+## Dagster
 
-## 1. Môi trường Ảo (Virtual Environment)
-**Luôn phải kích hoạt môi trường ảo** trước khi chạy bất kỳ lệnh nào bên dưới.
-```bash
-# Kích hoạt môi trường (Windows PowerShell)
-.venv\Scripts\activate
+```powershell
+.venv/Scripts/dagster.exe dev -m pipeline_orchestration.definitions
 ```
 
----
+Chọn toàn bộ `ecommerce_dbt_assets`. Lịch 07:00 và 15:00, timezone Asia/Ho_Chi_Minh; chỉ chạy tự động khi schedule được bật. OS lock ngăn CLI/Dagster cùng publish một destination. Không dùng subset cho một candidate.
 
-## 2. Làm việc với dbt (Xử lý & Chuyển đổi dữ liệu)
-Nếu bạn thay đổi code SQL trong thư mục `dbt_transforms/models/` hoặc đổi file `.csv` gốc, bạn có thể chạy thủ công bằng dbt để test thử:
+Nếu cần tạo manifest mà chưa muốn build:
 
-```bash
-# Di chuyển vào thư mục dbt
-cd dbt_transforms
-
-# Cài đặt dbt packages (nếu cần)
-dbt deps
-
-# Chạy toàn bộ tiến trình (Build = Run + Test)
-dbt build
-
-# Chỉ chạy một bảng cụ thể (ví dụ: mart_daily_revenue)
-dbt build --select mart_daily_revenue
-
-# Chỉ chạy mô hình (không test)
-dbt run
+```powershell
+Set-Location dbt_transforms
+../.venv/Scripts/dbt.exe parse --profiles-dir . --no-partial-parse
+Set-Location ..
 ```
 
----
+## Kiểm thử an toàn
 
-## 3. Dagster (Giao diện Quản lý & Orchestration)
-Sử dụng Dagster khi bạn muốn có một cái nhìn tổng quan về sự phụ thuộc giữa các bảng dữ liệu (Data Lineage) và xem sơ đồ luồng chạy trực tiếp trên máy của bạn.
-
-```bash
-# Đứng ở thư mục gốc của dự án, khởi chạy Server Dagster:
-# (Thiết lập DAGSTER_HOME để quản lý metadata phiên chạy)
-$env:DAGSTER_HOME="$(Get-Location)\.dagster"
-dagster dev -m pipeline_orchestration.definitions
+```powershell
+.venv/Scripts/python.exe scripts/validate_ecommerce_dbt.py
+.venv/Scripts/python.exe scripts/validate_ecommerce_dbt.py --real-data
+.venv/Scripts/python.exe scripts/validate_dashboard.py
+.venv/Scripts/python.exe scripts/validate_dagster.py
 ```
-👉 **Truy cập:** [http://localhost:3000](http://localhost:3000)
-- Mở **Overview** để xem toàn bộ Asset.
-- Chọn bảng và bấm **Materialize** để chạy dbt từ giao diện web.
-- Đóng Terminal (`Ctrl+C`) thì Dagster UI sẽ tắt.
 
----
+Validator lưu logs/run_results trong `.validation/`. `validate_dashboard.py` dùng fixture DB từ lần validator gần nhất. Không ghi vào database đang phục vụ.
 
-## 4. Streamlit Dashboard (Báo cáo & Trực quan hóa)
-Khởi chạy bảng điều khiển tương tác phân tích kinh doanh:
+## Cấu hình
 
-```bash
-# Đứng ở thư mục gốc của dự án:
-streamlit run dashboards/streamlit_app/app.py
-```
-👉 **Truy cập:** [http://localhost:8501](http://localhost:8501)
-- Xem chỉ số Doanh thu (GMV), Phân tích địa lý, SLA giao hàng & Đối soát tài chính.
+Đặt đường dẫn tuyệt đối trong `TIKTOK_CSV_PATH`, `SHOPEE_CSV_PATH`, `DBT_DUCKDB_PATH` để thay input/output. Sau thay đổi, build lại rồi bấm Làm mới dữ liệu trên Streamlit.
+
+`data/duckdb/latest_build.json` ghi receipt CLI lần publish gần nhất. Backup database có tên `ecom_medallion.backup-<UTC timestamp>.duckdb`. Khi cần rollback, dừng các writer/readers và phục hồi backup đã kiểm tra bằng thao tác file trên cùng volume; không sửa trực tiếp raw hoặc xóa file legacy để xử lý một build fail.
+
+Schema/metric definitions và flow: [model contract](dbt_transforms/models/README.md). Gold mô tả observations và coverage, không suy ra đơn hoặc SKU từ ID đã mask.

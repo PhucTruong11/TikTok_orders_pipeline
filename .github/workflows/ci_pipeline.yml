@@ -36,14 +36,20 @@ jobs:
         run: |
           python -m py_compile pipeline_orchestration/definitions.py
 
-      - name: dbt build and regression checks (synthetic TikTok fixture)
-        run: python scripts/validate_tiktok_dbt.py
+      - name: Medallion build and regression checks (both synthetic sources)
+        run: python scripts/validate_ecommerce_dbt.py
+
+      - name: Dashboard source/currency filter checks
+        run: python scripts/validate_dashboard.py
+
+      - name: Dagster two-source materialization and publication
+        run: python scripts/validate_dagster.py
 
       - name: Preserve validation evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: tiktok-dbt-validation
+          name: ecommerce-medallion-validation
           include-hidden-files: true
           path: |
             .validation/latest_validation.json

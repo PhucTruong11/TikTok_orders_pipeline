@@ -1,18 +1,18 @@
 ecom_pipeline:
   target: dev
   outputs:
-    ci:
-      type: duckdb
-      path: "{{ env_var('DBT_DUCKDB_PATH', '../data/duckdb/ecom_ci.duckdb') }}"
-      threads: 2
     dev:
       type: duckdb
-      path: "{{ env_var('DBT_DUCKDB_PATH', '../data/duckdb/ecom_warehouse.duckdb') }}"
+      path: '{{ var(''warehouse_path'', env_var(''DBT_DUCKDB_PATH'', ''../data/duckdb/ecom_medallion.duckdb''))
+        }}'
       threads: 4
-      extensions:
-        - parquet
-        - icu
+    ci:
+      type: duckdb
+      path: '{{ var(''warehouse_path'', env_var(''DBT_DUCKDB_PATH'', ''../data/duckdb/ecom_medallion.duckdb''))
+        }}'
+      threads: 2
     prod:
       type: duckdb
-      path: "{{ env_var('DBT_DUCKDB_PATH', '../data/duckdb/ecom_warehouse.duckdb') }}"
+      path: '{{ var(''warehouse_path'', env_var(''DBT_DUCKDB_PATH'', ''../data/duckdb/ecom_medallion.duckdb''))
+        }}'
       threads: 4

@@ -1,24 +1,9 @@
-{{ config(materialized='table', tags=['tiktok', 'observations']) }}
+{{ config(tags=['silver', 'tiktok', 'observations']) }}
 
--- One immutable CSV record, including repeated masks or identical record contents.
--- Serial CSV scan assigns record ordinals before any joins (quoted newlines are safe).
-{% set input_path = env_var('TIKTOK_CSV_PATH', '../data/raw/tiktok_orders.csv') | replace("'", "''") %}
-
-with source_rows as (
-    select row_number() over () as _source_row_number, *
-    from {{ source('raw_tiktok', 'tiktok_orders') }}
-),
-file_metadata as (
-    select sha256(content) as _file_sha256
-    from read_blob('{{ input_path }}')
-)
-
+with typed as (
 select
-    sha256('tiktok|' || _file_sha256 || '|' || cast(_source_row_number as varchar)) as observation_id,
-    _source_row_number,
-    _file_sha256,
-    '{{ input_path }}' as _source_file,
-    current_timestamp as _ingested_at,
+    observation_id, source_channel, _source_row_number, _file_sha256,
+    _source_file, _ingested_at,
     contains(cast(pkId as varchar), '*') as is_pk_masked,
     contains(cast(order_id as varchar), '*') as is_order_id_masked,
     -- === Metadata hệ thống ===
@@ -115,9 +100,27 @@ select
     cast(package_status as varchar)             as package_status,
     cast(item_cancel_reason as varchar)         as item_cancel_reason,
     cast(sku_image as varchar)                  as sku_image,
-    cast(row_idx as integer)                    as row_idx,
-
-    -- === Cột bổ sung cho pipeline ===
-    'tiktok' as source_channel
-
-from source_rows cross join file_metadata
+    cast(row_idx as integer)                    as row_idx
+from {{ ref('bronze_tiktok_orders') }}
+), mapped as (
+select t.*,
+    m.standardized_status, m.status_group,
+    m.raw_status is not null as is_status_mapped,
+    case when m.status_group = 'COMPLETED' then 1 else 0 end as is_completed,
+    case when m.status_group = 'CANCELLED' then 1 else 0 end as is_cancelled,
+    case when m.status_group = 'RETURNED' then 1 else 0 end as is_returned,
+    case when m.status_group = 'RETURN_REQUESTED' then 1 else 0 end as is_return_requested
+from typed t
+left join {{ ref('silver_order_status_mapping') }} m
+    on t.source_channel = m.channel and t.order_status = m.raw_status
+)
+select mapped.*,
+    item_sale_price * quantity as observed_item_sales_value,
+    item_original_price * quantity as observed_item_original_value,
+    (item_original_price - item_sale_price) * quantity as observed_item_price_difference,
+    total_amount is not null and shipping_fee is not null and tax_amount is not null
+        and small_order_fee is not null and retail_delivery_fee is not null
+        and insurance_fee is not null as has_complete_amount_components,
+    total_amount - shipping_fee - tax_amount - small_order_fee - retail_delivery_fee
+        - insurance_fee as amount_excluding_reported_shipping_tax_and_fees
+from mapped

@@ -1,111 +1,98 @@
-# TikTok snapshot pipeline — active model contract
+# Medallion contract — hai nguồn end-to-end
 
-Phạm vi: TikTok + dbt trong môi trường Dagster/DuckDB local hiện có. Không sửa CSV, Shopee hoặc code Streamlit. Masking được chấp nhận vì bảo mật; không khôi phục ID gốc.
+Mọi model active dùng đúng folder/schema/prefix `bronze`, `silver`, `gold`. Không còn các compatibility views `int_orders_deduped`/`fct_order_items` hoặc folder staging/intermediate/marts trong graph active. Lịch sử model cũ được giữ trong Git.
 
-## Active lineage — Bronze → Silver → Gold
+## Physical lineage
 
 ```mermaid
-flowchart TB
-    subgraph BRONZE["Bronze | Immutable raw file"]
-        CSV[("tiktok_orders.csv")]
-    end
-    SOURCE["source: raw_tiktok.tiktok_orders<br/>External CSV reference"]
-    MAPPING["seed: order_status_mapping"]
-
-    subgraph SILVER["Silver | One CSV record per observation"]
-        STG["stg_tiktok_orders<br/>TABLE: casts, fingerprint, record ordinal"]
-        INT["int_tiktok_observations<br/>VIEW: mapped status and flags"]
-        PASSTHROUGH["int_orders_deduped<br/>Compatibility VIEW: no dedup"]
-        FCT["fct_tiktok_observations<br/>VIEW: observation-level calculations"]
-        ITEMS["fct_order_items<br/>Compatibility VIEW"]
-        STG --> INT --> PASSTHROUGH --> FCT
-        FCT --> ITEMS
-    end
-
-    subgraph GOLD["Gold | Aggregated quality output"]
-        MART["mart_tiktok_observation_quality<br/>TABLE with schema contract<br/>date + channel + currency"]
-    end
-    CSV --> SOURCE --> STG
-    MAPPING --> INT
-    FCT --> MART
+flowchart LR
+    T[("TikTok CSV")] --> BT["bronze.bronze_tiktok_orders"]
+    S[("Shopee CSV")] --> BS["bronze.bronze_shopee_orders"]
+    BT --> ST["silver.silver_tiktok_observations"]
+    BS --> SS["silver.silver_shopee_observations"]
+    M["silver.silver_order_status_mapping"] --> ST
+    M --> SS
+    ST --> U["silver.silver_ecommerce_observations"]
+    SS --> U
+    U --> Q["gold.gold_observation_quality"]
+    U --> D["gold.gold_channel_daily"]
+    U --> STATUS["gold.gold_status_distribution"]
+    U --> META["gold.gold_pipeline_metadata"]
 ```
 
-| Logical layer | Current implementation | Grain / scope |
-|---|---|---|
-| Bronze | Original local CSV snapshots | Exported records preserved as received, including privacy masks |
-| Silver | `staging/` plus active `intermediate/` models | One snapshot observation; casts, provenance, mapping and quality checks |
-| Gold | `mart_tiktok_observation_quality` | One row per `(observation_date, source_channel, currency)` |
+## Bronze
 
-This is a logical medallion mapping on the existing local stack, not a schema rename or a new ingestion service. `source()` references the Bronze file; staging already transforms it, so staging belongs to Silver here. The mapping seed is reference data. Gold supports the stated quality-reporting scope, not verified order or customer identity. The two compatibility views are real dependency steps, not extra cleansing or aggregation layers.
+Hai bảng raw vật lý lưu mọi cột CSV nguyên bản dưới dạng VARCHAR, thêm:
 
-`order_status_mapping` seed joins on `(source_channel, normalized status)`. Trim/uppercase and alias `CANCELED → CANCELLED` apply before mapping. Raw spelling stays in `raw_order_status`. Unknown mapping fails tests; duplicate mappings fail the seed uniqueness test rather than silently multiplying records. Returned is supported explicitly.
+- `observation_id = sha256(channel | file_sha256 | CSV_record_ordinal)`.
+- `_source_row_number`: thứ tự record CSV, không phải physical line; quoted multiline cells không làm lệch ordinal.
+- `_file_sha256`, `_source_file`, `_ingested_at`, `source_channel`.
 
-## Snapshot identity and types
+Giữ tất cả record, kể cả nội dung giống nhau và masked ID trùng. Fingerprint theo toàn bộ nội dung file: cùng file giữ cùng observation IDs; đổi file ở cùng đường dẫn tạo snapshot identity mới. Đây không phải business identity bền vững xuyên các snapshot. Source phải bất biến trong suốt build; validator đối chiếu fingerprint trước publication.
 
-- `observation_id = sha256(channel | whole_file_sha256 | CSV_record_ordinal)`. Ordinal is one-based and counts CSV records, including quoted multiline cells correctly.
-- Preserve every record, including identical contents and repeated masks. `pk_id`, `order_id`, product/SKU/shop/buyer fields remain source labels, not unique business keys.
-- A byte-identical rerun preserves observation IDs. Changed contents at the same path produce a new fingerprint and new IDs; this is snapshot lineage, not cross-snapshot entity identity.
-- `_source_file`, `_file_sha256`, `_source_row_number`, `_ingested_at` provide provenance. `_ingested_at` is build time, not the source export date or market freshness.
-- Source must stay immutable during a build; the single configured CSV is read for both data and fingerprint. Do not edit or replace it while dbt runs.
-- Raw CSV columns are strings before explicit casts. Invalid dates/money fail the build. Optional missing dates/money remain null; no automatic imputation.
-- Full refresh replaces staging and quality tables on every build. No unsafe masked-key incremental upsert/global timestamp watermark remains in the active lineage.
-- Paths are configured with `TIKTOK_CSV_PATH`; default is `../data/raw/tiktok_orders.csv` from the dbt project directory. `DBT_DUCKDB_PATH` selects the output database. Use absolute paths when invoking outside the project directory.
+## Silver
 
-## Fields for the dashboard handoff
+Các bảng Silver được materialize để mọi cast thực thi, kể cả cột không được Gold truy vấn. Cast sai fail build; missing tùy chọn giữ null. Required fields và integer quantity được test riêng.
 
-| Field/model | Meaning |
+### Mapping Shopee
+
+| Source field | Silver field / policy |
 |---|---|
-| `fct_tiktok_observations` | Primary new relation: `main_intermediate.fct_tiktok_observations` under the current default schema |
-| `observation_id` | Technical unique row key; use for observation joins |
-| `raw_order_status`, `order_status`, `standardized_status`, `status_group` | Raw, normalized and mapped status separately |
-| `is_completed`, `is_cancelled`, `is_returned` | Integer flags per observation, not per unique order |
-| `observed_item_sales_value` | Reported item sale price × quantity for this observed record; not verified seller revenue |
-| `observed_item_original_value`, `observed_item_price_difference` | Item-level observed calculations, not order totals |
-| `amount_excluding_reported_shipping_tax_and_fees` | Former subtraction formula with an explicit name; NOT seller payout, settlement or profit |
-| `has_complete_amount_components` | All six inputs to that formula are non-null; missing input yields null amount |
-| `total_amount` and other header fields | Preserved for inspection; non-additive across observed records |
-| `is_pk_masked`, `is_order_id_masked` | Coverage indicators; masking is expected, not a failing test |
-| `mart_tiktok_observation_quality` | `main_marts.mart_tiktok_observation_quality`, grain `(observation_date, source_channel, currency)` |
+| `order_sn` | `order_id`, là mask, không unique test nghiệp vụ |
+| `create_time`, `pay_time`, `cancel_time`, `update_time` | `created_time`, `paid_time`, `cancelled_time`, `updated_time` |
+| `synced_at` | `synced_updated_at`; không dùng làm export date |
+| `shipped_time`, `completed_time` | Giữ đúng nghĩa; không suy ra delivered time |
+| `item_id`, `model_id` | `product_id`, `sku_id`; chưa đủ làm identity hoặc đối sánh cross-channel |
+| `item_sku`, `model_sku` | Giữ riêng code nguồn |
+| `original_price`, `model_discounted_price` | `item_original_price`, `item_sale_price`; missing sale price giữ null |
+| `total_order_value`, `buyer_total_amount` | Native header amounts, không additive theo observation |
+| Commission/service/transaction fee, vouchers, escrow | Giữ riêng trong Silver Shopee; escrow âm được chấp nhận như observed value |
+| `is_primary_row` | Giữ source flag; không dùng nó tự phục hồi order identity |
+| `TO_RETURN` | `standardized_status=RETURN_REQUESTED`, `is_return_requested=1`, `is_returned=0` |
+| Delivery timestamp / delivery SLA | Null có kiểu vì source không có cột tương đương |
 
-The quality mart contains observation/status/masking counts, `delivery_sla_eligible_count`, on-time/late observation counts, timestamp coverage and incomplete amount-component counts. Calculate SLA coverage from eligible/observation counts. All figures refer to observations, never unique orders; separate currency groups.
+TikTok giữ tên/các phép tính native đã typed. `amount_excluding_reported_shipping_tax_and_fees` chỉ mô tả phép trừ, không phải seller payout/profit; optional missing component giữ kết quả null.
 
-There is deliberately no `net_revenue`, `is_successful_revenue` or AOV in the active model contract. Do not substitute a raw row count or distinct mask count for business order count.
+`silver_order_status_mapping` là seed reference. Join theo `(source_channel, normalized order_status)`, chuẩn hóa trim/uppercase và `CANCELED → CANCELLED`. Raw status vẫn được giữ. Unknown status và duplicate mapping fail tests.
 
-## Retired models and existing dashboard
+`silver_ecommerce_observations` union all danh sách cột tương thích: technical metadata, status và flags, currency, các mốc thời gian chung, quantity, reported unit prices và observed item value. Không union header fees/payout khác semantics. Mọi record từ từng nguồn có đúng một observation ở bảng chung; IDs không trùng giữa nguồn.
 
-`fct_orders` and the five previous marts (`mart_daily_revenue`, `mart_product_performance`, `mart_geo_analysis`, `mart_fulfillment_sla`, `mart_financial_reconciliation`) have `enabled=false`. Their historical SQL is retained for reference, not executed. Their claimed order/product grain cannot be established with these masked identifiers.
+## Gold và công thức
 
-**Disabling a dbt model does not drop pre-existing relations.** The original working warehouse and Streamlit app were not rebuilt or changed during this work. Existing legacy tables may still contain old results; they are not refreshed by the new build and must not be treated as newly validated output. Migrate the dashboard to the new model contract before using a newly built warehouse. Review/remove retired relations separately after that migration; no automatic destructive cleanup is performed.
+| Table | Grain | Trách nhiệm |
+|---|---|---|
+| `gold_observation_quality` | date/channel/currency | Record/status/masking/missing-price/timestamp/SLA coverage counts |
+| `gold_channel_daily` | date/channel/currency | Observed quantities/prices và price coverage; không phải doanh thu đơn |
+| `gold_status_distribution` | date/channel/currency/standardized_status/status_group | Phân bố trạng thái ở grain record |
+| `gold_pipeline_metadata` | channel/currency/file_sha256 | Min/max event date, row count, build timestamp |
 
-`int_orders_deduped` and `fct_order_items` keep their names only to preserve lineage paths; descriptions and tests now use observation grain. Legacy `item_revenue` aliases are replaced by the explicit `observed_item_*` fields above.
+Công thức price: `observed_sales_value_sum = SUM(item_sale_price * quantity)` trên records có giá; `priced_unit_count` chỉ cộng quantity của records có giá. Giá có trọng số = tổng observed value / tổng priced units, null khi không có priced units. Khi gộp ngày, tính lại từ tổng numerator/denominator, không average các average ngày. Không điền missing price bằng 0; giá nguồn ghi 0 vẫn là một giá có dữ liệu.
 
-## Local validation without touching the working database
+SLA: eligible chỉ khi có cả delivered_time và delivery_sla_time; on-time + late = eligible. Coverage = eligible / observations. Coverage bằng 0 ở Shopee thể hiện không đủ trường để đo, không phải tỷ lệ giao trễ hoặc đúng hạn.
 
-From repo root, using the existing Python environment:
+Các tổng giá/quantity chỉ mô tả observations trong snapshot. Không gọi chúng là order count, GMV, AOV, net revenue, market share hoặc comparison của cùng SKU. Timezone các source timestamps chưa được xác nhận; không tự chuyển đổi event dates. `_ingested_at`/`last_build_at` là build instant; UI hiển thị theo Asia/Bangkok.
+
+## Build, validation và publication
+
+CLI `scripts/build_warehouse.py` và Dagster giữ cùng OS writer lock. Full candidate luôn có cả hai nguồn. Model/seed/tests chạy xong mới kiểm tra exact physical names, source fingerprints, raw/Silver/union uniqueness/counts và Gold reconciliation, rồi checkpoint/đóng candidate và atomic replace warehouse.
+
+Candidate giữ cùng basename với destination; điều này cũng tránh lỗi catalog references nếu về sau có views. Build directory nằm cùng volume dưới `data/duckdb/.builds/`. Lần thay warehouse mới đã tồn tại giữ backup có timestamp. Failed build trước publish không thay bản cũ. Dashboard không cache connection, chỉ cache dataframes theo file signature; publish có retry ngắn nếu reader Windows đang mở file.
+
+Default output là `data/duckdb/ecom_medallion.duckdb`. File legacy `ecom_warehouse.duckdb` và raw CSV được giữ nguyên. Không drop/rename destructive các bảng trong file cũ. Thay đổi vật lý được triển khai trong catalog mới, không tồn tại stale legacy marts trong database dashboard mới.
+
+Dagster cần materialize toàn bộ `ecommerce_dbt_assets` cho mỗi candidate; subset bị từ chối để không publish warehouse thiếu nguồn hoặc Gold tables. Manifest được tạo sau CLI build thành công; `dagster dev` cũng prepare manifest trong development.
+
+## Validation
+
+Từ repo root:
 
 ```powershell
-.venv/Scripts/python.exe scripts/validate_tiktok_dbt.py
-.venv/Scripts/python.exe scripts/validate_tiktok_dbt.py --real-data
+.venv/Scripts/python.exe scripts/validate_ecommerce_dbt.py
+.venv/Scripts/python.exe scripts/validate_ecommerce_dbt.py --real-data
+.venv/Scripts/python.exe scripts/validate_dashboard.py
+.venv/Scripts/python.exe scripts/validate_dagster.py
 ```
 
-The first command uses the checked-in synthetic fixture; the second also reads the local TikTok CSV. All builds use isolated copies of the dbt project and DuckDB databases below gitignored `.validation/`. Source CSV and the working warehouse are not written. Logs, manifests, run_results and latest_validation.json remain there for inspection.
+Tests dùng fixture public nhỏ và DB/project riêng dưới `.validation/`. Dùng `scripts/validate_ecommerce_dbt.py` cho cả hai nguồn. CI kiểm tra fixture, failed build recovery và dashboard filters; không cần dữ liệu riêng tư. Local `--real-data` đọc cả hai snapshot và đối chiếu mọi record/fingerprint.
 
-Regression scenarios: masked-key collision, identical records, multiline CSV cells, status aliases/return mapping, missing fee input, separate currencies, identical rerun, changed file at the same path, unknown status, zero quantity, malformed money, duplicate status mapping. Bad inputs must fail for the expected reason. Real-data mode reconciles all source observations and fingerprints.
-
-For a separate manual validation DB, from `dbt_transforms`:
-
-```powershell
-$env:DBT_DUCKDB_PATH = '../data/duckdb/tiktok_validation.duckdb'
-../.venv/Scripts/dbt.exe build --target ci --profiles-dir . --full-refresh
-Remove-Item Env:DBT_DUCKDB_PATH
-```
-
-Tests use the installed dbt Core/adapter and modern generic-test `arguments` syntax (Core >=1.10.5). No dependency installation/upgrade is performed by the local validator. The CI installs project requirements and runs the fixture suite; it needs no private CSV.
-
-Before launching/reloading Dagster after pulling the model changes, regenerate its manifest from `dbt_transforms`:
-
-```powershell
-../.venv/Scripts/dbt.exe parse --profiles-dir . --no-partial-parse
-```
-
-Then run the existing `dagster dev -m pipeline_orchestration.definitions` command from repo root. Parse regenerates metadata only. Keep writers to the same local DuckDB serialized, release Streamlit's cached connection before a working-DB build, and distinguish stored legacy outputs from the active manifest.
+Full refresh là baseline. Không có masked-key business dedup, global watermark incremental, giải che hay service mới trong implementation.

@@ -2,7 +2,7 @@
 
 Ngày cập nhật: 19/10/2026. Trạng thái: baseline cho thiết kế, chưa phải hợp đồng business grain đã xác thực.
 
-Quyết định đã chốt với người dùng: chấp nhận dữ liệu đã che vì bảo mật; không đặt mục tiêu giải che hay lấy lại ID gốc. Giữ Dagster, Python/uv/`.venv`, DuckDB, dbt-duckdb và Streamlit local. Airflow/Docker không nằm trong đợt cải thiện hiện tại. Masking là đặc tính đầu vào cần thích nghi khi chọn grain và metric, không phải lỗi phải sửa ở nguồn.
+Quyết định hiện tại: chấp nhận masking vì bảo mật, giữ Dagster/Python local/DuckDB/dbt/Streamlit. Đã đổi folder/schema/prefix models về Bronze/Silver/Gold và triển khai cả hai nguồn tới Gold/dashboard. Bronze giữ mọi cột nguồn dạng VARCHAR; ép kiểu/staging thuộc Silver. Xem [active model contract](../../dbt_transforms/models/README.md). Không đặt mục tiêu giải che hay phục hồi ID gốc; không thêm Airflow/Docker.
 
 ## Provenance
 

@@ -1,0 +1,128 @@
+version: 2
+models:
+- name: gold_observation_quality
+  description: Grain date/channel/currency. Counts describe observations; SLA covers
+    only rows with both delivery timestamps.
+  config:
+    contract:
+      enforced: true
+  columns:
+  - &id001
+    name: observation_date
+    data_type: date
+    data_tests:
+    - not_null
+  - &id002
+    name: source_channel
+    data_type: varchar
+    data_tests:
+    - not_null
+  - &id003
+    name: currency
+    data_type: varchar
+    data_tests:
+    - not_null
+  - name: observation_count
+    data_type: bigint
+  - name: completed_observation_count
+    data_type: bigint
+  - name: cancelled_observation_count
+    data_type: bigint
+  - name: returned_observation_count
+    data_type: bigint
+  - name: return_requested_observation_count
+    data_type: bigint
+  - name: unmapped_status_count
+    data_type: bigint
+  - name: masked_pk_count
+    data_type: bigint
+  - name: masked_order_id_count
+    data_type: bigint
+  - name: missing_sale_price_count
+    data_type: bigint
+  - name: shipped_time_populated_count
+    data_type: bigint
+  - name: completed_time_populated_count
+    data_type: bigint
+  - name: delivery_sla_eligible_count
+    data_type: bigint
+  - name: delivery_on_time_observation_count
+    data_type: bigint
+  - name: delivery_late_observation_count
+    data_type: bigint
+- name: gold_channel_daily
+  description: Observed record-level quantities/prices only. Not order count, GMV,
+    settlement, market share or matched-SKU comparison. Missing price stays null and
+    is excluded from priced units.
+  config:
+    contract:
+      enforced: true
+  columns:
+  - *id001
+  - *id002
+  - *id003
+  - name: observation_count
+    data_type: bigint
+  - name: observed_unit_count
+    data_type: bigint
+  - name: priced_unit_count
+    data_type: bigint
+  - name: missing_sale_price_count
+    data_type: bigint
+  - name: observed_sales_value_sum
+    data_type: decimal(38,2)
+  - name: weighted_observed_sale_price
+    data_type: double
+  - name: minimum_observed_sale_price
+    data_type: decimal(18,2)
+  - name: maximum_observed_sale_price
+    data_type: decimal(18,2)
+- name: gold_status_distribution
+  description: Grain date/channel/currency/standardized_status/status_group, at observation
+    grain. RETURN_REQUESTED and RETURNED remain separate.
+  config:
+    contract:
+      enforced: true
+  columns:
+  - *id001
+  - *id002
+  - *id003
+  - name: standardized_status
+    data_type: varchar
+    data_tests:
+    - not_null
+  - name: status_group
+    data_type: varchar
+    data_tests:
+    - not_null
+  - name: observation_count
+    data_type: bigint
+- name: gold_pipeline_metadata
+  description: Source coverage per channel/currency/snapshot hash. last_build_at is
+    pipeline time, never export time.
+  config:
+    contract:
+      enforced: true
+  columns:
+  - name: source_channel
+    data_type: varchar
+    data_tests:
+    - not_null
+  - name: currency
+    data_type: varchar
+    data_tests:
+    - not_null
+  - name: source_file_sha256
+    data_type: varchar
+    data_tests:
+    - not_null
+  - name: first_observation_date
+    data_type: date
+  - name: last_observation_date
+    data_type: date
+  - name: observation_count
+    data_type: bigint
+  - name: last_build_at
+    data_type: timestamp with time zone
+    data_tests:
+    - not_null

@@ -1,22 +1,28 @@
--- No join fan-out, missing records, or masked-key dedup across any active layer.
-{% set downstream = ['int_tiktok_observations', 'int_orders_deduped', 'fct_tiktok_observations', 'fct_order_items'] %}
-with stage as (
-    select observation_id from {{ ref('stg_tiktok_orders') }}
-),
-violations as (
-    select 'source_record_count' as check_name
-    where (select count(*) from {{ source('raw_tiktok', 'tiktok_orders') }})
-        <> (select count(*) from stage)
-    {% for name in downstream %}
+-- Preserve every CSV record through Bronze/Silver, including masked-key collisions.
+with violations as (
+{% for ch in ['tiktok','shopee'] %}
+    {% if not loop.first %}union all{% endif %}
+    select '{{ ch }}_source_count' as check_name
+    where (select count(*) from {{ source('raw_exports', ch ~ '_orders') }})
+        <> (select count(*) from {{ ref('bronze_' ~ ch ~ '_orders') }})
     union all
-    select '{{ name }}' as check_name
+    select '{{ ch }}_silver_keys' as check_name
     where exists (
-        select observation_id from stage
-        except all select observation_id from {{ ref(name) }}
+        select observation_id from {{ ref('bronze_' ~ ch ~ '_orders') }}
+        except all select observation_id from {{ ref('silver_' ~ ch ~ '_observations') }}
     ) or exists (
-        select observation_id from {{ ref(name) }}
-        except all select observation_id from stage
+        select observation_id from {{ ref('silver_' ~ ch ~ '_observations') }}
+        except all select observation_id from {{ ref('bronze_' ~ ch ~ '_orders') }}
     )
-    {% endfor %}
+    union all
+    select '{{ ch }}_union_keys' as check_name
+    where exists (
+        select observation_id from {{ ref('silver_' ~ ch ~ '_observations') }}
+        except all select observation_id from {{ ref('silver_ecommerce_observations') }} where source_channel='{{ ch }}'
+    ) or exists (
+        select observation_id from {{ ref('silver_ecommerce_observations') }} where source_channel='{{ ch }}'
+        except all select observation_id from {{ ref('silver_' ~ ch ~ '_observations') }}
+    )
+{% endfor %}
 )
 select * from violations
