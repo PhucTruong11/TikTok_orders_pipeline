@@ -1,22 +1,48 @@
 version: 2
-
 models:
-  - name: mart_daily_revenue
-    description: "Doanh thu, tỷ lệ hoàn thành/hủy, AOV theo ngày"
-    columns:
-      - name: order_date
-        tests:
-          - not_null
-          - unique
-
-  - name: mart_fulfillment_sla
-    description: "SLA đóng gói & giao hàng theo ngày, nhà vận chuyển, khu vực"
-
-  - name: mart_product_performance
-    description: "Hiệu suất sản phẩm: doanh thu, số lượng bán, tỷ lệ hủy theo SKU"
-
-  - name: mart_geo_analysis
-    description: "Phân tích theo khu vực địa lý: doanh thu, tỷ lệ COD, tốc độ giao theo tỉnh/quận"
-
-  - name: mart_financial_reconciliation
-    description: "Đối soát tài chính: GMV → Discount → Fees → Net Revenue theo tháng & trạng thái"
+- name: mart_tiktok_observation_quality
+  description: 'Grain: (observation_date, source_channel, currency). All counts describe
+    CSV observations, not orders. SLA counts only cover rows with both timestamps.
+    No header revenue is summed.'
+  config:
+    contract:
+      enforced: true
+  columns:
+  - name: observation_date
+    data_type: date
+    data_tests:
+    - not_null
+  - name: source_channel
+    data_type: varchar
+    data_tests:
+    - not_null
+  - name: currency
+    data_type: varchar
+    data_tests:
+    - not_null
+  - name: observation_count
+    data_type: bigint
+  - name: completed_observation_count
+    data_type: bigint
+  - name: cancelled_observation_count
+    data_type: bigint
+  - name: returned_observation_count
+    data_type: bigint
+  - name: unmapped_status_count
+    data_type: bigint
+  - name: masked_pk_count
+    data_type: bigint
+  - name: masked_order_id_count
+    data_type: bigint
+  - name: delivery_sla_eligible_count
+    data_type: bigint
+  - name: delivery_on_time_observation_count
+    data_type: bigint
+  - name: delivery_late_observation_count
+    data_type: bigint
+  - name: shipped_time_populated_count
+    data_type: bigint
+  - name: completed_time_populated_count
+    data_type: bigint
+  - name: incomplete_amount_components_count
+    data_type: bigint

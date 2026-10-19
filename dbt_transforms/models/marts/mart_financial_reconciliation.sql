@@ -1,3 +1,5 @@
+{{ config(enabled=false) }}
+-- Retired: cannot reconcile header totals using masked order IDs.
 -- MART: Đối soát Tài chính (Financial Reconciliation)
 -- Tổng hợp dòng tiền: Doanh thu gộp → Chiết khấu → Phí → Doanh thu thực nhận
 -- Theo tháng, để đối chiếu với báo cáo trên TikTok Seller Center

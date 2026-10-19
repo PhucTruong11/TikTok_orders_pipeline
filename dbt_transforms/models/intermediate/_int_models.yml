@@ -1,42 +1,63 @@
 version: 2
-
 models:
-  - name: int_orders_deduped
-    description: "Dữ liệu TikTok đã khử trùng - giữ bản ghi mới nhất theo pk_id"
-    columns:
-      - name: pk_id
-        tests:
-          - not_null
-          - unique
-
-  - name: fct_orders
-    description: "Fact table cấp đơn hàng: 1 dòng = 1 order_id duy nhất"
-    columns:
-      - name: order_id
-        description: "Mã đơn hàng TikTok (khóa chính)"
-        tests:
-          - not_null
-          - unique
-      - name: total_amount
-        description: "Tổng tiền đơn hàng (ORDER LEVEL - không bị nhân đôi)"
-        tests:
-          - not_null
-      - name: created_time
-        tests:
-          - not_null
-
-  - name: fct_order_items
-    description: "Fact table cấp sản phẩm: 1 dòng = 1 SKU trong đơn"
-    columns:
-      - name: pk_id
-        description: "Khóa chính (unique sau khi dedup)"
-        tests:
-          - not_null
-          - unique
-      - name: order_id
-        description: "Mã đơn hàng - FK tham chiếu fct_orders"
-        tests:
-          - not_null
-          - relationships:
-              to: ref('fct_orders')
-              field: order_id
+- name: int_tiktok_observations
+  description: One mapped observation per source CSV record; status seed joins must
+    not multiply rows.
+  columns:
+  - name: observation_id
+    data_tests:
+    - not_null
+    - unique
+    - relationships:
+        arguments:
+          to: ref('stg_tiktok_orders')
+          field: observation_id
+  - name: standardized_status
+    data_tests:
+    - not_null
+  - name: status_group
+    data_tests:
+    - not_null
+  - name: is_status_mapped
+    data_tests:
+    - accepted_values:
+        arguments:
+          values:
+          - true
+          quote: false
+- name: int_orders_deduped
+  description: 'Deprecated name, preserved lineage: full observation passthrough,
+    without dedup or incremental watermark.'
+  columns:
+  - name: observation_id
+    data_tests:
+    - not_null
+    - unique
+    - relationships:
+        arguments:
+          to: ref('stg_tiktok_orders')
+          field: observation_id
+- name: fct_tiktok_observations
+  description: Observation fact, NOT an order or unique product fact. Header money
+    is non-additive. Reported amount less selected components is NOT seller payout/profit.
+  columns:
+  - name: observation_id
+    data_tests:
+    - not_null
+    - unique
+    - relationships:
+        arguments:
+          to: ref('stg_tiktok_orders')
+          field: observation_id
+- name: fct_order_items
+  description: Compatibility view of fct_tiktok_observations. Use observation_id,
+    not masked order_id, in joins.
+  columns:
+  - name: observation_id
+    data_tests:
+    - not_null
+    - unique
+    - relationships:
+        arguments:
+          to: ref('stg_tiktok_orders')
+          field: observation_id

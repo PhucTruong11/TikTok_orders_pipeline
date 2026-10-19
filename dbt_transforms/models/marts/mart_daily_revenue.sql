@@ -1,3 +1,5 @@
+{{ config(enabled=false) }}
+-- Retired until a verified order grain is available. See models/README.md.
 -- MART: Doanh thu theo ngày
 -- Dùng để theo dõi xu hướng bán hàng, so sánh ngày/tuần/tháng
 

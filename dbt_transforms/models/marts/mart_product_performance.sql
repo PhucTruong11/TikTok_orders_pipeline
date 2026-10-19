@@ -1,3 +1,5 @@
+{{ config(enabled=false) }}
+-- Retired: masked SKU/order IDs do not establish unique products or orders.
 -- MART: Hiệu suất sản phẩm (Product Performance)
 -- Top SKU bán chạy, doanh thu theo sản phẩm, tỷ lệ hủy theo sản phẩm
 

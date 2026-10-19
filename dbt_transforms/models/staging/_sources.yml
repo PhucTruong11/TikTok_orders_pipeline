@@ -2,11 +2,11 @@ version: 2
 
 sources:
   - name: raw_tiktok
-    description: "Dữ liệu đơn hàng TikTok Shop thô, xuất từ hệ thống đồng bộ OMS"
-    meta:
-      channel: tiktok
+    description: "Immutable DataGrip CSV snapshot; identifiers are privacy masks, not business keys."
     tables:
       - name: tiktok_orders
-        description: "Bảng phẳng 71 cột - mỗi dòng là 1 line item trong đơn hàng"
-        external:
-          location: "read_csv_auto('data/raw/tiktok_orders.csv')"
+        description: "One exported CSV observation. No order identity is inferred from masked IDs."
+        config:
+          meta:
+            external_location: >-
+              read_csv('{{ env_var("TIKTOK_CSV_PATH", "../data/raw/tiktok_orders.csv") | replace("'", "''") }}', all_varchar=true, parallel=false)

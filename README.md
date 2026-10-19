@@ -1,161 +1,145 @@
-# 🚀 Multi-Channel E-Commerce Data Pipeline (TikTok Shop & Shopee Vietnam)
+# TikTok Orders Pipeline — hướng tới phân tích Shopee và TikTok
 
-Hệ thống Data Pipeline & Data Warehouse hiện đại, tinh gọn (*Modern Data Stack in-a-Box*) phục vụ phân tích dữ liệu kinh doanh, vận hành và tài chính cho nhà bán lẻ đa kênh tại Việt Nam (TikTok Shop & Shopee).
+Pipeline batch chạy local với **Dagster + dbt-duckdb + DuckDB + Streamlit**. Nhánh TikTok hiện bảo toàn từng dòng CSV, chuẩn hóa trạng thái và tạo mart chất lượng dữ liệu. Hai snapshot đầu vào đã che thông tin vì bảo mật; không dùng masked ID để suy ra số đơn hoặc sản phẩm duy nhất.
 
----
+**Trạng thái:** TikTok và dbt tests đã cập nhật; Shopee chưa tích hợp vào models; Streamlit chưa chuyển sang mart mới. Những sơ đồ bên dưới mô tả định nghĩa pipeline hiện tại và output sau khi build, không khẳng định working warehouse/dashboard đã được migrate.
 
-## 📌 1. Bối cảnh & Thách thức Nghiệp vụ
+## 1. Nguồn dữ liệu và grain
 
-Dữ liệu đầu vào bắt nguồn từ hệ thống đồng bộ đơn hàng (OMS / ERP / Open API) với cấu trúc **bảng phẳng 71 cột**:
-* **Quy mô hiện tại:** 5.000 đơn Shopee + 2.000 đơn TikTok Shop (~100.000+ dòng chi tiết sản phẩm).
-* **Đặc tính dữ liệu:**
-  * Bảng phẳng ở mức hạt độ chi tiết (grain) là **Dòng sản phẩm (`Order Line Item`)**, nhưng đồng thời chứa các chỉ số cấp **Đơn hàng (`Order Header`)** như tổng tiền, phí sàn, giảm giá, phí ship.
-  * Trạng thái đơn, mốc thời gian (SLA đóng gói, giao hàng, hủy) và mã voucher giữa Shopee và TikTok Shop có sự khác biệt về thuật ngữ và cơ chế ghi nhận.
+Người dùng xuất hai CSV trực tiếp từ bộ `vietnam_ecommerce` của Xóm Dataset bằng DataGrip:
 
-### Các "bẫy" dữ liệu cần xử lý triệt để:
-1. **Bẫy nhân đôi doanh thu (Fan-out Trap):** Nếu một đơn hàng có 3 món đồ, việc query `SUM(total_amount)` trực tiếp trên bảng phẳng sẽ làm doanh thu bị phóng đại gấp 3 lần. Cần chuẩn hóa theo mô hình Star Schema.
-2. **Xung đột khóa chính giữa các sàn:** Cần sinh Surrogate Key dạng `channel + '_' + order_id` để tránh trùng lặp mã đơn.
-3. **Chuẩn hóa trạng thái đơn (Order Status Mapping):** Ánh xạ trạng thái từ 2 sàn về một bộ trạng thái thống nhất (`Chờ đóng gói`, `Đang giao`, `Đã giao`, `Hủy`, `Trả hàng`).
-4. **Đối soát tài chính (Reconciliation):** Tách bạch rõ Doanh thu danh nghĩa (Gross GMV), Chiết khấu sàn, Chiết khấu nhà bán, Phí vận chuyển và Doanh thu thực nhận.
+| Snapshot | Record CSV | Cột | Tích hợp hiện tại |
+|---|---:|---:|---|
+| TikTok | 102.000 | 71 | Có staging, observation models và quality mart |
+| Shopee | 25.546 | 84 | Đã audit file; chưa có model Shopee |
 
----
+Một **observation** là một record trong snapshot CSV. `pkId`, mã đơn và nhiều ID/nhãn đã bị che nên distinct mask không đồng nghĩa distinct order/SKU. Giữ nguyên mọi record; không dedup theo các ID này. Các trường tiền header không cộng trực tiếp trên toàn bộ observations.
 
-## 🏗️ 2. Kiến trúc Tổng thể (Architecture Overview)
+Chi tiết: [CSV audit](docs/upgrade/CSV_AUDIT.md) và [hợp đồng nguồn](docs/upgrade/SOURCE_CONTRACTS.md).
 
-Pipeline được thiết kế theo triết lý **Modern Data Stack in-a-Box**: tối ưu hóa hiệu năng bằng xử lý cột (Columnar OLAP), chi phí hạ tầng 0 đồng (chạy trên local/VPS), không cần cụm máy chủ cồng kềnh.
+## 2. Kiến trúc tổng thể — Bronze → Silver → Gold
 
 ```mermaid
-flowchart TD
-    %% Định nghĩa màu sắc (classDef)
-    classDef source fill:#e67e22,stroke:#d35400,stroke-width:2px,color:#fff;
-    classDef orchestrator fill:#2f3640,stroke:#718093,stroke-width:2px,color:#fff;
-    classDef compute fill:#4a69bd,stroke:#0c2461,stroke-width:2px,color:#fff;
-    classDef transform fill:#e55039,stroke:#b71540,stroke-width:2px,color:#fff;
-    classDef storage fill:#2ecc71,stroke:#27ae60,stroke-width:2px,color:#fff;
-    classDef bi fill:#9b59b6,stroke:#8e44ad,stroke-width:2px,color:#fff;
-
-    subgraph Sources ["1. Nguồn Dữ Liệu"]
-        CSV[("File CSV\n(TikTok Shop Orders)")]:::source
+flowchart TB
+    subgraph BRONZE["Bronze | Raw snapshots trên local"]
+        TT[("tiktok_orders.csv<br/>Giữ nguyên dữ liệu đã mask")]
+        SP[("shopee_orders.csv<br/>Chưa tích hợp vào dbt")]
     end
 
-    subgraph Orchestration ["2. Điều phối & Tự động hóa"]
-        DAGSTER(("Dagster\n(Schedules & Assets)")):::orchestrator
+    subgraph WAREHOUSE["DuckDB local | dbt-duckdb"]
+        subgraph SILVER["Silver | Chuẩn hóa và kiểm tra ở grain observation"]
+            STG["stg_tiktok_orders<br/>Cast, raw status, fingerprint và record ordinal"]
+            OBS["Intermediate observation models<br/>Status mapping, bảo toàn dòng, phép tính có tên rõ"]
+            STG --> OBS
+        end
+        subgraph GOLD["Gold | Output tổng hợp có contract"]
+            QUALITY["mart_tiktok_observation_quality<br/>Ngày + channel + currency"]
+        end
+        OBS --> QUALITY
     end
 
-    subgraph DataPlatform ["3. Data Warehouse & Transformation"]
-        DBT["dbt-duckdb\n(Mô hình hóa Dữ liệu)"]:::transform
-        DUCKDB[("DuckDB\n(Database Engine)")]:::storage
-        
-        BRONZE["🥉 Bronze (Staging)"]:::compute
-        SILVER["🥈 Silver (Intermediate)"]:::compute
-        GOLD["🥇 Gold (Data Marts)"]:::compute
-        
-        DBT -->|Xử lý logic| BRONZE --> SILVER --> GOLD
-        GOLD -.->|Lưu trữ| DUCKDB
-    end
+    TT --> STG
+    SEED["order_status_mapping<br/>dbt seed"] --> OBS
+    DAGSTER["Dagster<br/>Giữ môi trường local hiện có"] -.->|"dbt build và tests"| STG
+    DAGSTER -.->|"dbt build và tests"| QUALITY
+    QUALITY -.->|"Kế hoạch nối dashboard sau"| STREAMLIT["Streamlit<br/>Chưa migrate sang mart mới"]
 
-    subgraph Consumption ["4. Trực quan hóa (BI)"]
-        STREAMLIT["Streamlit\n(Executive Dashboard)"]:::bi
-    end
-
-    CSV -->|Read CSV| DBT
-    DAGSTER -.->|Kích hoạt chạy| DBT
-    DUCKDB -->|Truy vấn trực tiếp| STREAMLIT
+    classDef bronze fill:#fff1df,stroke:#a86622,color:#3f2a16;
+    classDef silver fill:#edf2f7,stroke:#64748b,color:#172033;
+    classDef gold fill:#fff7cc,stroke:#b58b00,color:#493c00;
+    classDef pending fill:#f5f5f5,stroke:#888888,color:#555555,stroke-dasharray:5 5;
+    class TT bronze;
+    class STG,OBS silver;
+    class QUALITY gold;
+    class SP,STREAMLIT pending;
 ```
 
----
+Mũi tên liền thể hiện luồng dữ liệu active; nét đứt có nhãn thể hiện điều phối hoặc kết nối dự kiến. Dagster gọi `dbt build`, còn dbt quản lý dependency giữa các model và tests. Shopee được vẽ như input đang có nhưng chưa nối vào luồng active.
 
-## 🔄 3. Chi tiết Luồng Dữ liệu (Medallion & Star Schema Flow)
+Bronze hiện là các file CSV bất biến, chưa phải một raw table ingestion service hay lakehouse đầy đủ. Silver và Gold nằm trong cùng DuckDB; không cần đổi môi trường hoặc thêm database chỉ để dùng cách chia tầng này.
+
+## 3. Lineage chi tiết của nhánh TikTok đang chạy
 
 ```mermaid
-flowchart LR
-    subgraph Bronze ["🥉 Bronze (Raw Staging)"]
-        stg_tt["stg_tiktok_orders\n(Clean string, chuẩn hóa tên cột)"]
+flowchart TB
+    subgraph B["Bronze | Dữ liệu nguyên bản"]
+        CSV[("tiktok_orders.csv")]
+    end
+    SRC["source: raw_tiktok.tiktok_orders<br/>External CSV reference, không copy file"]
+    MAP["seed: order_status_mapping"]
+
+    subgraph S["Silver | Một record CSV = một observation"]
+        ST["stg_tiktok_orders<br/>TABLE: typed snapshot + observation_id"]
+        INT["int_tiktok_observations<br/>VIEW: mapping và flags trạng thái"]
+        COMPAT["int_orders_deduped<br/>VIEW tương thích: giữ mọi dòng, không dedup"]
+        FACT["fct_tiktok_observations<br/>VIEW: các phép tính ở grain observation"]
+        ITEMS["fct_order_items<br/>VIEW tương thích của observation fact"]
+        ST --> INT --> COMPAT --> FACT
+        FACT --> ITEMS
     end
 
-    subgraph Silver ["🥈 Silver (Intermediate)"]
-        int_dedup["int_orders_deduped\n(Xử lý trùng lặp, Watermark)"]
-        fct_orders["fct_orders\n(Fact Đơn hàng)"]
-        fct_items["fct_order_items\n(Fact Sản phẩm)"]
-        dim_status["order_status_mapping\n(Seed data)"]
+    subgraph G["Gold | Chất lượng dữ liệu"]
+        MART["mart_tiktok_observation_quality<br/>TABLE + schema contract<br/>Grain: observation_date, source_channel, currency"]
     end
 
-    subgraph Gold ["🥇 Gold (Data Marts)"]
-        mart_fin["mart_financial_reconciliation\n(Waterfall dòng tiền)"]
-        mart_rev["mart_daily_revenue\n(Doanh thu theo ngày)"]
-        mart_prod["mart_product_performance\n(Top SKU bán chạy)"]
-        mart_geo["mart_geo_analysis\n(Phân bổ địa lý)"]
-    end
+    CSV --> SRC --> ST
+    MAP --> INT
+    FACT --> MART
 
-    stg_tt --> int_dedup
-    int_dedup --> fct_orders
-    int_dedup --> fct_items
-    dim_status --> fct_orders
-
-    fct_orders --> mart_rev
-    fct_orders --> mart_fin
-    fct_items --> mart_prod
-    fct_orders --> mart_geo
+    classDef bronze fill:#fff1df,stroke:#a86622,color:#3f2a16;
+    classDef silver fill:#edf2f7,stroke:#64748b,color:#172033;
+    classDef gold fill:#fff7cc,stroke:#b58b00,color:#493c00;
+    class CSV bronze;
+    class ST,INT,COMPAT,FACT,ITEMS silver;
+    class MART gold;
 ```
 
-### Chi tiết các tầng dữ liệu:
+`int_orders_deduped` và `fct_order_items` giữ tên để tương thích lineage, không còn khẳng định grain là đơn hoặc SKU duy nhất. `fct_orders` và năm mart theo đơn/SKU cũ đã `enabled=false`, nên không xuất hiện trong flow active.
 
-| Tầng | Định dạng | Mục tiêu & Xử lý |
-| :--- | :--- | :--- |
-| **Bronze (Raw)** | Bảng DuckDB / Parquet thô | Giữ nguyên trạng 71 cột từ hệ thống đồng bộ. Bổ sung `_ingested_at`, `_source_channel` để phục vụ audit và truy vết lỗi. |
-| **Silver (Cleansed)** | Star Schema Model | • Tách Header thành `fct_orders` và Item thành `fct_order_items`.<br>• Xử lý kiểu dữ liệu (`datetime2`, chuẩn hóa múi giờ `UTC+7`).<br>• Sinh Surrogate Keys (`hash(channel, order_id)`).<br>• Chuẩn hóa danh mục địa chỉ (Tỉnh/Thành phố, Quận/Huyện) và số điện thoại. |
-| **Gold (Marts)** | Tối ưu hóa truy vấn BI | Tạo các bảng tổng hợp chỉ số nghiệp vụ: Doanh thu thực sau chiết khấu (Net GMV), Chi phí vận chuyển thực tế, Tỷ lệ vi phạm SLA giao hàng, Phân tích giỏ hàng. |
+### Ý nghĩa từng tầng
 
----
+| Tầng logic | Thành phần hiện tại | Trách nhiệm |
+|---|---|---|
+| **Bronze — raw** | `data/raw/*.csv` | Bảo toàn snapshot và masking; dùng lại được để audit/reprocess |
+| **Silver — chuẩn hóa** | `models/staging/` và các observation models trong `models/intermediate/` | Cast, lineage/key kỹ thuật, chuẩn hóa status, bảo toàn records và kiểm tra dữ liệu |
+| **Gold — tổng hợp** | `models/marts/mart_tiktok_observation_quality.sql` | Tổng hợp số observations và coverage theo ngày/channel/currency để phục vụ theo dõi chất lượng |
 
-## ⚙️ 4. Lý do Lựa chọn Tech Stack
+**Medallion và thư mục dbt là hai cách mô tả khác nhau.** Bronze/Silver/Gold nói về trách nhiệm của tầng dữ liệu; staging/intermediate/marts nói về cách tổ chức transformation. Vì `stg_tiktok_orders` đã cast và chuẩn hóa, project xếp nó vào Silver, không gọi staging là Bronze chỉ theo tên thư mục.
 
-| Công nghệ | Vai trò | Tại sao chọn thay vì giải pháp truyền thống? |
-| :--- | :--- | :--- |
-| **DuckDB** | OLAP Engine | **Thay thế PostgreSQL / ClickHouse:** Xử lý dạng cột (columnar) cực nhanh, truy vấn trực tiếp file CSV. Chạy in-process (không cần server riêng). |
-| **dbt-duckdb** | Data Transformation | Tự động hóa quá trình làm sạch và chia tầng dữ liệu. Có sẵn cơ chế test (unique, not_null) và quản lý bằng Git. |
-| **Dagster** | Orchestrator | **Thay thế Airflow:** Tiếp cận theo tư duy Software-Defined Assets (SDA). Lên lịch chạy tự động, hiển thị rõ luồng lineage từ file CSV đến Data Mart. |
-| **Streamlit** | BI Dashboard | Dùng Python thuần túy để xây dựng dashboard Premium với Plotly (nhẹ, nhanh, không cần cài cắm server rườm rà như Metabase / Superset). |
+Gold hiện phục vụ chất lượng dữ liệu ở grain observation. Tên Gold không khôi phục ID đã che, không xác thực số đơn/AOV và không biến phép trừ tiền thành payout. Đây là cách áp dụng pattern medallion theo phạm vi nhỏ trên local; tham khảo [định nghĩa medallion của Databricks](https://docs.databricks.com/aws/en/lakehouse/medallion).
 
----
+## 4. Kiểm thử và chạy local
 
-## 📁 5. Cấu trúc Thư mục Dự án Đề xuất
+Từ repo root, dùng Python environment đang có:
+
+```powershell
+.venv/Scripts/python.exe scripts/validate_tiktok_dbt.py
+.venv/Scripts/python.exe scripts/validate_tiktok_dbt.py --real-data
+```
+
+Các lệnh này build trong project/DB riêng dưới `.validation/`, không viết vào hai CSV hoặc working warehouse. Bộ kiểm tra bao gồm 51 dbt data tests, fixture có masked-key collision, exact duplicate, multiline cell, mapping fan-out, rerun và input sai. CI chạy fixture mà không cần CSV riêng tư.
+
+Xem [active model contract và hướng dẫn Dagster](dbt_transforms/models/README.md) trước khi build vào database đang dùng.
+
+## 5. Cấu trúc liên quan
 
 ```text
-Tiktok_orders_pipeline/
-├── README.md
-├── pyproject.toml              # Quản lý dependencies (uv)
+TikTok_orders_pipeline/
 ├── data/
-│   ├── raw/                    # Chứa file CSV đầu vào (Tiktok_ecommerce.csv)
-│   └── duckdb/                 # Nơi lưu database ecom_warehouse.duckdb
-├── dbt_transforms/             # Data Warehouse Transformation
-│   ├── dbt_project.yml
+│   ├── raw/                         # Bronze: snapshot CSV gốc
+│   └── duckdb/                      # DuckDB local, không commit dữ liệu
+├── dbt_transforms/
 │   ├── models/
-│   │   ├── staging/            # Tầng Bronze
-│   │   ├── intermediate/       # Tầng Silver
-│   │   └── marts/              # Tầng Gold (Business logic)
-│   └── seeds/                  # order_status_mapping.csv
-├── pipeline_orchestration/     # Dagster Orchestrator
-│   └── ...                     # Code định nghĩa Assets & Lịch trình
-└── dashboards/
-    └── streamlit_app/          # Streamlit Single Page Dashboard (app.py)
+│   │   ├── staging/                 # Silver: cast và metadata snapshot
+│   │   ├── intermediate/            # Silver: observations/mapping và compatibility views
+│   │   └── marts/                   # Gold: quality mart đang active
+│   ├── seeds/                       # Mapping tham chiếu, không phải luồng giao dịch Bronze
+│   └── tests/                       # Quality checks và reconciliation
+├── pipeline_orchestration/          # Dagster điều phối dbt build
+├── dashboards/streamlit_app/         # Dashboard cũ, chưa migrate
+├── tests/fixtures/                  # Dữ liệu synthetic nhỏ để test logic
+├── scripts/validate_tiktok_dbt.py
+└── docs/                           # Audit và plan hiện tại
 ```
 
----
-
-## 📋 6. Trạng thái Dự án (Current Status)
-
-Dự án đã triển khai thành công và hoàn thiện toàn bộ các tính năng cốt lõi:
-
-- [x] **Giai đoạn 1: Khởi tạo & Dữ liệu**
-  - Môi trường Python (uv), DuckDB, dbt-duckdb, Dagster, Streamlit.
-  - Nạp dữ liệu e-commerce vào tầng Bronze (Raw).
-- [x] **Giai đoạn 2: Mô hình hóa dữ liệu (dbt Core)**
-  - Tách bảng Star Schema (Staging -> Intermediate -> Marts).
-  - Viết dbt tests toàn vẹn dữ liệu (chặn trùng lặp, logic constraints).
-- [x] **Giai đoạn 3: Điều phối Pipeline (Dagster)**
-  - Tích hợp `dbt_assets` vào Data Orchestration UI.
-  - Thiết lập lịch (Schedules) tự động chạy vào 7:00 sáng và 13:00 trưa hàng ngày (`0 7,13 * * *`).
-- [x] **Giai đoạn 4: Trực quan hóa & Báo cáo (Streamlit)**
-  - Đã xây dựng hoàn chỉnh Executive Dashboard dạng Single Page Scroll.
-  - Tích hợp biểu đồ Plotly sang trọng (Waterfall, Area, Scatter).
+Đây là mapping logic; tên thư mục/schema vật lý vẫn giữ nguyên. Các bảng legacy có sẵn trong working warehouse không tự bị xóa khi model bị disabled, và không được refresh bởi nhánh mới. Phần Shopee và migration dashboard được để lại cho bước tiếp theo trong [kế hoạch](docs/UPGRADE_PLAN.md).

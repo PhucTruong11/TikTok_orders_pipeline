@@ -6,6 +6,7 @@ tiktok,IN_TRANSIT,IN_TRANSIT,SHIPPING,Đang vận chuyển
 tiktok,DELIVERED,DELIVERED,SHIPPING,Đã giao - chờ hoàn tất
 tiktok,COMPLETED,COMPLETED,COMPLETED,Hoàn thành
 tiktok,CANCELLED,CANCELLED,CANCELLED,Đã hủy
+tiktok,RETURNED,RETURNED,RETURNED,Trả hàng / hoàn tiền
 shopee,UNPAID,UNPAID,PENDING,Chưa thanh toán
 shopee,READY_TO_SHIP,AWAITING_SHIPMENT,PROCESSING,Chờ chuẩn bị hàng
 shopee,PROCESSED,AWAITING_COLLECTION,PROCESSING,Đã đóng gói - chờ bàn giao

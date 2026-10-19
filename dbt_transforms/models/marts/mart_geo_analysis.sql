@@ -1,3 +1,5 @@
+{{ config(enabled=false) }}
+-- Retired: masked order grouping cannot support these order metrics.
 -- MART: Phân tích theo Khu vực Địa lý
 -- Doanh thu, số đơn, tỷ lệ hủy theo Tỉnh/Thành phố & Quận/Huyện
 

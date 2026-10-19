@@ -1,3 +1,5 @@
+{{ config(enabled=false) }}
+-- Retired: use observation coverage instead of inferred order-level SLA.
 -- MART: Phân tích SLA vận hành (Fulfillment & Delivery)
 -- Theo dõi: đóng gói có kịp SLA không? Giao hàng có trễ không?
 
