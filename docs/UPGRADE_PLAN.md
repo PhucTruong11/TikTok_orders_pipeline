@@ -14,22 +14,30 @@ Cập nhật 19/10/2026 theo yêu cầu giữ stack local, đổi tên các tầ
 ## 2. Data flow
 
 ```mermaid
+---
+config:
+  htmlLabels: false
+  flowchart:
+    htmlLabels: false
+    nodeSpacing: 25
+    rankSpacing: 35
+---
 flowchart TB
-    T[("TikTok CSV")] --> BT["Bronze: bronze_tiktok_orders"]
-    S[("Shopee CSV")] --> BS["Bronze: bronze_shopee_orders"]
-    BT --> ST["Silver: silver_tiktok_observations"]
-    BS --> SS["Silver: silver_shopee_observations"]
-    REF["silver_order_status_mapping"] --> ST
+    T[("TikTok CSV")] --> BT["Bronze<br/>TikTok raw"]
+    S[("Shopee CSV")] --> BS["Bronze<br/>Shopee raw"]
+    BT --> ST["Silver<br/>TikTok observations"]
+    BS --> SS["Silver<br/>Shopee observations"]
+    REF["Silver<br/>Status mapping"] --> ST
     REF --> SS
-    ST --> U["Silver: silver_ecommerce_observations"]
+    ST --> U["Silver<br/>Observations hai nguồn"]
     SS --> U
-    U --> G["Gold: quality, channel daily, status, metadata"]
-    G --> V["dbt tests và source reconciliation"]
-    V --> P["Atomic publish warehouse mới"]
-    P --> UI["Streamlit hai nguồn"]
-    DG["Dagster hoặc CLI"] -.->|"Build đủ hai nguồn"| BT
-    DG -.->|"Cùng một lần chạy"| BS
+    U --> G["Gold<br/>Quality · Daily · Status · Metadata"]
+    G --> V["dbt tests<br/>Đối chiếu hai nguồn"]
+    V --> P["Atomic publish<br/>DuckDB"]
+    P --> UI["Streamlit<br/>Hai nguồn"]
 ```
+
+Dagster hoặc CLI điều phối toàn bộ luồng build, validate và publish cho cả hai nguồn trong cùng một lần chạy. Nhãn sơ đồ được rút gọn để đọc trên GitHub.
 
 Lineage vật lý đầy đủ và metric contract: [models README](../dbt_transforms/models/README.md). Kiến trúc tổng thể và lệnh chạy: [README](../README.md), [cheatsheet](../CHEATSHEET.md).
 

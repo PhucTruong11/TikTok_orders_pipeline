@@ -5,20 +5,43 @@ Mọi model active dùng đúng folder/schema/prefix `bronze`, `silver`, `gold`.
 ## Physical lineage
 
 ```mermaid
-flowchart LR
-    T[("TikTok CSV")] --> BT["bronze.bronze_tiktok_orders"]
-    S[("Shopee CSV")] --> BS["bronze.bronze_shopee_orders"]
-    BT --> ST["silver.silver_tiktok_observations"]
-    BS --> SS["silver.silver_shopee_observations"]
-    M["silver.silver_order_status_mapping"] --> ST
+---
+config:
+  htmlLabels: false
+  flowchart:
+    htmlLabels: false
+    nodeSpacing: 25
+    rankSpacing: 35
+---
+flowchart TB
+    T[("TikTok CSV")] --> BT["Bronze<br/>TikTok raw"]
+    S[("Shopee CSV")] --> BS["Bronze<br/>Shopee raw"]
+    BT --> ST["Silver<br/>TikTok observations"]
+    BS --> SS["Silver<br/>Shopee observations"]
+    M["Silver<br/>Status mapping"] --> ST
     M --> SS
-    ST --> U["silver.silver_ecommerce_observations"]
+    ST --> U["Silver<br/>Observations hai nguồn"]
     SS --> U
-    U --> Q["gold.gold_observation_quality"]
-    U --> D["gold.gold_channel_daily"]
-    U --> STATUS["gold.gold_status_distribution"]
-    U --> META["gold.gold_pipeline_metadata"]
+    U --> Q["Gold<br/>Data quality"]
+    U --> D["Gold<br/>Channel daily"]
+    U --> STATUS["Gold<br/>Status distribution"]
+    U --> META["Gold<br/>Build metadata"]
 ```
+
+Sơ đồ dùng nhãn ngắn; tên vật lý đầy đủ để tra cứu và viết SQL:
+
+| Nhãn trong sơ đồ | Schema và tên bảng |
+|---|---|
+| Bronze / TikTok raw | `bronze.bronze_tiktok_orders` |
+| Bronze / Shopee raw | `bronze.bronze_shopee_orders` |
+| Silver / TikTok observations | `silver.silver_tiktok_observations` |
+| Silver / Shopee observations | `silver.silver_shopee_observations` |
+| Silver / Status mapping | `silver.silver_order_status_mapping` |
+| Silver / Observations hai nguồn | `silver.silver_ecommerce_observations` |
+| Gold / Data quality | `gold.gold_observation_quality` |
+| Gold / Channel daily | `gold.gold_channel_daily` |
+| Gold / Status distribution | `gold.gold_status_distribution` |
+| Gold / Build metadata | `gold.gold_pipeline_metadata` |
 
 ## Bronze
 
