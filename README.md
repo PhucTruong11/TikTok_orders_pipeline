@@ -6,62 +6,9 @@ Dữ liệu nguồn đã che thông tin vì bảo mật. Một observation là m
 
 ## 1. Luồng dữ liệu đang triển khai
 
-```mermaid
----
-config:
-  htmlLabels: false
-  flowchart:
-    htmlLabels: false
-    nodeSpacing: 25
-    rankSpacing: 35
----
-flowchart TB
-    TT[("TikTok CSV")]
-    SP[("Shopee CSV")]
-    BT["Bronze<br/>TikTok raw"]
-    BS["Bronze<br/>Shopee raw"]
-    ST["Silver<br/>TikTok observations"]
-    SS["Silver<br/>Shopee observations"]
-    MAP["Silver<br/>Status mapping"]
-    UNION["Silver<br/>Observations hai nguồn"]
-    Q["Gold<br/>Data quality"]
-    D["Gold<br/>Channel daily"]
-    STATUS["Gold<br/>Status distribution"]
-    META["Gold<br/>Build metadata"]
-    TT --> BT --> ST
-    SP --> BS --> SS
-    MAP --> ST
-    MAP --> SS
-    ST --> UNION
-    SS --> UNION
-    UNION --> Q
-    UNION --> D
-    UNION --> STATUS
-    UNION --> META
+![Data flow: TikTok và Shopee CSV → Bronze → Silver → Gold trong DuckDB candidate → kiểm chứng → atomic publish → Streamlit](docs/assets/data-flow.svg)
 
-    classDef bronze fill:#fff1df,stroke:#a86622,color:#3f2a16;
-    classDef silver fill:#edf2f7,stroke:#64748b,color:#172033;
-    classDef gold fill:#fff7cc,stroke:#b58b00,color:#493c00;
-    class BT,BS bronze;
-    class ST,SS,UNION,MAP silver;
-    class Q,D,STATUS,META gold;
-```
-
-Nhãn trong sơ đồ được rút gọn để dễ đọc; [physical lineage](dbt_transforms/models/README.md#physical-lineage) liệt kê tên đầy đủ của cả 10 bảng. Dagster hoặc CLI điều phối luồng vận hành riêng bên dưới:
-
-```mermaid
----
-config:
-  htmlLabels: false
-  flowchart:
-    htmlLabels: false
-    rankSpacing: 30
----
-flowchart LR
-    BUILD["Build candidate<br/>Bronze → Silver → Gold"] --> CHECK["dbt tests<br/>Đối chiếu hai nguồn"]
-    CHECK --> PUBLISH["Atomic publish<br/>DuckDB"]
-    PUBLISH --> UI["Streamlit<br/>Đọc Gold"]
-```
+Dagster hoặc CLI điều phối cùng một luồng build, kiểm chứng và publish. [Physical lineage](dbt_transforms/models/README.md#physical-lineage) liệt kê tên đầy đủ của cả 10 bảng.
 
 | Tầng | Folder dbt | Schema thật | Ví dụ bảng |
 |---|---|---|---|

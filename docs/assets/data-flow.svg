@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="title description">
+  <title id="title">From source to analytics — TikTok and Shopee</title>
+  <desc id="description">Two immutable CSV exports feed the Bronze layer of an isolated DuckDB candidate. Dagster or the Python CLI coordinates a full dbt build with nine models, one reference seed and ninety-nine data tests. Bronze flows into Silver and Gold. Source reconciliation must pass before atomic publication of ecom_medallion.duckdb. Streamlit reads the four published Gold tables. Solid mint arrows represent data or database flow; dashed lavender arrows represent execution control.</desc>
+  <defs>
+    <marker id="data-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#90d8c8"/>
+    </marker>
+    <marker id="control-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#bdb8ef"/>
+    </marker>
+    <style>
+      text { font-family: "Segoe UI", Arial, sans-serif; }
+      .heading { fill: #f5f7fc; font-size: 44px; font-weight: 700; }
+      .subtitle { fill: #afbed9; font-size: 25px; }
+      .section { fill: #b9c7e1; font-size: 21px; font-weight: 700; letter-spacing: 1.6px; }
+      .card-title { fill: #f5f7fc; font-size: 31px; font-weight: 650; }
+      .card-detail { fill: #c0cde3; font-size: 24px; }
+      .note { fill: #aebed9; font-size: 21px; }
+      .small { fill: #aebed9; font-size: 19px; }
+      .data { fill: none; stroke: #90d8c8; stroke-width: 3; marker-end: url(#data-arrow); }
+      .control { fill: none; stroke: #bdb8ef; stroke-width: 3; stroke-dasharray: 8 8; marker-end: url(#control-arrow); }
+    </style>
+  </defs>
+
+  <!-- Fixed SVG text and geometry keep GitHub rendering independent of HTML labels. -->
+  <rect width="1600" height="1120" rx="28" fill="#0f1424"/>
+  <rect x="1" y="1" width="1598" height="1118" rx="27" fill="none" stroke="#26314a"/>
+  <text x="56" y="75" class="heading">From source to analytics</text>
+  <text x="56" y="119" class="subtitle">Local batch ELT · Dagster / Python / dbt / DuckDB / Streamlit</text>
+
+  <!-- Execution is local; schedules are optional, not an active hosted sync. -->
+  <rect x="430" y="167" width="1114" height="253" rx="19" fill="#191e32" stroke="#414a70" stroke-width="1.5"/>
+  <text x="462" y="209" class="section">LOCAL ORCHESTRATION · BUILD BOTH SOURCES</text>
+  <rect x="462" y="246" width="462" height="140" rx="16" fill="#1b3231" stroke="#538d7d" stroke-width="1.5"/>
+  <text x="693" y="291" text-anchor="middle" class="card-title">Dagster / Python CLI</text>
+  <text x="693" y="333" text-anchor="middle" class="card-detail">Candidate build + writer lock</text>
+  <text x="693" y="365" text-anchor="middle" class="small">Same validation and publication rules</text>
+  <rect x="1000" y="246" width="512" height="140" rx="16" fill="#292740" stroke="#8a80bc" stroke-width="1.5"/>
+  <text x="1256" y="291" text-anchor="middle" class="card-title">dbt CLI</text>
+  <text x="1256" y="333" text-anchor="middle" class="card-detail">Full refresh · build + tests</text>
+  <text x="1256" y="365" text-anchor="middle" class="small">SQL transforms and reference seed</text>
+  <path d="M924 316 H998" class="control"/>
+  <path d="M1256 386 V520" class="control"/>
+  <text x="1275" y="476" class="note">Execute SQL + tests</text>
+
+  <!-- The CSVs are scanned by dbt-duckdb directly into Bronze. -->
+  <text x="56" y="222" class="section">SOURCE SNAPSHOTS</text>
+  <rect x="56" y="246" width="308" height="174" rx="16" fill="#1c2b3c" stroke="#608aa8" stroke-width="1.5"/>
+  <text x="210" y="289" text-anchor="middle" class="card-title">CSV snapshots</text>
+  <rect x="80" y="312" width="126" height="40" rx="20" fill="#213e49"/>
+  <text x="143" y="339" text-anchor="middle" fill="#b5e7eb" font-size="23" font-weight="600">TikTok</text>
+  <rect x="220" y="312" width="120" height="40" rx="20" fill="#48332e"/>
+  <text x="280" y="339" text-anchor="middle" fill="#ffd0ad" font-size="23" font-weight="600">Shopee</text>
+  <text x="210" y="388" text-anchor="middle" class="note">2 immutable DataGrip exports</text>
+  <text x="56" y="499" class="note">CSV scan · preserve every record</text>
+
+  <!-- These are physical tables in a separate candidate database. -->
+  <rect x="56" y="522" width="1488" height="254" rx="19" fill="#162130" stroke="#42617b" stroke-width="1.5"/>
+  <text x="88" y="565" class="section">DUCKDB · ISOLATED CANDIDATE WAREHOUSE</text>
+  <text x="1512" y="565" text-anchor="end" class="note">9 models · 1 seed · 99 data tests</text>
+
+  <rect x="88" y="602" width="428" height="134" rx="16" fill="#352b20" stroke="#a5874c" stroke-width="1.5"/>
+  <text x="302" y="645" text-anchor="middle" class="card-title">Bronze</text>
+  <text x="302" y="681" text-anchor="middle" class="card-detail">2 raw tables</text>
+  <text x="302" y="714" text-anchor="middle" class="note">Source strings + row metadata</text>
+
+  <rect x="586" y="602" width="428" height="134" rx="16" fill="#2a3243" stroke="#94a3bd" stroke-width="1.5"/>
+  <text x="800" y="645" text-anchor="middle" class="card-title">Silver</text>
+  <text x="800" y="681" text-anchor="middle" class="card-detail">3 tables + 1 reference seed</text>
+  <text x="800" y="714" text-anchor="middle" class="note">Types · statuses · union all</text>
+
+  <rect x="1084" y="602" width="428" height="134" rx="16" fill="#352f1e" stroke="#c5aa49" stroke-width="1.5"/>
+  <text x="1298" y="645" text-anchor="middle" class="card-title">Gold</text>
+  <text x="1298" y="681" text-anchor="middle" class="card-detail">4 analytical tables</text>
+  <text x="1298" y="714" text-anchor="middle" class="note">Quality · daily · status · metadata</text>
+
+  <path d="M516 669 H584" class="data"/>
+  <path d="M1014 669 H1082" class="data"/>
+  <path d="M210 420 V463 H28 V669 H86" class="data"/>
+
+  <!-- A successful build is reconciled before replacing the serving database. -->
+  <path d="M800 776 V812 H276 V848" class="data"/>
+  <text x="832" y="818" class="note">Reconcile the candidate before publication</text>
+
+  <rect x="56" y="850" width="440" height="142" rx="16" fill="#1b3231" stroke="#538d7d" stroke-width="1.5"/>
+  <text x="84" y="884" class="section">QUALITY GATE</text>
+  <text x="276" y="925" text-anchor="middle" fill="#f5f7fc" font-size="29" font-weight="650">Validate &amp; reconcile</text>
+  <text x="276" y="963" text-anchor="middle" class="note">Counts · identities · file hashes</text>
+
+  <path d="M496 921 H550" class="data"/>
+  <rect x="552" y="850" width="490" height="142" rx="16" fill="#1c2b3c" stroke="#608aa8" stroke-width="1.5"/>
+  <text x="580" y="884" class="section">ATOMIC PUBLISH</text>
+  <text x="797" y="925" text-anchor="middle" fill="#f5f7fc" font-size="29" font-weight="650">Published DuckDB</text>
+  <text x="797" y="963" text-anchor="middle" fill="#c0cde3" font-size="23">ecom_medallion.duckdb</text>
+
+  <path d="M1042 921 H1096" class="data"/>
+  <rect x="1098" y="850" width="446" height="142" rx="16" fill="#1c2b3c" stroke="#608aa8" stroke-width="1.5"/>
+  <text x="1126" y="884" class="section">ANALYTICS</text>
+  <text x="1321" y="925" text-anchor="middle" fill="#f5f7fc" font-size="29" font-weight="650">Streamlit dashboard</text>
+  <text x="1321" y="963" text-anchor="middle" class="note">4 Gold tables · read-only queries</text>
+
+  <path d="M56 1037 H120" class="data"/>
+  <text x="138" y="1045" class="note">Data / model dependency / database flow</text>
+  <path d="M760 1037 H824" class="control"/>
+  <text x="842" y="1045" class="note">Execution order / SQL control</text>
+  <text x="56" y="1087" class="small">Snapshot observations · currencies kept separate</text>
+  <text x="1544" y="1087" text-anchor="end" class="small">Failed builds keep the last valid warehouse</text>
+</svg>
